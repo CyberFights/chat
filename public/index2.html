@@ -87,4 +87,92 @@
       </div>
       </div>
   </body>
+  <script>
+  
+        // Handle login form submission
+       // async function login_submit(event) {
+       //  const formData = new FormData(document.getElementById('loginForm'));
+
+         // try {
+           // const response = await fetch('/login', { // Make sure the endpoint matches your server configuration
+             // method: 'POST',
+             // body: formData, // FormData will be sent correctly with 'multipart/form-data' automatically set
+            // });
+            // const data = await response.json();
+
+
+            // if(response.ok) {
+              // Login successful
+              // alert("Login successful!");
+              // localStorage.setItem('token', 'true'); // You can adjust based on how you handle authentication tokens
+              // localStorage.setItem('name', `${document.getElementById('username').value}`);
+              // localStorage.setItem('languagePreference', 'en');
+              // window.location.href = '/chat.html'; // Redirect user to the chat page
+            // } else {
+              // Login failed
+              // alert("Login failed: " + data.message);
+            //}
+          // } catch (error) {
+            // console.error('Error during login:', error);
+            //alert('Login attempt failed. Please try again.');
+          //}
+        //} 
+      
+      function toggle_login() {
+        var login_btn = document.querySelector("#login_btn");
+        var login_box = document.querySelector("#login_box");
+        var register_box = document.querySelector("#registration-form-container");
+        login_box.style.display = login_box.style.display === "none" ? "block" : "none";
+        login_btn.style.display = login_box.style.display === "block" ? "none" : "block";
+        register_box.style.display = "none"; // Hide registration form when toggling login form
+      }
+      function toggle_register() {
+        var login_btn = document.querySelector("#login_btn");
+        var login_box = document.querySelector("#login_box");
+        var register_box = document.querySelector("#registration-form-container");
+        login_box.style.display = "none";
+        login_btn.style.display = login_box.style.display === "block" ? "none" : "block";
+        register_box.style.display = register_box.style.display === "none" ? "block" : "none";
+      }
+      
+
+     //async function register_submit(event) {
+          //event.preventDefault(); // Prevent default form submission
+          //const formData = new FormData(document.getElementById('registrationForm'));
+       //const username = formData.get('username');
+       //const image = formData.get('image');
+
+          //try {
+            //const response = await fetch('/upload', { // Make sure the endpoint matches your server configuration
+              //method: 'POST',
+              //body: formData, // FormData will be sent correctly with 'multipart/form-data' automatically set
+            //});
+            //const data = await response.json();
+
+            //if(response.ok) {
+              // Registration successful
+              //alert("Registration successful!");
+              //localStorage.setItem('token', 'true'); // You can adjust based on how you handle authentication tokens
+              //localStorage.setItem('name', formData.get('username'));
+              //localStorage.setItem('languagePreference', formData.get('nativeLanguage'));
+              //window.location.href = '/html/chat.html'; // Redirect user to the chat page
+            //} else {
+              // Registration failed
+              //alert("Registration failed: " + data.message);
+            //}
+          //} catch (error) {
+            //console.error('Error during registration:', error);
+            //alert('Registration attempt failed. Please try again.');
+          //}
+        //}
+        function register_submit() {
+          
+          var body1 = document.querySelector("#body_1");
+        var body2 = document.querySelector("#body_2");
+        var register_box = document.querySelector("#registration-form-container");
+        register_box.style.display = "none";
+        body1.style.display = "none";
+        body2.style.display = "block";
+      }
+      </script>
 </html>
