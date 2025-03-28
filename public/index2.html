@@ -174,5 +174,63 @@
         body1.style.display = "none";
         body2.style.display = "block";
       }
+        
+        <script src="/socket.io/socket.io.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const socket = io();
+
+      const signupScreen = document.getElementById('signup-screen');
+      const chatScreen = document.getElementById('chat-screen');
+      const signupForm = document.getElementById('signup-form');
+      const usernameInput = document.getElementById('username');
+      const messageInput = document.getElementById('m');
+      const messagesList = document.getElementById('messages');
+
+      signupForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const username = usernameInput.value.trim();
+        if (username) {
+          localStorage.setItem('username', username);
+          signupScreen.style.display = 'none';
+          chatScreen.style.display = 'block';
+          socket.emit('set username', username);
+        }
+      });
+
+      document.getElementById('form').addEventListener('submit', (e) => {
+        e.preventDefault();
+        const message = messageInput.value.trim();
+        if (message) {
+          socket.emit('chat message', message);
+          messageInput.value = '';
+        }
+      });
+
+      socket.on('chat message', (msg) => {
+        const item = document.createElement('li');
+        item.textContent = `${msg.date} - ${msg.username} - ${msg.message}`;
+        messagesList.appendChild(item);
+        saveMessageLocally(msg);
+      });
+
+      function saveMessageLocally(msg) {
+        let messages = JSON.parse(localStorage.getItem('messages')) || [];
+        messages.push(msg);
+        localStorage.setItem('messages', JSON.stringify(messages));
+      }
+
+      function loadMessagesFromLocalStorage() {
+        const messages = JSON.parse(localStorage.getItem('messages')) || [];
+        messages.forEach((msg) => {
+          const item = document.createElement('li');
+          item.textContent = `${msg.date} - ${msg.username} - ${msg.message}`;
+          messagesList.appendChild(item);
+        });
+      }
+
+      loadMessagesFromLocalStorage();
+    });
+  </script>
       </script>
 </html>
