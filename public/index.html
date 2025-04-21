@@ -1,770 +1,914 @@
 
 <!DOCTYPE html>
- <html lang="en">
-      <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet"  href="https://fonts.googleapis.com/icon?family=Material+Icons">
-    <title>Cyber Fighters</title>
-    <style>   @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap");
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Chat Room Hub</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
+<style>
+@import url('https://fonts.googleapis.com/css?family=Lato');
 
-    * {
-        box-sizing: border-box;
-        font-family: "Poppins", sans-serif;
-        color: #121212;
-        transition: all 0.3s;
-        -webkit-transition: all 0.3s;
-        -moz-transition: all 0.3s;
-        -ms-transition: all 0.3s;
-        -o-transition: all 0.3s;
-      } 
+        body {
+            font-family: Arial, sans-serif;
+            margin: 40px;
+            background: linear-gradient(45deg, #000, #03055b);
+            text-align: center;
+            width: 100%;
+            height: 100vh;
+            overflow-x: hidden;
+            color: white;
+            
+        }
 
-      html,
-      body {
-        padding: 0;
-        margin: 0;
-        height: 100vh;
-      }
+        /* Landing Page */
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            text-align: center;
+        }
 
-      body {
-        background-color: black;
-         display: flex;
-        justify-content: center;
-        align-items: center;
-      }
-      
-            #body_1{
-              position:fixed;
-            margin-top: 2%;
-            margin-left: 2%;
+        .content {
+            animation: fadeIn 2s ease-in-out;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            text-transform: uppercase;
+            letter-spacing: 5px;
+            color: #ff0000;
+            text-shadow:
+                -1px 0 #ff0000,
+                0 2px #ff0000,
+                2px 0 #ff0000,
+                0 -2px #ff0000,
+                0 0 8px #000,
+                0 0 12px #1700fb,
+                0 0 15px #1700fb;
+            margin-bottom: 20px;
+        }
+
+        #p {
+            font-size: 1.2rem;
+            margin-top: 20px;
+            color: #fff;
+        }
+
+        /* Fade-out animation for landing page */
+        .fade-out {
+            animation: fadeOut 2s forwards;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        @keyframes fadeOut {
+            to {
+                opacity: 0;
+                visibility: hidden;
+            }
+        }
+
+        /* Hidden page initially hidden */
+        .hidden-page {
+            display: none;
+            color: white;
+            
+        }
+
+        /* Button row */
+        .button-row {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .button-row button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 8px;
+            border: none;
+            background-color: #ff0000;
+            color: white;
+            transition: background-color 0.3s ease;
+        }
+
+        .button-row button:hover {
+            background-color: #cc0000;
+        }
+
+        /* Image grid */
+        .image-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            max-width: 900px;
+            margin: 0 auto 40px auto;
+        }
+
+        .image-grid img {
+            width: 100%;
+            max-width: 280px;
+            border-radius: 10px;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .image-grid img:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 16px rgba(0,0,0,0.5);
+        }
+
+        /* Popups */
+        .popup-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0,0,0,0.4);
+            justify-content: center;
+            align-items: center;
+            z-index: 999;
+        }
+
+        .popup-box {
+            background: #fff;
+            padding: 30px 20px;
+            border-radius: 8px;
+            min-width: 250px;
+            position: relative;
+            box-shadow: 0 2px 16px rgba(0,0,0,0.2);
+            color: #000;
+            max-width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 10px;
+            right: 14px;
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #333;
+        }
+
+        .close-btn:hover {
+            color: #000;
+        }
+
+        /* Settings popup special style */
+        .palak {
+            background: linear-gradient(blue, black);
+            box-shadow: 1px 2px 5px gold, 1px 2px 12px red;
+            border-radius: 70px;
+            padding: 20px;
+            color: red;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .palak .img span {
+            display: block;
+            width: 90px;
+            height: 90px;
+            border-radius: 50%;
+            margin: 0 auto 10px auto;
+            box-shadow: 1px 2px 8px red, 1px 0px 12px black;
+            overflow: hidden;
+        }
+
+        .palak .img span img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 50%;
+        }
+
+        .palak .head {
+            text-align: center;
+            font-size: 40px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            text-shadow: 0px 3px 19px black;
+        }
+
+        .palak .head2 {
+            background-color: black;
+            color: grey;
+            font-size: 18px;
+            font-weight: bold;
+            border-radius: 40px;
+            padding: 15px;
+            max-height: 300px;
+            overflow-y: auto;
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+
+        .palak input[type="text"],
+        .palak input[type="password"],
+        .palak textarea,
+        .palak select {
+            border-radius: 15%;
+            font-size: 18px;
+            width: 100%;
+            padding: 8px;
+            margin: 8px 0;
+            box-sizing: border-box;
+        }
+
+        .palak textarea {
+            resize: vertical;
+            height: 80px;
+        }
+
+        .palak button.register {
+            background-color: green;
+            color: white;
+            width: 50%;
+            padding: 10px;
+            border-radius: 20%/20%;
+            font-size: 25px;
+            cursor: pointer;
+            border: none;
+            margin: 0 auto;
+            display: block;
+            transition: background-color 0.3s ease;
+        }
+
+        .palak button.register:hover {
+            background-color: darkgreen;
+        }
+
+        #imagePreviewContainer {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        #imagePreview {
+            max-width: 50%;
+            max-height: 150px;
+            border-radius: 10px;
+            object-fit: cover;
+        }
+
+        /* Chat overlay */
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .overlay-content {
+            background-color: #1700fb;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+            width: 90%;
+            max-width: 900px;
+            position: relative;
+            border: 8px solid grey;
+            display: grid;
+            grid-template-columns: 4fr 1fr;
+            grid-template-rows: 1fr auto;
+            gap: 0 0;
+            color: white;
+        }
+
+        #messages-column {
             display: flex;
             flex-direction: column;
-                  background-repeat: no-repeat;
-            background-attachment: fixed;
-            background-size:80%;
-            background-size:cover;
-            background-position: center;
-            height: 90%;
-            width: 92%;
-              border: 4px solid white;
-              border-radius: 3%/5%;
-              background-image: url('https://raw.githubusercontent.com/CyberFights/chat/efd4972f14b4a61b85d4310e4de4624e45666705/public/assets/images/cyberblue%20(1).png');
-
-          }
-       div {
-       
-        background: rgba(224, 224, 224, 0.08);
-        box-shadow: 6px 5px 11px 0 rgb(0 0 0 / 37%);
-        backdrop-filter: blur(4.5px);
-        -webkit-backdrop-filter: blur(4.5px);
-        border-radius: 10px;
-        border: 1px solid rgba(255, 255, 255, 0.18);
-        background-color: grey;
-        display: none;
-        } 
-
-      div h1 {
-        text-align: center;
-      }
-      #wel {
-        font-size:45px; 
-        color:red; 
-        text-shadow: 0 0 8px #000, 0 0 3px #000, 0 0 12px #000, 0 0 10px red; 
-        font-weight:bold; 
-        text-align:center; 
-        margin-top:7%; 
-        margin-bottom:-1%;
-      }
-      #to {
-        font-size:30px; 
-        color:red; 
-        text-shadow: 0 0 8px #000, 0 0 3px #000, 0 0 12px #000, 0 0 10px red; 
-        font-weight:bold; 
-        text-align:center;
-        margin-top:-1%;
-        margin-bottom:-3%;
-      }
-      #cf{
-        font-size:45px;
-        color:red; 
-        text-shadow: 0 0 8px #000, 0 0 3px #000, 0 0 12px #000, 0 0 10px red; 
-        font-weight:bold; 
-        text-align:center;
-        margin-bottom:-1%;
-      }
-      #login_box {
-        width: 80%;
-        max-width: 80%;
-        padding: 25px;
-        z-index:1;
-        background-image: url('https://raw.githubusercontent.com/CyberFights/chat/efd4972f14b4a61b85d4310e4de4624e45666705/public/assets/images/cyberfight%20(1).png');
-        background-repeat: no-repeat;
-        background-attachment: fixed;
-        background-size:80%;
-        background-size:cover;
-        background-position: center;
-        margin-left:10%;
-        height: 95%;
-        color:white;
-        margin-top: -27%;
-      }
-
-      #login_box label {
-        font-size: 18px;
-        color: white;
-      }
-
-      #login_box input {
-        padding: 0.6em;
-        border-radius: 0.5em;
-        -webkit-border-radius: 0.5em;
-        -moz-border-radius: 0.5em;
-        -ms-border-radius: 0.5em;
-        -o-border-radius: 0.5em;
-        width: 100%;
-        background: rgba(224, 224, 224, 0.08);
-        backdrop-filter: blur(4.5px);
-        border: 1px solid #121212;
-      }
-
-      #login_box input::placeholder {
-        color: white;
-      }
-
-      #login_box input:focus {
-        outline: none;
-        border-color: #eeeeee;
-      }
-
-      #login_box #username {
-        margin-bottom: 16px;
-      }
-
-      #login_box button {
-        margin: auto;
-        display: block;
-        margin-top: 25px;
-        width: 100%;
-        font-size: 18px;
-        border-radius: 4px;
-        cursor: pointer;
-        -webkit-border-radius: 4px;
-        -moz-border-radius: 4px;
-        -ms-border-radius: 4px;
-        -o-border-radius: 4px;
-        padding: 4px;
-        border: 1px #121212 solid;
-        background-image: linear-gradient(270deg, #20bae6, #8c09dd);
-        box-shadow: #121212 3px 3px 5px;
-      }
-
-      #login_box button:hover {
-        transform: translateY(4px);
-        -webkit-transform: translateY(4px);
-        -moz-transform: translateY(4px);
-        -ms-transform: translateY(4px);
-        -o-transform: translateY(4px);
-        box-shadow: #121212 1px 1px 1px;
-      }
-
-      #login_box b {
-        position: absolute;
-        right: 15px;
-        top: 8px;
-        font-size: 18px;
-      }
-
-      #login_box b:hover {
-        font-size: 24px;
-        color: orange;
-        cursor: pointer;
-      }
-
-      #login_box p {
-        text-align: center;
-        margin: 15px auto -15px auto;
-      }
-
-      a {
-        color: white;
-        text-decoration: none;
-        font-size: -6px;
-      }
-
-
-      #login_btn {
-        z-index:1;
-        align-items: center;
-        display: none;
-        background-image: radial-gradient(100% 100% at 100% 0, #1d4350, #a43931 100%);
-        border: 0;
-        border-radius: 6%/7%;
-        box-shadow: rgba(45, 35, 66, .4) 0 2px 4px,rgba(45, 35, 66, .3) 0 7px 13px -3px,rgba(58, 65, 111, .5) 0 -3px 0 inset;
-        box-sizing: border-box;
-        color: #fff;
-        cursor: pointer;
-        display: inline-flex;
-        font-family: "JetBrains Mono",monospace;
-        height: 15%;
-        width: 60%;
-        justify-content: center;
-        line-height: 1;
-        list-style: none;
-        overflow: hidden;
-        padding-left: 16px;
-        padding-right: 16px;
-        position: fixed;
-        text-align: center;
-        text-decoration: none;
-        transition: box-shadow .15s,transform .15s;
-        user-select: none;
-        -webkit-user-select: none;
-        touch-action: manipulation;
-        white-space: nowrap;
-        will-change: box-shadow,transform;
-        font-size: 30px;
-        margin-top:40%;
-        margin-left: 20%;
-        font-weight: bold;
-      }
-
-      #login_btn:focus {
-        box-shadow: #3c4fe0 0 0 0 1.5px inset, rgba(45, 35, 66, .4) 0 2px 4px, rgba(45, 35, 66, .3) 0 7px 13px -3px, #3c4fe0 0 -3px 0 inset;
-      }
-
-      #login_btn:hover {
-        box-shadow: rgba(45, 35, 66, .4) 0 4px 8px, rgba(45, 35, 66, .3) 0 7px 13px -3px, #3c4fe0 0 -3px 0 inset;
-        transform: translateY(-2px);
-      }
-
-      #login_btn:active {
-        box-shadow: #3c4fe0 0 3px 7px inset;
-        transform: translateY(2px);
-      }
-
-      #registration-form-container {
-        /* Adjust the form styling */
-        display:none;
-        margin: auto;
-        padding: 20px;
-        width: 90%;
-        max-width: 400px;
-      }
-      input, select, button {
-        width: 100%;
-        margin-bottom: 10px;
-        padding: 8px;
-        border: 1px solid #ccc;
-        border-radius: 4px;
-      }
-      button {
-        cursor: pointer;
-        background-color: #4CAF50;
-        color: white;
-      }
-      button:hover {
-        opacity: 0.8;
-      }
-      
-      @media (max-width: 480px) {
-        #login_btn {
-          z-index:1;
-          align-items: center;
-          display: none;
-          background-image: radial-gradient(100% 100% at 100% 0, #5adaff 0, #5468ff 100%);
-          border: 0;
-          border-radius: 6%/7%;
-          box-shadow: rgba(45, 35, 66, .4) 0 2px 4px,rgba(45, 35, 66, .3) 0 7px 13px -3px,rgba(58, 65, 111, .5) 0 -3px 0 inset;
-          box-sizing: border-box;
-          color: #fff;
-          cursor: pointer;
-          display: flex;
-          font-family: "JetBrains Mono",monospace;
-          height: 15%;
-          width: 60%;
-          justify-content: center;
-          line-height: 1;
-          list-style: none;
-          overflow: hidden;
-          padding-left: 16px;
-          padding-right: 16px;
-          position: relative;
-          text-align: center;
-          text-decoration: none;
-          transition: box-shadow .15s,transform .15s;
-          user-select: none;
-          -webkit-user-select: none;
-          touch-action: manipulation;
-          white-space: nowrap;
-          will-change: box-shadow,transform;
-          font-size: 20px;
-          margin-top:60%;
-          margin-left: 20%;
-          font-weight: bold;
+            height: 480px;
+            width: 98%;
+            grid-column: 1 / 2;
+            grid-row: 1 / 2;
+            border: 3px solid white;
+            background-color: #000;
+            overflow: hidden;
         }
-        #wel {
-          font-size:30px; 
-          color:red; 
-          text-shadow: 0 0 8px #000, 0 0 3px #000, 0 0 12px #000, 0 0 10px red; 
-          font-weight:bold; 
-          text-align:center; 
-          margin-top:7%; 
-          margin-bottom:-1%;
+
+        #roomTitle {
+            font-size: 30px;
+            text-shadow: 0 0 7px lightskyblue, 0 0 4px lightskyblue, 0 0 10px lightskyblue, 0 0 12px lightskyblue;
+            color: ghostwhite;
+            margin-left: 70%;
+            z-index: 2;
+            margin-bottom: 10px;
         }
-        #to {
-          font-size:15px; 
-          color:red; 
-          text-shadow: 0 0 8px #000, 0 0 3px #000, 0 0 12px #000, 0 0 10px red; 
-          font-weight:bold; 
-          text-align:center;
-          margin-top:-1%;
-          margin-bottom:-5%;
+
+        #messages {
+            list-style-type: none;
+            padding: 10px;
+            margin: 0;
+            overflow-y: auto;
+            flex-grow: 1;
+            max-height: 420px;
         }
-        #cf{
-          font-size:30px;
-          color:red; 
-          text-shadow: 0 0 8px #000, 0 0 3px #000, 0 0 12px #000, 0 0 10px red; 
-          font-weight:bold; 
-          text-align:center;
-          margin-bottom:-7%;
+
+        #messages li {
+            padding: 5px 10px;
+            border-bottom: 1px solid #eee;
+            color: white;
+            word-wrap: break-word;
         }
-        #body{
-            position:fixed;
-          margin-top: 0%;
-          margin-left: 0%;
-          display: flex;
-          flex-direction: column;
-                background-repeat: no-repeat;
-          background-attachment: fixed;
-          background-size:80%;
-          background-size:cover;
-          background-position: center;
-          height: 90%;
-          width: 92%;
-            border: 4px solid white;
-            border-radius: 3%/5%;
-            background-image: url('https://raw.githubusercontent.com/CyberFights/chat/efd4972f14b4a61b85d4310e4de4624e45666705/public/assets/images/cyberblue%20(1).png');
 
+        #online-members {
+            grid-column: 2 / 3;
+            grid-row: 1 / 2;
+            width: 88%;
+            padding: 10px;
+            color: white;
+            border-left: 1px solid #eee;
+            overflow-y: auto;
+            height: 460px;
+            background-color: grey;
+            border: 3px solid white;
+            margin-left: -4%;
+            font-size: 16px;
         }
-        #login_btn {
-          z-index:1;
-          align-items: center;
-          display: none;
-          background-image: radial-gradient(100% 100% at 100% 0, #1d4350, #a43931 100%);
-          border: 0;
-          border-radius: 6%/7%;
-          box-shadow: rgba(45, 35, 66, .4) 0 2px 4px,rgba(45, 35, 66, .3) 0 7px 13px -3px,rgba(58, 65, 111, .5) 0 -3px 0 inset;
-          box-sizing: border-box;
-          color: #fff;
-          cursor: pointer;
-          display: inline-flex;
-          font-family: "JetBrains Mono",monospace;
-          height: 15%;
-          width: 60%;
-          justify-content: center;
-          line-height: 1;
-          list-style: none;
-          overflow: hidden;
-          padding-left: 16px;
-          padding-right: 16px;
-          position: fixed;
-          text-align: center;
-          text-decoration: none;
-          transition: box-shadow .15s,transform .15s;
-          user-select: none;
-          -webkit-user-select: none;
-          touch-action: manipulation;
-          white-space: nowrap;
-          will-change: box-shadow,transform;
-          font-size: 20px;
-          margin-top:60%;
-          margin-left: 15%;
-          font-weight: bold;
+
+        #members-list {
+            list-style: none;
+            padding: 0;
+            margin: 10px 0 0 0;
         }
-        #login_box {
-          width: 80%;
-          max-width: 80%;
-          padding: 5px;
-          z-index:1;
-          background-image: url('https://raw.githubusercontent.com/CyberFights/chat/efd4972f14b4a61b85d4310e4de4624e45666705/public/assets/images/cyberfight%20(1).png');
-          background-repeat: no-repeat;
-          background-attachment: fixed;
-          background-size:90%;
-          background-size:cover;
-          background-position: center;
-          margin-left:10%;
-          height: 90%;
-           color:white;
-          margin-top: -45%;
+
+        .member-item {
+            display: flex;
+            align-items: center;
+            padding: 5px;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.2s ease;
         }
-        #login_box button {
-          margin: auto;
-          display: block;
-          margin-top: 20px;
-          margin-bottom:-18%;
-          width: 85%;
-          font-size: 14px;
-          border-radius: 4px;
-          cursor: pointer;
-          -webkit-border-radius: 4px;
-          -moz-border-radius: 4px;
-          -ms-border-radius: 4px;
-          -o-border-radius: 4px;
-          padding: 4px;
-          border: 1px #121212 solid;
-          background-image: linear-gradient(270deg, #20bae6, #8c09dd);
-          box-shadow: #121212 3px 3px 5px;
+
+        .member-item:hover {
+            background-color: #222;
         }
-  #register {margin-top: -10%;}
 
-      }
-     
-     #body_2 {
-       display: none;
-  font-family: "Lato", sans-serif;
-}
+        .member-item img {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            margin-right: 10px;
+            object-fit: cover;
+        }
 
-.sidebar {
-  height: 100%;
-  width: 0;
-  position: fixed;
-  z-index: 1;
-  top: 0;
-  left: 0;
-  background-color: #111;
-  overflow-x: hidden;
-  transition: 0.5s;
-  padding-top: 60px;
-}
+        #form {
+            grid-column: 1 / 3;
+            grid-row: 2 / 3;
+            display: flex;
+            padding: 10px;
+            background: #f0f0f0;
+            width: 98%;
+            border-radius: 8px;
+        }
 
-.sidebar a {
-  padding: 8px 8px 8px 32px;
-  text-decoration: none;
-  font-size: 25px;
-  color: #818181;
-  display: block;
-  transition: 0.3s;
-}
+        #m {
+            flex-grow: 1;
+            border: none;
+            padding: 10px;
+            font-size: 1em;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(7, 1, 1, 0.41), 0 7px 13px -3px rgba(0, 0, 0, 0.91), inset 0 -3px 0 rgba(0, 0, 0, 0.51);
+        }
 
-.sidebar a:hover {
-  color: #f1f1f1;
-}
+        #form button {
+            background: #333;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            border-radius: 5px;
+            margin-left: 10px;
+            width: 80px;
+        }
 
-.sidebar .closebtn {
-  position: absolute;
-  top: 0;
-  right: 25px;
-  font-size: 36px;
-  margin-left: 50px;
-}
+        #form button:hover {
+            background: #555;
+        }
 
-.openbtn {
-  font-size: 20px;
-  cursor: pointer;
-  background-color: #111;
-  color: white;
-  padding: 10px 15px;
-  border: none;
-}
+        #form label {
+            cursor: pointer;
+            margin-left: 10px;
+            display: flex;
+            align-items: center;
+            color: #333;
+        }
 
-.openbtn:hover {
-  background-color: #444;
-}
+        #form input[type="file"] {
+            display: none;
+        }
 
-#main {
-  transition: margin-left .5s;
-  padding: 16px;
-}
+        /* Close button for chat overlay */
+        .close-button {
+            position: absolute;
+            top: 5px;
+            right: 10px;
+            cursor: pointer;
+            font-size: 2em;
+            color: #aaa;
+            z-index: 10;
+        }
 
-    #members-column-user {
-      max-width: 80%;
-      background-color: #f0f0f0;
-      padding: 5px;
-      height: 50%;
-      overflow: hidden;
-      opacity: 80%;
-      overflow-y: auto;
-      overflow-y: scroll;
-      font-size: 18px;
-margin-left: 10%;
-      box-shadow:  0 50px 100px -20px rgba(2, 2, 2, 0.74), 0 30px 60px -30px rgba(0, 0, 0, 0.41),inset 0 -2px 6px 0 rgba(1, 7, 14, 0.95);
-    }
-      ul.no-bullets {
-      list-style-type: none;
-      margin: 0;
-      padding: 0;
-    }
-    
-       #columns-container {
-      display: flex;
-      justify-content: space-between;
-      height: 90%;
-      width: 95%;
-      box-shadow:  0 50px 100px -20px rgba(50,50,93,0.25), 0 30px 60px -30px rgba(0,0,0,0.3),inset 0 -2px 6px 0 rgba(10,37,64,0.35);
-    }
-     #members-column,
-      #messages-column {
-        flex: 1;
-        border: 2px solid transparent;
-        border-radius: 2%/3%;
-        box-sizing: border-box;
+        .close-button:hover {
+            color: #fff;
+        }
 
-      }
+        /* Side Tab for Private Chats */
+        .side-tab {
+            height: 80%;
+            width: 0;
+            position: fixed;
+            z-index: 1100;
+            top: 0;
+            left: 0;
+            background-color: #111;
+            overflow-x: hidden;
+            transition: 0.5s;
+            padding-top: 60px;
+            text-align: left;
+            border-radius: 0 0 10px 0;
+        }
 
-    #messages {
-      max-width:85%;
-      max-height: 70%;
-    }
+        .side-tab a.closebtn {
+            position: absolute;
+            top: 10px;
+            right: 25px;
+            font-size: 36px;
+            color: red;
+            cursor: pointer;
+            text-decoration: none;
+        }
 
-    #messages-column {
-      max-width: 100%;
-      padding: 5px;
-      max-height: 100%; /* Set your maximum height */
-      overflow-y: auto; /* Add scrolling when content overflows */
-      background-color: black;
-      color: white;
-      opacity: 90%;
-      overflow-y: scroll;
-    font-size: 20px;
-      position: relative;
-     round: 10%;
-      box-shadow-top: 0 5px #fff;
-      box-shadow:  0 50px 100px -20px rgba(13, 13, 14, 0.96), 0 30px 60px -30px rgba(13, 13, 13, 0.3),inset 0 -2px 6px 0 rgba(149, 195, 238, 0.99);
-    }
-    
-/* On smaller screens, where height is less than 450px, change the style of the sidenav (less padding and a smaller font size) */
-@media screen and (max-height: 450px) {
-  .sidebar {padding-top: 15px;}
-  .sidebar a {font-size: 18px;}
-}
-      </style>
-  </head>
-  <body>
-  
-    <div id="body_1">
-      <p id="wel">Welcome</p><br>
-      <p id="to">to</p><br>
-      <p id="cf">Cyber Fighters</p><br>
-      <button id="login_btn" onclick="toggle_login()" role="button">Login/Register</button>
-      <div id="login_box" style="display: none;">
-        <button onclick="toggle_login()" title="close" aria-label="Close" style="width:4%; margin-right: 1%;">&#10006;</button>
-        <h1 style="color:red; text-shadow: 0 0 8px #000, 0 0 3px #000, 0 0 12px #000, 0 0 10px red;">Login Form</h1>
-        <form action="" method="post" id="loginForm">
-          <label for="username">Username :</label><br>
-          <input type="text" id="username" name="username" placeholder="Enter your username..." required autocomplete="off"><br>
-          <label for="password">Password :</label><br>
-          <input type="password" name="password" id="password" placeholder="Enter Your Password..." required><br>
-          <button onclick="login_submit()">Login</button><br>
-          <p style="font-size:18px; color:red; text-shadow: 0 0 8px #000, 0 0 3px #000, 0 0 12px #000, 0 0 10px red; font-weight:bold; margin-top:10%;">Not a member?</p>
-        </form>
-          <button onclick="toggle_register()" title="register" aria-label="register" id="register" style="width:30%;">Sign up</button>
-        
-      </div> 
+        .side-tab a.closebtn:hover {
+            color: #f00;
+        }
+
+        .side-tab div.title {
+            color: ghostwhite;
+            margin-top: 25px;
+            margin-left: 20px;
+            font-size: 24px;
+            text-shadow: 0 0 7px purple, 0 0 4px purple, 0 0 10px purple, 0 0 12px purple;
+        }
+
+        #private-chats {
+            color: white;
+            list-style-type: none;
+            padding: 0;
+            margin: 10px 0 0 0;
+            max-height: 70vh;
+            overflow-y: auto;
+        }
+
+        #private-chats li {
+            padding: 10px;
+            border-bottom: 1px solid #444;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+
+        #private-chats li:hover {
+            background-color: #333;
+        }
+
+        /* Open tab button */
+        .open-tab {
+            font-size: 30px;
+            cursor: pointer;
+            background-color: #111;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            z-index: 1200;
+            border-radius: 8px;
+            box-shadow: 0 0 10px #000;
+            transition: background-color 0.3s ease;
+        }
+
+        .open-tab:hover {
+            background-color: #222;
+        }
+
+        /* Profile and Updates Section */
+        #hiddenPage {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .profile-section, .updates-section {
+            padding: 20px;
+            border-radius: 10px;
+            background-color: #222;
+            margin-bottom: 20px;
+        }
+
+        .profile-section h2, .updates-section h2 {
+            margin-bottom: 15px;
+            color: #ff0000;
+        }
+
+        .blank-profile, .user-profile {
+            text-align: center;
+            padding: 20px;
+            border: 1px solid #444;
+            border-radius: 10px;
+            background-color: #111;
+            color: white;
+        }
+</style>
+
+</head>
+<body onclick="confirmAge()">
+
+<!-- Landing Page -->
+<div class="container" id="landingPage">
+    <div class="content">
+        <h1>Welcome to Male CyberFights</h1>
+        <p id="p">Click anywhere to enter the ring!</p>
     </div>
-    
-    <div id="registration-form-container" style="display:none;">
-      <button onclick="toggle_register()" title="close" aria-label="Close" style="width:8%; margin-right: 1%;">&#10006;</button>
-      <form method="post" action="/home/html/chat2" enctype="multipart/form-data" id="registrationForm">
-                <input name="email" type="email" placeholder="Email address"  />
-                <input id="username" name="username" type="text" placeholder="Username"  />
-                <input id="password" name="password" type="password" placeholder="Password"  />
-                <input id="height" name="height" type="text" placeholder="Height"  />
-                <input id="weight" name="weight" type="text" placeholder="Weight"  />
-                <input id="age" name="age" type="text" placeholder="Age"  />
-                <label for="nativeLanguage">Native Language:</label>
-                <select name="nativeLanguage" id="nativeLanguage" >
+</div>
+
+<!-- Hidden Page -->
+<div class="hidden-page" id="hiddenPage" >
+
+    <h1>Cyberfighters</h1>
+
+    <div class="button-row">
+        <button onclick="openPopup('popup1')">About</button>
+        <button onclick="openPopup('popup2')">Help</button>
+        <button onclick="openPopup('popup3')">Contact</button>
+        <button onclick="openPopup('popup4')">Settings</button>
+    </div>
+
+    <div class="image-grid">
+        <img src="https://media.discordapp.net/attachments/685846604325978163/1362174395040268318/IMG_3014.jpg?ex=68016f43&is=68001dc3&hm=6f7a44b6a48b2339d9ef01f62acc10c437317a0c3d88f165cd7ac8720e72845c&" alt="Main Chat" data-room="Main_Chat" />
+        <img src="https://media.discordapp.net/attachments/685846604325978163/1362174395434668112/IMG_3015.jpg?ex=68016f43&is=68001dc3&hm=b88349577b9cd9e391f79262814e28dfbf8accf791bf07b3e4535a8e9daa3044&" alt="Main Chat" data-room="Main_Chat" />
+        <img src="https://media.discordapp.net/attachments/685846604325978163/1362174396474593360/IMG_3017.jpg?ex=68016f44&is=68001dc4&hm=a4df25562f36b5393887b30ae251e332a778a3cf2098800069285108d8c6eb6b&" alt="Public Ring" data-room="Public_Ring" />
+        <img src="https://media.discordapp.net/attachments/685846604325978163/1362174394566443199/IMG_3013.jpg?ex=68016f43&is=68001dc3&hm=a5a085a8a59500bdc13887af3d21ae6bdc0ca2e2c98999607e916cb14c626eb3&" alt="Weight Room" data-room="Weight_Room" />
+        <img src="https://media.discordapp.net/attachments/685846604325978163/1362174395853963345/IMG_3016.jpg?ex=68016f43&is=68001dc3&hm=fed3d2270275c85a589dba469558821bc3e0bb1bf289e19b2267681b2c0ca33f&" alt="Locker Room" data-room="Locker_Room" />
+        <img src="https://media.discordapp.net/attachments/685846604325978163/1362174396956934296/IMG_3018.jpg?ex=68016f44&is=68001dc4&hm=12316e9420cf26623f15d46ba633aa60181e13d1a86a8a353c008934987dff46&" alt="Public Pool" data-room="Public_Pool" />
+    </div>
+
+    <!-- Profile and Updates -->
+    <div class="profile-section">
+        <h2>User Profile</h2>
+        <div id="profile" class="blank-profile">
+            <p>Please log in to see your profile.</p>
+        </div>
+    </div>
+
+    <div class="updates-section">
+        <h2>Website Updates</h2>
+        <ul id="updates-list">
+            <li>No updates available.</li>
+        </ul>
+    </div>
+
+</div>
+
+<!-- Popups -->
+<div id="popup1" class="popup-overlay" onclick="closePopup(event, 'popup1')">
+    <div class="popup-box">
+        <button class="close-btn" onclick="closePopup(event, 'popup1')">&times;</button>
+        <h3>About</h3>
+        <p>This site lets you join different chat rooms by clicking the images below.</p>
+    </div>
+</div>
+
+<div id="popup2" class="popup-overlay" onclick="closePopup(event, 'popup2')">
+    <div class="popup-box">
+        <button class="close-btn" onclick="closePopup(event, 'popup2')">&times;</button>
+        <h3>Help</h3>
+        <p>Click a chat room image to join. Use the buttons above for info or assistance.</p>
+    </div>
+</div>
+
+<div id="popup3" class="popup-overlay" onclick="closePopup(event, 'popup3')">
+    <div class="popup-box">
+        <button class="close-btn" onclick="closePopup(event, 'popup3')">&times;</button>
+        <h3>Contact</h3>
+        <p>Email us at support@example.com</p>
+    </div>
+</div>
+
+<div id="popup4" class="popup-overlay" onclick="closePopup(event, 'popup4')">
+    <div class="popup-box palak">
+        <button class="close-btn" onclick="closePopup(event, 'popup4')">&times;</button>
+        <div class="img">
+            <span>
+                <img id="profilepic1" src="" alt="Profile Picture" />
+            </span>
+        </div>
+        <div class="head">User Settings</div>
+        <form id="settingsForm" method="post" enctype="multipart/form-data">
+            <div class="head2">
+                <label>Username:
+                    <input id="username" name="username" type="text" placeholder="Enter username" required />
+                </label>
+                <label>Password:
+                    <input id="password" name="password" type="password" placeholder="Enter password" required />
+                </label>
+                <label>Height:
+                    <input id="height" name="height" type="text" placeholder="Enter height" required />
+                </label>
+                <label>Weight:
+                    <input id="weight" name="weight" type="text" placeholder="Enter weight" required />
+                </label>
+                <label>Age:
+                    <input id="age" name="age" type="text" placeholder="Enter age" required />
+                </label>
+                <label>Info:
+                    <textarea id="user-info" name="info" placeholder="Enter info" required></textarea>
+                </label>
+                <label for="nativeLanguage">Select your language:</label>
+                <select name="nativeLanguage" id="nativeLanguage">
                     <option value="en">English</option>
                     <option value="es">Spanish</option>
                     <option value="mandarin">Mandarin</option>
                     <option value="hi">Hindi</option>
                     <option value="ar">Arabic</option>
-                    <!-- Add more languages as options here -->
                 </select>
-                <input id="info" name="info" type="text" placeholder="Info (e.g., interests)"  />
-
-                <input type="file" name="image" accept="image/*"  />
-                <input type="submit" onclick="register_submit()" value="Register" />
-            </form>
+                <label>Name Color:
+                    <input type="color" id="favcolor" style="height:50px; width:70px;" value="#ff0000" />
+                </label>
+                <label for="sounds">Sounds:</label>
+                <select name="sounds" id="sounds">
+                    <option value="on">On</option>
+                    <option value="off">Off</option>
+                </select>
+                <label>Image:
+                    <input type="file" id="imageUpload" name="imageUpload" accept="image/*" />
+                </label>
+                <div id="imagePreviewContainer">
+                    <img id="imagePreview" alt="Image Preview" />
+                </div>
+                <button class="register" type="submit">Update</button>
+            </div>
+        </form>
     </div>
-    <div id="body_2">
-    <div id="mySidebar" class="sidebar">
-  
-          <div id="members-column-user">
-          <ul id="online-users" class="no-bullets"></ul>
-          </div>
-  <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">×</a>
-  <a href="#">About</a>
-  <a href="#">Rules</a>
-  <a href="#">Terms of Service</a>
-  <a href="#">User Settings</a>
 </div>
 
-<div id="main">
-  <button class="openbtn" onclick="openNav()">☰ Menu</button>  
-  </div>
-    <div id="columns-container">
-        
-      
+<!-- Chat Overlay -->
+<div class="overlay" id="chatOverlay">
+    <div class="overlay-content">
+        <span class="close-button" id="closeBtn" title="Close Chat">&times;</span>
         <div id="messages-column">
-          <div style="text-shadow: 0 0 7px lightskyblue, 0 0 4px lightskyblue,  0 0 10px lightskyblue, 0 0 12px lightskyblue; color: ghostwhite; margin-left:70%; z-index:2;">Main_Chat</div>
-          <ul id="messages" class="no-bullets"></ul>
-          
+            <div id="roomTitle"></div>
+            <ul id="messages"></ul>
         </div>
-      </div>
-     
-
-      <form id="form" action="#" enctype="multipart/form-data">
-       <input id="m" placeholder="Type your message here..." autocomplete="off" style="width: 70%; height:62px; box-shadow:  0 2px 4px  rgba(7, 1, 1, 0.41), 0 7px 13px -3px rgba(0, 0, 0, 0.91),inset 0 -3px 0  rgba(0, 0, 0, 0.51);" />
-        <button style="background-color: green; color: white; width: 7%; height:55px; border-radius:10%/10%;  box-shadow-left: 2px solid grey;  box-shadow-bottom: 2px solid grey; margin-left: -0.5%;">Send</button>  <label for="image-input"> <i class="material-icons">attachment</i> </label> <input type="file" id="image-input" accept="image/*" style="width: 10%;"/>
-      </form>
-      </div>
-      </div>
-      
-         <script src="/socket.io/socket.io.js"></script>
-
-  <script>
-  
-        // Handle login form submission
-       // async function login_submit(event) {
-       //  const formData = new FormData(document.getElementById('loginForm'));
-
-         // try {
-           // const response = await fetch('/login', { // Make sure the endpoint matches your server configuration
-             // method: 'POST',
-             // body: formData, // FormData will be sent correctly with 'multipart/form-data' automatically set
-            // });
-            // const data = await response.json();
+        <div id="online-members">
+            <div style="text-shadow: 0 0 7px green, 0 0 4px green, 0 0 10px green, 0 0 12px green; color: ghostwhite; font-size:18px; margin-bottom: 10px;">Online Members</div>
+            <ul id="members-list"></ul>
+        </div>
+        <form id="form" enctype="multipart/form-data">
+            <input id="m" placeholder="Type your message here..." autocomplete="off" />
+            <button type="submit">Send</button>
+            <label for="image-input" title="Attach Image"><i class="material-icons" style="font-size:24px; color:#333;">attachment</i></label>
+            <input type="file" id="image-input" accept="image/*" />
+        </form>
+    </div>
 
 
-            // if(response.ok) {
-              // Login successful
-              // alert("Login successful!");
-              // localStorage.setItem('token', 'true'); // You can adjust based on how you handle authentication tokens
-              // localStorage.setItem('name', `${document.getElementById('username').value}`);
-              // localStorage.setItem('languagePreference', 'en');
-              // window.location.href = '/chat.html'; // Redirect user to the chat page
-            // } else {
-              // Login failed
-              // alert("Login failed: " + data.message);
-            //}
-          // } catch (error) {
-            // console.error('Error during login:', error);
-            //alert('Login attempt failed. Please try again.');
-          //}
-        //} 
-      
-      function toggle_login() {
-        var login_btn = document.querySelector("#login_btn");
-        var login_box = document.querySelector("#login_box");
-        var register_box = document.querySelector("#registration-form-container");
-        login_box.style.display = login_box.style.display === "none" ? "block" : "none";
-        login_btn.style.display = login_box.style.display === "block" ? "none" : "block";
-        register_box.style.display = "none"; // Hide registration form when toggling login form
-      }
-      function toggle_register() {
-        var login_btn = document.querySelector("#login_btn");
-        var login_box = document.querySelector("#login_box");
-        var register_box = document.querySelector("#registration-form-container");
-        login_box.style.display = "none";
-        login_btn.style.display = login_box.style.display === "block" ? "none" : "block";
-        register_box.style.display = register_box.style.display === "none" ? "block" : "none";
-      }
-      
+<!-- Private Chats Side Tab -->
+<button class="open-tab" onclick="openNav()" aria-label="Open Private Chats">☰ Private Chats</button>
 
-     //async function register_submit(event) {
-          //event.preventDefault(); // Prevent default form submission
-          //const formData = new FormData(document.getElementById('registrationForm'));
-       //const username = formData.get('username');
-       //const image = formData.get('image');
+<div id="mySideTab" class="side-tab" aria-label="Private Chats Side Tab">
+    <a href="javascript:void(0)" class="closebtn" onclick="closeNav()" aria-label="Close Private Chats">×</a>
+    <div class="title">Private Chats</div>
+    <ul id="private-chats"></ul>
+</div>
+</div>
+<!-- Socket.IO -->
+<script src="https://cdn.socket.io/4.12.1/socket.io.min.js" crossorigin="anonymous"></script>
+<script>
+let isAgeVerified = false;
 
-          //try {
-            //const response = await fetch('/upload', { // Make sure the endpoint matches your server configuration
-              //method: 'POST',
-              //body: formData, // FormData will be sent correctly with 'multipart/form-data' automatically set
-            //});
-            //const data = await response.json();
-
-            //if(response.ok) {
-              // Registration successful
-              //alert("Registration successful!");
-              //localStorage.setItem('token', 'true'); // You can adjust based on how you handle authentication tokens
-              //localStorage.setItem('name', formData.get('username'));
-              //localStorage.setItem('languagePreference', formData.get('nativeLanguage'));
-              //window.location.href = '/html/chat.html'; // Redirect user to the chat page
-            //} else {
-              // Registration failed
-              //alert("Registration failed: " + data.message);
-            //}
-          //} catch (error) {
-            //console.error('Error during registration:', error);
-            //alert('Registration attempt failed. Please try again.');
-          //}
-        //}
-        function register_submit() {
-          
-          var body1 = document.querySelector("#body_1");
-        var body2 = document.querySelector("#body_2");
-        var register_box = document.querySelector("#registration-form-container");
-        register_box.style.display = "none";
-        body1.style.display = "none";
-        body2.style.display = "block";
-      }
-        
-      
-    document.addEventListener('DOMContentLoaded', () => {
-      const socket = io();
-
-      const signupScreen = document.getElementById('login_box');
-      const chatScreen = document.getElementById('messages-column');
-      const signupForm = document.getElementById('loginForm');
-      const usernameInput = document.getElementById('username');
-      const messageInput = document.getElementById('m');
-      const messagesList = document.getElementById('messages');
-
-      signupForm.addEventListener('submit', (e) => {
-        e.preventDefault();
-        const username = usernameInput.value.trim();
-        if (username) {
-          localStorage.setItem('username', username);
-          signupScreen.style.display = 'none';
-          chatScreen.style.display = 'block';
-          socket.emit('set username', username);
+    function confirmAge() {
+        if (!isAgeVerified) {
+            const userConfirmed = confirm("Are you 18 years or older?");
+            if (userConfirmed) {
+                isAgeVerified = true;
+                const landingPage = document.getElementById("landingPage");
+                landingPage.classList.add("fade-out");
+                setTimeout(() => {
+                    landingPage.style.display = "none";
+                    document.getElementById("hiddenPage").style.display = "block";
+                }, 2000);
+            } else {
+                alert("You must be at least 18 years old to proceed.");
+            }
         }
-      });
+    }
 
-      document.getElementById('form').addEventListener('submit', (e) => {
-        e.preventDefault();
-        const message = messageInput.value.trim();
-        if (message) {
-          socket.emit('chat message', message);
-          messageInput.value = '';
+    const images = document.querySelectorAll('.image-grid img');
+    const overlay = document.getElementById('chatOverlay');
+    const closeBtn = document.getElementById('closeBtn');
+    const messages = document.getElementById('messages');
+    const form = document.getElementById('form');
+    const input = document.getElementById('m');
+    const roomTitle = document.getElementById('roomTitle');
+    const membersList = document.getElementById('members-list');
+    const privateChatsList = document.getElementById('private-chats');
+    const sideTab = document.getElementById('mySideTab');
+
+    let socket = null;
+    let currentRoom = null;
+    let currentUsername = 'User'; // Default username
+    let privateChats = {};
+
+    // Open chat overlay and join room
+    function openChat(roomName) {
+        overlay.style.display = 'flex';
+        roomTitle.textContent = roomName;
+
+        if (!socket) {
+            socket = io('http://localhost:3000'); // Replace with your server URL
+            setupSocketListeners();
         }
-      });
 
-      socket.on('chat message', (msg) => {
-        const item = document.createElement('li');
-        item.textContent = `${msg.date} - ${msg.username} - ${msg.message}`;
-        messagesList.appendChild(item);
-        saveMessageLocally(msg);
-      });
+        if (currentRoom) {
+            socket.emit('leaveRoom', { room: currentRoom, username: currentUsername });
+        }
 
-      function saveMessageLocally(msg) {
-        let messages = JSON.parse(localStorage.getItem('messages')) || [];
-        messages.push(msg);
-        localStorage.setItem('messages', JSON.stringify(messages));
-      }
+        currentRoom = roomName;
+        socket.emit('joinRoom', { room: roomName, username: currentUsername });
+    }
 
-      function loadMessagesFromLocalStorage() {
-        const messages = JSON.parse(localStorage.getItem('messages')) || [];
-        messages.forEach((msg) => {
-          const item = document.createElement('li');
-          item.textContent = `${msg.date} - ${msg.username} - ${msg.message}`;
-          messagesList.appendChild(item);
+    // Setup socket event listeners once
+    function setupSocketListeners() {
+        socket.on('loadMessages', (previousMessages) => {
+            messages.innerHTML = '';
+            previousMessages.forEach(msg => {
+                const item = document.createElement('li');
+                item.textContent = msg;
+                messages.appendChild(item);
+            });
+            scrollToBottom();
         });
-      }
 
-      loadMessagesFromLocalStorage();
+        socket.on('chat message', (data) => {
+            const item = document.createElement('li');
+            item.textContent = `${data.username}: ${data.message}`;
+            messages.appendChild(item);
+            scrollToBottom();
+        });
+
+        socket.on('updateMembers', (members) => {
+            membersList.innerHTML = '';
+            members.forEach(member => {
+                const memberItem = document.createElement('li');
+                memberItem.classList.add('member-item');
+                memberItem.innerHTML = `
+                    <img src="${member.profilePic || 'https://via.placeholder.com/30'}" alt="${member.username}" />
+                    <span>${member.username}</span>
+                `;
+                memberItem.addEventListener('click', () => startPrivateChat(member.username));
+                membersList.appendChild(memberItem);
+            });
+        });
+
+        socket.on('private message', (data) => {
+            const sender = data.from;
+            const message = data.message;
+
+            if (!privateChats[sender]) {
+                privateChats[sender] = { username: sender, messages: [] };
+                addPrivateChat(sender);
+            }
+
+            privateChats[sender].messages.push(message);
+            console.log(`Received private message from ${sender}: ${message}`);
+        });
+    }
+
+    // Start a private chat
+    function startPrivateChat(username) {
+        if (!privateChats[username]) {
+            privateChats[username] = { username: username, messages: [] };
+            addPrivateChat(username);
+        }
+        alert('Starting private chat with ' + username);
+    }
+
+    // Add private chat to side tab
+    function addPrivateChat(username) {
+        const listItem = document.createElement('li');
+        listItem.textContent = username;
+        listItem.addEventListener('click', () => {
+            alert('Open chat with ' + username);
+        });
+        privateChatsList.appendChild(listItem);
+    }
+
+    // Close chat overlay
+    function closeChat() {
+        overlay.style.display = 'none';
+        if (socket && currentRoom) {
+            socket.emit('leaveRoom', { room: currentRoom, username: currentUsername });
+            currentRoom = null;
+        }
+    }
+
+    // Scroll chat to bottom
+    function scrollToBottom() {
+        messages.scrollTop = messages.scrollHeight;
+    }
+
+    // Event listeners
+    images.forEach(image => {
+        image.addEventListener('click', () => {
+            const roomName = image.dataset.room;
+            openChat(roomName);
+        });
     });
-  </script>
-      </body>
+
+    closeBtn.addEventListener('click', closeChat);
+
+    window.addEventListener('click', (event) => {
+        if (event.target === overlay) {
+            closeChat();
+        }
+    });
+
+    // Side tab open/close
+    function openNav() {
+        sideTab.style.width = "250px";
+    }
+
+    function closeNav() {
+        sideTab.style.width = "0";
+    }
+
+    // Popup open/close
+    function openPopup(id) {
+        document.getElementById(id).style.display = 'flex';
+    }
+
+    function closePopup(event, id) {
+        if (event.target.classList.contains('popup-overlay') || event.target.classList.contains('close-btn')) {
+            document.getElementById(id).style.display = 'none';
+        }
+    }
+
+    // Image preview in settings
+    document.getElementById('imageUpload').addEventListener('change', function(event) {
+        const file = event.target.files[0];
+        const preview = document.getElementById('imagePreview');
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                preview.src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        } else {
+            preview.src = '';
+        }
+    });
+
+    // Settings form submit
+    document.getElementById('settingsForm').addEventListener('submit', function(event) {
+        event.preventDefault();
+        currentUsername = document.getElementById('username').value || 'User';
+
+        // Optionally update profile picture preview in main UI
+        const profilePic = document.getElementById('imagePreview').src;
+        if (profilePic) {
+            document.getElementById('profilepic1').src = profilePic;
+        }
+
+        closePopup(event, 'popup4');
+        alert('Settings updated! Username is now: ' + currentUsername);
+    });
+</script>
+</body>
 </html>
