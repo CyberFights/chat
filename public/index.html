@@ -141,7 +141,30 @@
             transform: scale(1.05);
             box-shadow: 0 4px 16px rgba(0,0,0,0.5);
         }
+.image-item {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
 
+.room-label {
+    position: absolute;
+    top: 14px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0,0,0,0.65);
+    color: #fff;
+    padding: 6px 18px;
+    border-radius: 8px;
+    font-size: 1.2em;
+    font-weight: bold;
+    letter-spacing: 1px;
+    pointer-events: none;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+    text-shadow: 0 1px 8px #000;
+    z-index: 2;
+}
         /* Popups */
         .popup-overlay {
             display: none;
@@ -563,6 +586,12 @@
         margin: 5px;
         font-size: 16px;
     }
+    
+.room-label {
+    font-size: 1em;
+    padding: 4px 10px;
+    top: 8px;
+}
     .container {
         padding: 0;
         height: 100vh;
@@ -706,14 +735,32 @@
         <button onclick="openPopup('popup4')">Settings</button>
     </div>
 
-    <div class="image-grid">
+<div class="image-grid">
+    <div class="image-item">
         <img src="https://raw.githubusercontent.com/CyberFights/chat/refs/heads/main/public/assets/images/maindesk.jpg" alt="Main Chat" data-room="Main_Chat" />
-        <img src="https://raw.githubusercontent.com/CyberFights/chat/refs/heads/main/public/assets/images/lobby.jpg" alt="Main Chat" data-room="Main_Chat" />
-        <img src="https://raw.githubusercontent.com/CyberFights/chat/refs/heads/main/public/assets/images/wrestlingring.jpg" alt="Public Ring" data-room="Public_Ring" />
-        <img src="https://raw.githubusercontent.com/CyberFights/chat/refs/heads/main/public/assets/images/weightroom.jpg" alt="Weight Room" data-room="Weight_Room" />
-        <img src="https://raw.githubusercontent.com/CyberFights/chat/refs/heads/main/public/assets/images/lockerroom.jpg" alt="Locker Room" data-room="Locker_Room" />
-        <img src="https://raw.githubusercontent.com/CyberFights/chat/refs/heads/main/public/assets/images/pool.jpg" alt="Public Pool" data-room="Public_Pool" />
+        <div class="room-label">Main Desk</div>
     </div>
+    <div class="image-item">
+        <img src="https://raw.githubusercontent.com/CyberFights/chat/refs/heads/main/public/assets/images/lobby.jpg" alt="Lobby" data-room="Main_Chat" />
+        <div class="room-label">Lobby</div>
+    </div>
+    <div class="image-item">
+        <img src="https://raw.githubusercontent.com/CyberFights/chat/refs/heads/main/public/assets/images/wrestlingring.jpg" alt="Public Ring" data-room="Public_Ring" />
+        <div class="room-label">Wrestling Ring</div>
+    </div>
+    <div class="image-item">
+        <img src="https://raw.githubusercontent.com/CyberFights/chat/refs/heads/main/public/assets/images/weightroom.jpg" alt="Weight Room" data-room="Weight_Room" />
+        <div class="room-label">Weight Room</div>
+    </div>
+    <div class="image-item">
+        <img src="https://raw.githubusercontent.com/CyberFights/chat/refs/heads/main/public/assets/images/lockerroom.jpg" alt="Locker Room" data-room="Locker_Room" />
+        <div class="room-label">Locker Room</div>
+    </div>
+    <div class="image-item">
+        <img src="https://raw.githubusercontent.com/CyberFights/chat/refs/heads/main/public/assets/images/pool.jpg" alt="Public Pool" data-room="Public_Pool" />
+        <div class="room-label">Pool</div>
+    </div>
+</div>
 
     <!-- Profile and Updates -->
     <div class="profile-section">
