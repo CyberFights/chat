@@ -488,10 +488,13 @@
             text-align: left;
             border-radius: 0 0 10px 0;
             font-size: 18px;
+            /* Hidden by default */
+            display: none;
         }
 
         .side-tab.open {
             width: 250px !important;
+            display: block;
         }
 
         .side-tab a.closebtn {
@@ -551,6 +554,8 @@
             border-radius: 8px;
             box-shadow: 0 0 10px #000;
             transition: background-color 0.3s ease;
+            /* Hidden by default */
+            display: none;
         }
 
         .open-tab:hover {
@@ -621,10 +626,14 @@
         margin-left: auto;
         margin-right: auto;
     }
+    /* Shortened and centered buttons on mobile */
     .button-row button {
         width: 100%;
+        max-width: 200px;
         font-size: 18px;
         padding: 12px;
+        margin: 0 auto 8px auto;
+        display: block;
     }
     .image-grid {
         grid-template-columns: 1fr;
@@ -910,9 +919,10 @@
     </div>
 </div>
 
-<!-- Private Chats Side Tab -->
-<button class="open-tab" onclick="openNav()" aria-label="Open Private Chats">☰ Private Chats</button>
+<!-- Private Chats Side Tab Button (hidden by default) -->
+<button class="open-tab" id="privateChatsBtn" onclick="openNav()" aria-label="Open Private Chats">☰ Private Chats</button>
 
+<!-- Private Chats Side Tab (hidden by default) -->
 <div id="mySideTab" class="side-tab" aria-label="Private Chats Side Tab">
     <a href="javascript:void(0)" class="closebtn" onclick="closeNav()" aria-label="Close Private Chats">×</a>
     <div class="title">Private Chats</div>
@@ -934,6 +944,11 @@ let isAgeVerified = false;
                 setTimeout(() => {
                     landingPage.style.display = "none";
                     document.getElementById("hiddenPage").style.display = "block";
+                    // Show private chats button and tab after verification
+                    const privateChatsBtn = document.getElementById("privateChatsBtn");
+                    const mySideTab = document.getElementById("mySideTab");
+                    if (privateChatsBtn) privateChatsBtn.style.display = "flex";
+                    if (mySideTab) mySideTab.style.display = "block";
                 }, 2000);
             } else {
                 alert("You must be at least 18 years old to proceed.");
