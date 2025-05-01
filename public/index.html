@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8" />
     <title>Chat Room Hub</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
 <style>
 @import url('https://fonts.googleapis.com/css?family=Lato');
@@ -17,7 +18,6 @@
             height: 100vh;
             overflow-x: hidden;
             color: white;
-            
         }
 
         /* Landing Page */
@@ -29,7 +29,8 @@
             text-align: center;
             background: url('https://raw.githubusercontent.com/CyberFights/chat/refs/heads/main/public/assets/images/CyberfightersWith.png');
             background-repeat: no-repeat;
-            background-size: fit;
+            background-size: cover; /* fixed from 'fit' */
+            background-position: center;
         }
 
         .content {
@@ -93,7 +94,6 @@
         .hidden-page {
             display: none;
             color: white;
-            
         }
 
         /* Button row */
@@ -483,10 +483,15 @@
             left: 0;
             background-color: #111;
             overflow-x: hidden;
-            transition: 0.5s;
+            transition: width 0.5s;
             padding-top: 60px;
             text-align: left;
             border-radius: 0 0 10px 0;
+            font-size: 18px;
+        }
+
+        .side-tab.open {
+            width: 250px !important;
         }
 
         .side-tab a.closebtn {
@@ -582,30 +587,39 @@
         
 /* --- Mobile Responsive Styles --- */
 @media (max-width: 640px) {
+    html, body {
+        margin: 0;
+        padding: 0;
+        width: 100vw;
+        min-height: 100vh;
+        font-size: 15px;
+        box-sizing: border-box;
+        overflow-x: hidden;
+    }
     body {
-        margin: 5px;
+        margin: 0;
         font-size: 16px;
     }
-    
-.room-label {
-    font-size: 1em;
-    padding: 4px 10px;
-    top: 8px;
-}
     .container {
         padding: 0;
+        width: 100vw;
         height: 100vh;
-        background-size: fit;
+        min-height: 100vh;
+        background-size: cover;
         background-position: center;
     }
     h1, #p {
-        font-size: 1.5rem;
+        font-size: 1.3rem;
         margin-top: 25%;
+        padding: 0 5vw;
     }
     .button-row {
         flex-direction: column;
         gap: 10px;
         margin-bottom: 20px;
+        width: 98vw;
+        margin-left: auto;
+        margin-right: auto;
     }
     .button-row button {
         width: 100%;
@@ -614,23 +628,32 @@
     }
     .image-grid {
         grid-template-columns: 1fr;
-        gap: 12px;
+        gap: 10px;
         max-width: 98vw;
         margin-bottom: 20px;
     }
     .image-grid img {
-        max-width: 95vw;
+        width: 100%;
+        max-width: 98vw;
         height: auto;
+        display: block;
+        margin: 0 auto;
+    }
+    .room-label {
+        font-size: 0.95em;
+        padding: 4px 10px;
+        top: 8px;
     }
     .profile-section, .updates-section {
         padding: 8px;
+        margin: 0 2vw 10px 2vw;
     }
     .palak {
         max-width: 98vw;
         padding: 8px;
     }
     .palak .head {
-        font-size: 1.3em;
+        font-size: 1.1em;
     }
     .palak .head2 {
         font-size: 1em;
@@ -651,7 +674,7 @@
         width: 98vw;
         max-width: 100vw;
         padding: 5px;
-        border-width: 3px;
+        border-width: 2px;
         border-radius: 5px;
         display: flex;
         flex-direction: column;
@@ -659,18 +682,23 @@
     }
     #messages-column {
         width: 100%;
-        height: 280px;
-        min-height: 180px;
+        height: 210px;
+        min-height: 120px;
         border-width: 2px;
+    }
+    #roomTitle {
+        font-size: 1.2em;
+        margin-left: 0;
+        margin-bottom: 6px;
     }
     #online-members {
         width: 100%;
-        height: 120px;
+        height: 90px;
         margin-left: 0;
         border-left: none;
         border-top: 1px solid #eee;
         border-width: 2px;
-        font-size: 15px;
+        font-size: 14px;
         margin-bottom: 10px;
     }
     #form {
@@ -689,7 +717,7 @@
         margin-bottom: 5px;
     }
     .close-button {
-        font-size: 1.5em;
+        font-size: 1.2em;
         top: 5px;
         right: 6px;
     }
@@ -703,14 +731,13 @@
         width: 80vw !important;
     }
     .open-tab {
-        font-size: 22px;
+        font-size: 20px;
         padding: 8px 10px;
         top: 5px;
         left: 5px;
         border-radius: 6px;
     }
 }
-
 </style>
 
 </head>
@@ -881,7 +908,7 @@
             <input type="file" id="image-input" accept="image/*" />
         </form>
     </div>
-
+</div>
 
 <!-- Private Chats Side Tab -->
 <button class="open-tab" onclick="openNav()" aria-label="Open Private Chats">☰ Private Chats</button>
@@ -891,7 +918,7 @@
     <div class="title">Private Chats</div>
     <ul id="private-chats"></ul>
 </div>
-</div>
+
 <!-- Socket.IO -->
 <script src="https://cdn.socket.io/4.12.1/socket.io.min.js" crossorigin="anonymous"></script>
 <script>
@@ -1044,13 +1071,13 @@ let isAgeVerified = false;
         }
     });
 
-    // Side tab open/close
+    // Side tab open/close using class toggle
     function openNav() {
-        sideTab.style.width = "250px";
+        sideTab.classList.add('open');
     }
 
     function closeNav() {
-        sideTab.style.width = "0";
+        sideTab.classList.remove('open');
     }
 
     // Popup open/close
