@@ -1250,7 +1250,26 @@ let isAgeVerified = false;
         });
         privateChatsList.appendChild(listItem);
     }
+function openProfile(user) {
+          const img = `https://cyberfighters.replit.app/uploads/${user}-image.jpg`;
+          // Correctly retrieve user information asynchronously
+          fetch(`/get-details?username=${user}`)
+            .then((response) => response.json())
+            .then((data) => {
+              document.getElementById("profile-info").innerHTML = `Info: ${data.info}`;
+              document.getElementById("profile-stats").innerHTML = `Stats: Height - ${data.height}, Weight - ${data.weight}`;
+              document.getElementById("profile-age").innerHTML = `Age: ${data.age}`;
+              document.getElementById("profile-name").innerHTML = user;
+              document.getElementById("profile-img").src = img;
+            })
+            .catch((error) => {
+              console.error('Error:', error);
+            });
 
+          document.getElementById("myNavi2").style.display = "block";
+          localStorage.setItem('receiver', user);
+        }
+        
     // Close chat overlay
     function closeChat() {
         overlay.style.display = 'none';
