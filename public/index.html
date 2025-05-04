@@ -589,7 +589,167 @@
             background-color: #111;
             color: white;
         }
+           #myNavi2 {
+        display: none;
+        position: fixed;
+      z-index: 999;
+        content-align: center;
+      }
+      .profile2{
+        width: 100vw;
+        height: 100vh;
+        display:flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        background: transparent;
+        z-index: 0;
+        padding:0;
+        margin: 0;
+        position: relative;
+        overflow: hidden;
+      }
+
+      svg{
+        z-index: -10;
+        background: transparent;
+        position: absolute;
+        overflow: hidden;
+        max-height: 100%;
+        max-width: 100%;
+      }
+
+      .profile-img{
+        border-radius: 50%;
+        height: 90px;
+        width: 90px;
+        border: 7px solid rgba(90,140,240,1);
+        position: absolute;
+        left:15px;
+        top: 15px;
+      }
+
+
+
+      p{
+        font-size: 1.30em;
+      }
+
+      .middlecont p{
+        color: rgb(200,200,205);
         
+      }
+
+      .top{
+        background:rgb(80,80,87);
+        height: 30px;
+        width: 410px;
+        max-width: 95%;
+        border-radius: 15px 15px 3px 3px;
+        display: block;
+        position: relative;
+        box-shadow: inset 6px 6px 5px rgba(200,200,205,0.4), inset -6px 6px 6px rgba(10,10,15,0.4), inset -2px -2px 2px rgba(10,10,15,0.4);
+        z-index:5;
+      }
+
+      .light{
+        background: rgb(10,10,15);
+        width: 20px;
+        height: 5px;
+        border-radius: 3px;
+        position: absolute ;
+        right: 15px;
+        top: 13px;
+        box-shadow: inset 1px 1px 2px rgba(0,0,0,0.2), inset -1px -1px 2px rgba(150,150,155,0.4);
+        animation: 1.5s lf ease forwards;
+        animation-delay: 2s;
+      }
+
+      @keyframes lf{
+        0%{
+          background: rgb(10,10,15);
+        }
+        25%{background: rgb(50,100,200);}
+        50%{background: rgb(10,60,160);}
+        100%{background: rgb(90,140,240);}
+      }
+
+      .middle{
+        background: linear-gradient(45deg, rgba(30,80,180,1), rgba(90,140,240,1));
+        width: 400px;
+        height: 450px;
+        max-width: 92%;
+        max-height: 80%;
+        transition: all 1s ease;
+        z-index:1;
+        overflow: hidden;
+        margin: 0;
+        padding: 0;
+      }
+
+      .middlecont{
+        height: 100%;
+        max-width: 95%;
+        color: white;
+        padding: 5px;
+        text-align: center;
+        z-index: 10;
+        position: relative;
+        left:0;
+        right:0;
+        margin: auto;
+      }
+
+      .open{
+        height: 400px;
+        opacity: 0.9;
+        animation: 15s hg ease infinite;
+      }
+
+      @keyframes hg{
+        0%{
+          transform: skewX(1deg);
+          opacity: 0.7;
+        }
+        1%{ transform: skewX(0);
+          opacity: 0.9;
+         }
+         69%{
+          transform: skewX(0.5deg);
+          opacity: 0.8;
+         }
+         70%{
+          transform: skewX(-1deg);
+          opacity: 0.7;
+         }
+         71%{
+          transform: skewX(0.5deg);
+          opacity: 0.9;
+         }
+         100%{
+          transform: skewX(0);
+          opacity: 0.9;
+         }
+      }
+
+      .closed{
+        height: 0px;
+        opacity: 0;
+      }
+
+
+
+      .bottom{
+        background: rgb(80,80,87);
+        width: 410px;
+        height: 30px;
+        max-width: 95%;
+        border-radius: 3px 3px 15px 15px;
+        display: block;
+        position: relative;
+          box-shadow: inset -6px -6px 6px rgba(10,10,15,0.5), inset 6px -6px 6px rgba(200, 200, 205, 0.4), inset 2px 2px 2px rgba(200,200,205,0.2);
+        z-index:4;
+      }
 /* --- Mobile Responsive Styles --- */
 @media (max-width: 640px) {
     html, body {
