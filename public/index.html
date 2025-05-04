@@ -1006,7 +1006,8 @@
         <br><br>
       <p id="profile-info"></p>
         <img src="" class="profile-img" id="profile-img">
-        </div>
+         <button onclick="startPrivateChat('${user}')">Msg</button>
+         </div>
         </div>
         <div onclick="toggleOpen()" class="bottom">
         </div>
@@ -1213,7 +1214,7 @@ let isAgeVerified = false;
                     <img src="${member.profilePic || 'https://via.placeholder.com/30'}" alt="${member.username}" />
                     <span>${member.username}</span>
                 `;
-                memberItem.addEventListener('click', () => startPrivateChat(member.username));
+                memberItem.addEventListener('click', () => openProfile(member.username));
                 membersList.appendChild(memberItem);
             });
         });
