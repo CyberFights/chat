@@ -822,6 +822,36 @@
 </div>
 
 <!-- Popups -->
+   <div id="myNavi2" class="pop-up">
+
+        <!-- Button to close the overlay navigation -->
+
+      <div class="profile2">
+        <div class="top" onclick="toggleOpen()">
+        <p style="text-align:center; font-size:20px; top-margin:1%;">Click here to close</p>  <div class="light"></div>
+        </div>
+        <div class="middle closed">
+        <svg height="400" width="300">
+      <circle cx="0" cy="0" r="100" fill="rgba(90,140,240,1)"></circle>
+
+      <circle cx="90" cy="110" r="20" fill="rgba(90,140,240,1)"></circle>
+
+      <circle cx="0" cy="310" r="100" fill="rgba(90,140,240,0.75)"></circle>
+      </svg>
+        <div class="middlecont">
+        <br>
+        <p style="margin-left:69px; margin-bottom: 0;" id="profile-name" ></p>
+      <p style="margin-left: 55px;" id="profile-age"></p><br>
+           <p style="margin-left: 55px;" id="profile-stats"></p><br>
+        <br><br>
+      <p id="profile-info"></p>
+        <img src="" class="profile-img" id="profile-img">
+        </div>
+        </div>
+        <div onclick="toggleOpen()" class="bottom">
+        </div>
+      </div>
+      </div>
 <div id="popup1" class="popup-overlay" onclick="closePopup(event, 'popup1')">
     <div class="popup-box">
         <button class="close-btn" onclick="closePopup(event, 'popup1')">&times;</button>
