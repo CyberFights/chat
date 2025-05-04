@@ -1251,6 +1251,20 @@ let isAgeVerified = false;
         });
         privateChatsList.appendChild(listItem);
     }
+    function toggleOpen(){
+          var el = document.getElementsByClassName("middle")[0];
+
+          if(el.className.includes("open")){
+            el.className = "middle closed";
+            
+          }else if(el.className.includes("closed")){
+            document.getElementById("myNavi2").style.display = "none";
+            el.className = "middle open";
+          }else{
+            el.className = "middle open";
+            document.getElementById("myNavi2").style.display = "block";
+          }
+        }
 function openProfile(user) {
           const img = `https://cyberfighters.replit.app/uploads/${user}-image.jpg`;
           // Correctly retrieve user information asynchronously
