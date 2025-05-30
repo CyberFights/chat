@@ -964,6 +964,21 @@
     </div>
 </div>
 
+
+<!-- Example login popup -->
+<div id="popup0" class="popup-overlay" onclick="closePopup(event, 'popup0')">
+  <div class="popup-box">
+    <button class="close-btn" onclick="closePopup(event, 'popup0')">&times;</button>
+    <h3>Login</h3>
+    <form id="loginForm">
+      <input type="text" id="loginUsername" placeholder="Username" required />
+      <input type="password" id="loginPassword" placeholder="Password" required />
+      <button type="submit">Login</button>
+    </form>
+  </div>
+</div>
+
+
     <!-- Profile and Updates -->
     <div class="profile-section">
         <h2>User Profile</h2>
@@ -1129,6 +1144,8 @@
 <script src="https://cdn.socket.io/4.12.1/socket.io.min.js" crossorigin="anonymous"></script>
 <script>
 let isAgeVerified = false;
+let isLoggedIn = false; 
+
 
     function confirmAge() {
         if (!isAgeVerified) {
@@ -1151,6 +1168,16 @@ let isAgeVerified = false;
             }
         }
     }
+
+
+document.getElementById('loginForm').addEventListener('submit', function(event) {
+    event.preventDefault();
+    // TODO: Add your real authentication logic here!
+    isLoggedIn = true; // Now the user is logged in
+    closePopup({target: {classList: ['popup-overlay']}}, 'popup0');
+    alert('Login successful! You can now enter chat rooms.');
+});
+
 
     const images = document.querySelectorAll('.image-grid img');
     const overlay = document.getElementById('chatOverlay');
@@ -1300,12 +1327,19 @@ function openProfile(user) {
     }
 
     // Event listeners
-    images.forEach(image => {
-        image.addEventListener('click', () => {
-            const roomName = image.dataset.room;
-            openChat(roomName);
-        });
+
+images.forEach(image => {
+    image.addEventListener('click', () => {
+        if (!isLoggedIn) {
+            alert('Please log in before entering any chat room!');
+            openPopup('popup0'); // Open login popup
+            return;
+        }
+        const roomName = image.dataset.room;
+        openChat(roomName);
     });
+});
+
 
     closeBtn.addEventListener('click', closeChat);
 
