@@ -965,7 +965,7 @@
 </div>
 
 
-<!-- Example login popup -->
+
 <div id="popup0" class="popup-overlay" onclick="closePopup(event, 'popup0')">
   <div class="popup-box">
     <button class="close-btn" onclick="closePopup(event, 'popup0')">&times;</button>
@@ -974,6 +974,41 @@
       <input type="text" id="loginUsername" placeholder="Username" required />
       <input type="password" id="loginPassword" placeholder="Password" required />
       <button type="submit">Login</button>
+    </form>
+    <!-- Register Button Here -->
+    <button id="showRegisterBtn" type="button" style="margin-top:15px; width:100%; background: #0077ff; color: #fff; border-radius:8px; font-size:16px;">Register</button>
+  </div>
+</div>
+
+<div id="registerPopup" class="popup-overlay" onclick="closePopup(event, 'registerPopup')">
+  <div class="popup-box" onclick="event.stopPropagation();">
+    <button class="close-btn" onclick="closePopup(event, 'registerPopup')">&times;</button>
+    <h3>Register</h3>
+    <form id="registerForm" enctype="multipart/form-data">
+      <input type="text" name="username" placeholder="Username" required />
+      <input type="password" name="password" placeholder="Password" required />
+      <input type="email" name="email" placeholder="Email" required />
+      <input type="number" name="age" placeholder="Age" min="13" max="120" required />
+      <input type="text" name="height" placeholder="Height (e.g. 5'9&quot; or 175cm)" required />
+      <input type="text" name="weight" placeholder="Weight (e.g. 160 lbs or 72kg)" required />
+      <textarea name="info" placeholder="Tell us about yourself" required></textarea>
+      <label for="nativeLanguage">Native Language:</label>
+      <select name="nativeLanguage" id="nativeLanguageReg" required>
+        <option value="">Select</option>
+        <option value="en">English</option>
+        <option value="es">Spanish</option>
+        <option value="mandarin">Mandarin</option>
+        <option value="hi">Hindi</option>
+        <option value="ar">Arabic</option>
+      </select>
+      <label for="colorReg">Name Color:</label>
+      <input type="color" id="colorReg" name="color" value="#ff0000" style="height:40px;width:60px;" />
+      <label for="imageUploadReg">Profile Image:</label>
+      <input type="file" id="imageUploadReg" name="image" accept="image/*" />
+      <div id="registerImagePreviewContainer" style="margin-bottom:10px;text-align:center;">
+        <img id="registerImagePreview" style="max-width:50%;max-height:120px;border-radius:10px;display:none;" />
+      </div>
+      <button type="submit" style="background:green;color:white;width:100%;border-radius:8px;font-size:18px;">Register</button>
     </form>
   </div>
 </div>
@@ -1146,28 +1181,64 @@
 let isAgeVerified = false;
 let isLoggedIn = false; 
 
-
-    function confirmAge() {
-        if (!isAgeVerified) {
-            const userConfirmed = confirm("Are you 18 years or older?");
-            if (userConfirmed) {
-                isAgeVerified = true;
-                const landingPage = document.getElementById("landingPage");
-                landingPage.classList.add("fade-out");
-                setTimeout(() => {
-                    landingPage.style.display = "none";
-                    document.getElementById("hiddenPage").style.display = "block";
-                    // Show private chats button and tab after verification
-                    const privateChatsBtn = document.getElementById("privateChatsBtn");
-                    const mySideTab = document.getElementById("mySideTab");
-                    if (privateChatsBtn) privateChatsBtn.style.display = "flex";
-                    if (mySideTab) mySideTab.style.display = "block";
-                }, 2000);
-            } else {
-                alert("You must be at least 18 years old to proceed.");
-            }
+function confirmAge() {
+    if (!isAgeVerified) {
+        const userConfirmed = confirm("Are you 18 years or older?");
+        if (userConfirmed) {
+            isAgeVerified = true;
+            const landingPage = document.getElementById("landingPage");
+            landingPage.classList.add("fade-out");
+            setTimeout(() => {
+                landingPage.style.display = "none";
+                document.getElementById("hiddenPage").style.display = "block";
+                // Show private chats button and tab after verification
+                const privateChatsBtn = document.getElementById("privateChatsBtn");
+                const mySideTab = document.getElementById("mySideTab");
+                if (privateChatsBtn) privateChatsBtn.style.display = "flex";
+                if (mySideTab) mySideTab.style.display = "block";
+            }, 2000);
+        } else {
+            alert("You must be at least 18 years old to proceed.");
         }
     }
+}
+
+// Show Register Popup
+document.addEventListener('DOMContentLoaded', function() {
+  document.getElementById('showRegisterBtn').onclick = function(e) {
+    e.stopPropagation();
+    closePopup(null, 'popup0');
+    setTimeout(() => openPopup('registerPopup'), 200);
+  };
+
+  // Register Form Image Preview
+  document.getElementById('imageUploadReg').onchange = function(evt) {
+    const [file] = evt.target.files;
+    if (file) {
+      const preview = document.getElementById('registerImagePreview');
+      preview.src = URL.createObjectURL(file);
+      preview.style.display = 'block';
+    }
+  };
+
+  // Registration Form Handler (demo, replace with your logic)
+  document.getElementById('registerForm').onsubmit = function(e) {
+    e.preventDefault();
+    // Gather form data, send to server, etc.
+    alert('Registration submitted!\n(Implement your backend logic here.)');
+    closePopup(null, 'registerPopup');
+  };
+});
+
+// Popup open/close helpers
+function openPopup(id) {
+  document.getElementById(id).style.display = 'flex';
+}
+function closePopup(event, id) {
+  if (!event || event.target.classList.contains('popup-overlay')) {
+    document.getElementById(id).style.display = 'none';
+  }
+}
 
 
 document.getElementById('loginForm').addEventListener('submit', function(event) {
@@ -1391,7 +1462,7 @@ images.forEach(image => {
 
         // Optionally update profile picture preview in main UI
         const profilePic = document.getElementById('imagePreview').src;
-        if (profilePic) {
+        llkif (profilePic) {
             document.getElementById('profilepic1').src = profilePic;
         }
 
