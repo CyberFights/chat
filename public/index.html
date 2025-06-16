@@ -941,6 +941,16 @@ function confirmAge(){
     }
 }
 
+// Popup open/close helpers
+function openPopup(id) {
+  document.getElementById(id).style.display = 'flex';
+}
+function closePopup(event, id) {
+  if (!event || event.target.classList.contains('popup-overlay')) {
+    document.getElementById(id).style.display = 'none';
+  }
+}
+
 </script>
 </head>
 <body onclick="confirmAge()">
@@ -1235,15 +1245,6 @@ document.addEventListener('DOMContentLoaded', function() {
   };
 });
 
-// Popup open/close helpers
-function openPopup(id) {
-  document.getElementById(id).style.display = 'flex';
-}
-function closePopup(event, id) {
-  if (!event || event.target.classList.contains('popup-overlay')) {
-    document.getElementById(id).style.display = 'none';
-  }
-}
 
 
 document.getElementById('loginForm').addEventListener('submit', function(event) {
