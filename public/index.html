@@ -914,10 +914,10 @@
 </style>
 
 </head>
-<body onclick="confirmAge()">
+<body>
 
 <!-- Landing Page -->
-<div class="container" id="landingPage">
+<div class="container" id="landingPage" onclick="confirmAge()">
     <div class="content">
         <p id="p">Click anywhere to enter the ring!</p>
     </div>
@@ -1181,7 +1181,7 @@
 let isAgeVerified = false;
 let isLoggedIn = false; 
 
-function confirmAge() {
+function confirmAge(){
     if (!isAgeVerified) {
         const userConfirmed = confirm("Are you 18 years or older?");
         if (userConfirmed) {
