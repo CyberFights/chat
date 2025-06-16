@@ -912,12 +912,41 @@
     }
 }
 </style>
+<script>
+let isAgeVerified = false;
+let isLoggedIn = false; 
 
+function confirmAge(){
+    if (!isAgeVerified) {
+        const userConfirmed = confirm("Are you 18 years or older?");
+        if (userConfirmed) {
+            isAgeVerified = true;
+            const landingPage = document.getElementById("landingPage");
+            if (landingPage) {
+                landingPage.classList.add("fade-out");
+                setTimeout(() => {
+                    landingPage.style.display = "none";
+                    const hiddenPage = document.getElementById("hiddenPage");
+                    if (hiddenPage) hiddenPage.style.display = "block";
+                    // Show private chats button and tab after verification
+                    const privateChatsBtn = document.getElementById("privateChatsBtn");
+                    const mySideTab = document.getElementById("mySideTab");
+                    if (privateChatsBtn) privateChatsBtn.style.display = "flex";
+                    if (mySideTab) mySideTab.style.display = "block";
+                }, 2000);
+            }
+        } else {
+            alert("You must be at least 18 years old to proceed.");
+        }
+    }
+}
+
+</script>
 </head>
-<body>
+<body onclick="confirmAge()">
 
 <!-- Landing Page -->
-<div class="container" id="landingPage" onclick="confirmAge()">
+<div class="container" id="landingPage">
     <div class="content">
         <p id="p">Click anywhere to enter the ring!</p>
     </div>
@@ -1178,34 +1207,6 @@
 <!-- Socket.IO -->
 <script src="https://cdn.socket.io/4.12.1/socket.io.min.js" crossorigin="anonymous"></script>
 <script>
-let isAgeVerified = false;
-let isLoggedIn = false; 
-
-function confirmAge(){
-    if (!isAgeVerified) {
-        const userConfirmed = confirm("Are you 18 years or older?");
-        if (userConfirmed) {
-            isAgeVerified = true;
-            const landingPage = document.getElementById("landingPage");
-            if (landingPage) {
-                landingPage.classList.add("fade-out");
-                setTimeout(() => {
-                    landingPage.style.display = "none";
-                    const hiddenPage = document.getElementById("hiddenPage");
-                    if (hiddenPage) hiddenPage.style.display = "block";
-                    // Show private chats button and tab after verification
-                    const privateChatsBtn = document.getElementById("privateChatsBtn");
-                    const mySideTab = document.getElementById("mySideTab");
-                    if (privateChatsBtn) privateChatsBtn.style.display = "flex";
-                    if (mySideTab) mySideTab.style.display = "block";
-                }, 2000);
-            }
-        } else {
-            alert("You must be at least 18 years old to proceed.");
-        }
-    }
-}
-
 
 // Show Register Popup
 document.addEventListener('DOMContentLoaded', function() {
