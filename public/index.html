@@ -951,31 +951,33 @@ document.addEventListener('DOMContentLoaded', function() {
         setTimeout(() => openPopup('registerPopup'), 200);
     };
 
-    document.getElementById('imageUploadReg').onchange = function(evt) {
-        const [file] = evt.target.files;
-        if (file) {
-            const preview = document.getElementById('registerImagePreview');
-            preview.src = URL.createObjectURL(file);
-            preview.style.display = 'block';
-        }
-    };
+document.getElementById('imageUploadReg').onchange = function(evt) {
+    const [file] = evt.target.files;
+    if (file) {
+        const preview = document.getElementById('registerImagePreview');
+        preview.src = URL.createObjectURL(file);
+        preview.style.display = 'block';
+    }
+};
 
 document.getElementById('registerForm').onsubmit = async function(e) {
     e.preventDefault();
+    const btn = this.querySelector('button[type="submit"]');
+    btn.disabled = true;
+    btn.textContent = 'Registering...';
 
-    // Collect form data including the file
     const form = e.target;
     const formData = new FormData(form);
 
     try {
         const response = await fetch('https://backend-api-production-a19d.up.railway.app/register', {
             method: 'POST',
-            body: formData // No need to set Content-Type; browser sets it automatically for FormData
+            body: formData
         });
-
         if (response.ok) {
-            alert('Registration successful!');
-            closePopup({target: {classList: {contains: () => true}}}, 'registerPopup');
+            alert('Registration successful! Please log in.');
+            closePopup(null, 'registerPopup');
+            openPopup('popup0');
         } else {
             const error = await response.json().catch(() => ({}));
             alert('Registration failed: ' + (error.message || response.statusText));
@@ -983,7 +985,10 @@ document.getElementById('registerForm').onsubmit = async function(e) {
     } catch (err) {
         alert('Error: ' + err.message);
     }
+    btn.disabled = false;
+    btn.textContent = 'Register';
 };
+
 
     // Chat room images click
     document.querySelectorAll('.image-grid img').forEach(image => {
@@ -1142,36 +1147,33 @@ function closePopup(event, id) {
   </div>
 </div>
 
-<div id="registerPopup" class="popup-overlay" style="display:none;" onclick="closePopup(event, 'registerPopup')">
-  <div class="popup-box" onclick="event.stopPropagation();">
-    <button class="close-btn" onclick="closePopup(event, 'registerPopup')">&times;</button>
-    <h3>Register</h3>
-    <form id="registerForm" enctype="multipart/form-data">
-      <input type="text" name="username" placeholder="Username" required />
-      <input type="password" name="password" placeholder="Password" required />
-      <input type="email" name="email" placeholder="Email" required />
-      <input type="number" name="age" placeholder="Age" min="13" max="120" required />
-      <input type="text" name="stats" placeholder="Height e.g. 5'9&quot; or 175cm and Weight e.g. 160 lbs or 72kh" required />
-      <textarea name="info" placeholder="Tell us about yourself" required></textarea>
-      <label for="nativeLanguage">Native Language:</label>
-      <select name="nativeLanguage" id="nativeLanguage" required>
-        <option value="">Select</option>
-        <option value="en">English</option>
-        <option value="es">Spanish</option>
-        <option value="mandarin">Mandarin</option>
-        <option value="hi">Hindi</option>
-        <option value="ar">Arabic</option>
-      </select>
-      <label for="colorReg">Name Color:</label>
-      <input type="color" id="colorPreference" name="colorPreference" value="#ff0000" style="height:40px;width:60px;" />
-      <label for="imageUploadReg">Profile Image:</label>
-      <input type="file" id="image" name="image" accept="image/*" />
-      <div id="registerImagePreviewContainer" style="margin-bottom:10px;text-align:center;">
-        <img id="registerImagePreview" style="max-width:50%;max-height:120px;border-radius:10px;display:none;" />
-      </div>
-      <button type="submit" style="background:green;color:white;width:100%;border-radius:8px;font-size:18px;">Register</button>
-    </form>
+
+<form id="registerForm" enctype="multipart/form-data">
+  <input type="text" name="username" placeholder="Username" required />
+  <input type="password" name="password" placeholder="Password" required />
+  <input type="email" name="email" placeholder="Email" required />
+  <input type="number" name="age" placeholder="Age" min="13" max="120" required />
+  <input type="text" name="stats" placeholder="Height and Weight" required />
+  <textarea name="info" placeholder="Tell us about yourself" required></textarea>
+  <label for="nativeLanguage">Native Language:</label>
+  <select name="nativeLanguage" id="nativeLanguage" required>
+    <option value="">Select</option>
+    <option value="en">English</option>
+    <option value="es">Spanish</option>
+    <option value="mandarin">Mandarin</option>
+    <option value="hi">Hindi</option>
+    <option value="ar">Arabic</option>
+  </select>
+  <label for="colorReg">Name Color:</label>
+  <input type="color" id="colorPreference" name="colorPreference" value="#ff0000" style="height:40px;width:60px;" />
+  <label for="imageUploadReg">Profile Image:</label>
+  <input type="file" id="imageUploadReg" name="image" accept="image/*" />
+  <div id="registerImagePreviewContainer" style="margin-bottom:10px;text-align:center;">
+    <img id="registerImagePreview" style="max-width:50%;max-height:120px;border-radius:10px;display:none;" />
   </div>
+  <button type="submit" style="background:green;color:white;width:100%;border-radius:8px;font-size:18px;">Register</button>
+</form>
+</div>
 </div>
 
 <div id="popup1" class="popup-overlay" style="display:none;" onclick="closePopup(event, 'popup1')">
