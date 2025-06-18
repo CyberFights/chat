@@ -992,6 +992,26 @@ images.forEach(image => {
         openChat(roomName);
     });
 });
+// Side tab open/close using class toggle
+    function openNav() {
+        sideTab.classList.add('open');
+    }
+
+    function closeNav() {
+        sideTab.classList.remove('open');
+    }
+
+    // Popup open/close
+    
+function openPopup(id) {
+    document.getElementById(id).style.display = 'flex';
+}
+
+function closePopup(event, id) {
+    if (event.target.classList.contains('popup-overlay') || event.target.classList.contains('close-btn')) {
+        document.getElementById(id).style.display = 'none';
+    }
+}
 </script>
 
 </head>
@@ -1428,26 +1448,7 @@ images.forEach(image => {
         }
     });
 
-    // Side tab open/close using class toggle
-    function openNav() {
-        sideTab.classList.add('open');
-    }
-
-    function closeNav() {
-        sideTab.classList.remove('open');
-    }
-
-    // Popup open/close
     
-function openPopup(id) {
-    document.getElementById(id).style.display = 'flex';
-}
-
-function closePopup(event, id) {
-    if (event.target.classList.contains('popup-overlay') || event.target.classList.contains('close-btn')) {
-        document.getElementById(id).style.display = 'none';
-    }
-}
     // Image preview in settings
     document.getElementById('imageUpload').addEventListener('change', function(event) {
         const file = event.target.files[0];
