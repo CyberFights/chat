@@ -1012,6 +1012,205 @@ function closePopup(event, id) {
         document.getElementById(id).style.display = 'none';
     }
 }
+const images = document.querySelectorAll('.image-grid img');
+    const overlay = document.getElementById('chatOverlay');
+    const closeBtn = document.getElementById('closeBtn');
+    const messages = document.getElementById('messages');
+    const form = document.getElementById('form');
+    const input = document.getElementById('m');
+    const roomTitle = document.getElementById('roomTitle');
+    const membersList = document.getElementById('members-list');
+    const privateChatsList = document.getElementById('private-chats');
+    const sideTab = document.getElementById('mySideTab');
+
+    let socket = null;
+    let currentRoom = null;
+    let currentUsername = 'User'; // Default username
+    let privateChats = {};
+
+    // Open chat overlay and join room
+    function openChat(roomName) {
+    overlay.style.display = 'flex';
+    roomTitle.textContent = roomName;
+
+    if (!socket) {
+        socket = io('http://localhost:3000'); // Replace with your server URL
+        setupSocketListeners();
+    }
+
+    if (currentRoom) {
+        socket.emit('leaveRoom', { room: currentRoom, username: currentUsername });
+    }
+
+    currentRoom = roomName;
+    socket.emit('joinRoom', { room: roomName, username: currentUsername });
+}
+
+function setupSocketListeners() {
+    socket.on('loadMessages', (previousMessages) => {
+        messages.innerHTML = '';
+        previousMessages.forEach(msg => {
+            const item = document.createElement('li');
+            item.textContent = msg;
+            messages.appendChild(item);
+        });
+        scrollToBottom();
+    });
+
+    socket.on('chat message', (data) => {
+        const item = document.createElement('li');
+        item.textContent = `${data.username}: ${data.message}`;
+        messages.appendChild(item);
+        scrollToBottom();
+    });
+
+    socket.on('updateMembers', (members) => {
+        membersList.innerHTML = '';
+        members.forEach(member => {
+            const memberItem = document.createElement('li');
+            memberItem.classList.add('member-item');
+            memberItem.innerHTML = `
+                <img src="${member.profilePic || 'https://via.placeholder.com/30'}" alt="${member.username}" />
+                <span>${member.username}</span>
+            `;
+            memberItem.addEventListener('click', () => openProfile(member.username));
+            membersList.appendChild(memberItem);
+        });
+    });
+
+    socket.on('private message', (data) => {
+        const sender = data.from;
+        const message = data.message;
+
+        if (!privateChats[sender]) {
+            privateChats[sender] = { username: sender, messages: [] };
+            addPrivateChat(sender);
+        }
+
+        privateChats[sender].messages.push(message);
+        console.log(`Received private message from ${sender}: ${message}`);
+    });
+}
+
+    // Start a private chat
+    function startPrivateChat(username) {
+        if (!privateChats[username]) {
+            privateChats[username] = { username: username, messages: [] };
+            addPrivateChat(username);
+        }
+        alert('Starting private chat with ' + username);
+    }
+
+    // Add private chat to side tab
+    function addPrivateChat(username) {
+        const listItem = document.createElement('li');
+        listItem.textContent = username;
+        listItem.addEventListener('click', () => {
+            alert('Open chat with ' + username);
+        });
+        privateChatsList.appendChild(listItem);
+    }
+    function toggleOpen(){
+          var el = document.getElementsByClassName("middle")[0];
+
+          if(el.className.includes("open")){
+            el.className = "middle closed";
+            
+          }else if(el.className.includes("closed")){
+            document.getElementById("myNavi2").style.display = "none";
+            el.className = "middle open";
+          }else{
+            el.className = "middle open";
+            document.getElementById("myNavi2").style.display = "block";
+          }
+        }
+function openProfile(user) {
+          const img = `https://cyberfighters.replit.app/uploads/${user}-image.jpg`;
+          // Correctly retrieve user information asynchronously
+          fetch(`/get-details?username=${user}`)
+            .then((response) => response.json())
+            .then((data) => {
+              document.getElementById("profile-info").innerHTML = `Info: ${data.info}`;
+              document.getElementById("profile-stats").innerHTML = `Stats: Height - ${data.height}, Weight - ${data.weight}`;
+              document.getElementById("profile-age").innerHTML = `Age: ${data.age}`;
+              document.getElementById("profile-name").innerHTML = user;
+              document.getElementById("profile-img").src = img;
+            })
+            .catch((error) => {
+              console.error('Error:', error);
+            });
+
+          document.getElementById("myNavi2").style.display = "block";
+          localStorage.setItem('receiver', user);
+        }
+        
+    // Close chat overlay
+    function closeChat() {
+        overlay.style.display = 'none';
+        if (socket && currentRoom) {
+            socket.emit('leaveRoom', { room: currentRoom, username: currentUsername });
+            currentRoom = null;
+        }
+    }
+
+    // Scroll chat to bottom
+    function scrollToBottom() {
+        messages.scrollTop = messages.scrollHeight;
+    }
+
+    // Event listeners
+
+images.forEach(image => {
+    image.addEventListener('click', () => {
+        if (!isLoggedIn) {
+            alert('Please log in before entering any chat room!');
+            openPopup('popup0'); // Open login popup
+            return;
+        }
+        const roomName = image.dataset.room;
+        openChat(roomName);
+    });
+});
+
+
+    closeBtn.addEventListener('click', closeChat);
+
+    window.addEventListener('click', (event) => {
+        if (event.target === overlay) {
+            closeChat();
+        }
+    });
+
+    
+    // Image preview in settings
+    document.getElementById('imageUpload').addEventListener('change', function(event) {
+        const file = event.target.files[0];
+        const preview = document.getElementById('imagePreview');
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                preview.src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        } else {
+            preview.src = '';
+        }
+    });
+
+    // Settings form submit
+    document.getElementById('settingsForm').addEventListener('submit', function(event) {
+        event.preventDefault();
+        currentUsername = document.getElementById('username').value || 'User';
+
+        // Optionally update profile picture preview in main UI
+        const profilePic = document.getElementById('imagePreview').src;
+        llkif (profilePic) {
+            document.getElementById('profilepic1').src = profilePic;
+        }
+
+        closePopup(event, 'popup4');
+        alert('Settings updated! Username is now: ' + currentUsername);
+    });
 </script>
 
 </head>
@@ -1279,205 +1478,7 @@ function closePopup(event, id) {
 <!-- Socket.IO -->
 <script src="https://cdn.socket.io/4.12.1/socket.io.min.js" crossorigin="anonymous"></script>
 <script>
-    const images = document.querySelectorAll('.image-grid img');
-    const overlay = document.getElementById('chatOverlay');
-    const closeBtn = document.getElementById('closeBtn');
-    const messages = document.getElementById('messages');
-    const form = document.getElementById('form');
-    const input = document.getElementById('m');
-    const roomTitle = document.getElementById('roomTitle');
-    const membersList = document.getElementById('members-list');
-    const privateChatsList = document.getElementById('private-chats');
-    const sideTab = document.getElementById('mySideTab');
-
-    let socket = null;
-    let currentRoom = null;
-    let currentUsername = 'User'; // Default username
-    let privateChats = {};
-
-    // Open chat overlay and join room
-    function openChat(roomName) {
-    overlay.style.display = 'flex';
-    roomTitle.textContent = roomName;
-
-    if (!socket) {
-        socket = io('http://localhost:3000'); // Replace with your server URL
-        setupSocketListeners();
-    }
-
-    if (currentRoom) {
-        socket.emit('leaveRoom', { room: currentRoom, username: currentUsername });
-    }
-
-    currentRoom = roomName;
-    socket.emit('joinRoom', { room: roomName, username: currentUsername });
-}
-
-function setupSocketListeners() {
-    socket.on('loadMessages', (previousMessages) => {
-        messages.innerHTML = '';
-        previousMessages.forEach(msg => {
-            const item = document.createElement('li');
-            item.textContent = msg;
-            messages.appendChild(item);
-        });
-        scrollToBottom();
-    });
-
-    socket.on('chat message', (data) => {
-        const item = document.createElement('li');
-        item.textContent = `${data.username}: ${data.message}`;
-        messages.appendChild(item);
-        scrollToBottom();
-    });
-
-    socket.on('updateMembers', (members) => {
-        membersList.innerHTML = '';
-        members.forEach(member => {
-            const memberItem = document.createElement('li');
-            memberItem.classList.add('member-item');
-            memberItem.innerHTML = `
-                <img src="${member.profilePic || 'https://via.placeholder.com/30'}" alt="${member.username}" />
-                <span>${member.username}</span>
-            `;
-            memberItem.addEventListener('click', () => openProfile(member.username));
-            membersList.appendChild(memberItem);
-        });
-    });
-
-    socket.on('private message', (data) => {
-        const sender = data.from;
-        const message = data.message;
-
-        if (!privateChats[sender]) {
-            privateChats[sender] = { username: sender, messages: [] };
-            addPrivateChat(sender);
-        }
-
-        privateChats[sender].messages.push(message);
-        console.log(`Received private message from ${sender}: ${message}`);
-    });
-}
-
-    // Start a private chat
-    function startPrivateChat(username) {
-        if (!privateChats[username]) {
-            privateChats[username] = { username: username, messages: [] };
-            addPrivateChat(username);
-        }
-        alert('Starting private chat with ' + username);
-    }
-
-    // Add private chat to side tab
-    function addPrivateChat(username) {
-        const listItem = document.createElement('li');
-        listItem.textContent = username;
-        listItem.addEventListener('click', () => {
-            alert('Open chat with ' + username);
-        });
-        privateChatsList.appendChild(listItem);
-    }
-    function toggleOpen(){
-          var el = document.getElementsByClassName("middle")[0];
-
-          if(el.className.includes("open")){
-            el.className = "middle closed";
-            
-          }else if(el.className.includes("closed")){
-            document.getElementById("myNavi2").style.display = "none";
-            el.className = "middle open";
-          }else{
-            el.className = "middle open";
-            document.getElementById("myNavi2").style.display = "block";
-          }
-        }
-function openProfile(user) {
-          const img = `https://cyberfighters.replit.app/uploads/${user}-image.jpg`;
-          // Correctly retrieve user information asynchronously
-          fetch(`/get-details?username=${user}`)
-            .then((response) => response.json())
-            .then((data) => {
-              document.getElementById("profile-info").innerHTML = `Info: ${data.info}`;
-              document.getElementById("profile-stats").innerHTML = `Stats: Height - ${data.height}, Weight - ${data.weight}`;
-              document.getElementById("profile-age").innerHTML = `Age: ${data.age}`;
-              document.getElementById("profile-name").innerHTML = user;
-              document.getElementById("profile-img").src = img;
-            })
-            .catch((error) => {
-              console.error('Error:', error);
-            });
-
-          document.getElementById("myNavi2").style.display = "block";
-          localStorage.setItem('receiver', user);
-        }
-        
-    // Close chat overlay
-    function closeChat() {
-        overlay.style.display = 'none';
-        if (socket && currentRoom) {
-            socket.emit('leaveRoom', { room: currentRoom, username: currentUsername });
-            currentRoom = null;
-        }
-    }
-
-    // Scroll chat to bottom
-    function scrollToBottom() {
-        messages.scrollTop = messages.scrollHeight;
-    }
-
-    // Event listeners
-
-images.forEach(image => {
-    image.addEventListener('click', () => {
-        if (!isLoggedIn) {
-            alert('Please log in before entering any chat room!');
-            openPopup('popup0'); // Open login popup
-            return;
-        }
-        const roomName = image.dataset.room;
-        openChat(roomName);
-    });
-});
-
-
-    closeBtn.addEventListener('click', closeChat);
-
-    window.addEventListener('click', (event) => {
-        if (event.target === overlay) {
-            closeChat();
-        }
-    });
-
     
-    // Image preview in settings
-    document.getElementById('imageUpload').addEventListener('change', function(event) {
-        const file = event.target.files[0];
-        const preview = document.getElementById('imagePreview');
-        if (file) {
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                preview.src = e.target.result;
-            };
-            reader.readAsDataURL(file);
-        } else {
-            preview.src = '';
-        }
-    });
-
-    // Settings form submit
-    document.getElementById('settingsForm').addEventListener('submit', function(event) {
-        event.preventDefault();
-        currentUsername = document.getElementById('username').value || 'User';
-
-        // Optionally update profile picture preview in main UI
-        const profilePic = document.getElementById('imagePreview').src;
-        llkif (profilePic) {
-            document.getElementById('profilepic1').src = profilePic;
-        }
-
-        closePopup(event, 'popup4');
-        alert('Settings updated! Username is now: ' + currentUsername);
-    });
 </script>
 </body>
 </html>
