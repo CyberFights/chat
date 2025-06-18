@@ -912,6 +912,87 @@
     }
 }
 </style>
+<script>
+let isAgeVerified = false;
+let isLoggedIn = false; // User is NOT logged in initially
+
+function confirmAge() {
+    if (!isAgeVerified) {
+        const userConfirmed = confirm("Are you 18 years or older?");
+        if (userConfirmed) {
+            isAgeVerified = true;
+            const landingPage = document.getElementById("landingPage");
+            landingPage.classList.add("fade-out");
+            setTimeout(() => {
+                landingPage.style.display = "none";
+                document.getElementById("hiddenPage").style.display = "block";
+                // Show private chats button and tab after verification
+                const privateChatsBtn = document.getElementById("privateChatsBtn");
+                const mySideTab = document.getElementById("mySideTab");
+                if (privateChatsBtn) privateChatsBtn.style.display = "flex";
+                if (mySideTab) mySideTab.style.display = "block";
+            }, 2000);
+        } else {
+            alert("You must be at least 18 years old to proceed.");
+        }
+    }
+}
+
+// Show Register Popup
+document.addEventListener('DOMContentLoaded', function() {
+  document.getElementById('showRegisterBtn').onclick = function(e) {
+    e.stopPropagation();
+    closePopup(null, 'popup0');
+    setTimeout(() => openPopup('registerPopup'), 200);
+  };
+
+  // Register Form Image Preview
+  document.getElementById('imageUploadReg').onchange = function(evt) {
+    const [file] = evt.target.files;
+    if (file) {
+      const preview = document.getElementById('registerImagePreview');
+      preview.src = URL.createObjectURL(file);
+      preview.style.display = 'block';
+    }
+  };
+
+  // Registration Form Handler (demo, replace with your logic)
+  document.getElementById('registerForm').onsubmit = function(e) {
+    e.preventDefault();
+    // Gather form data, send to server, etc.
+    alert('Registration submitted!\n(Implement your backend logic here.)');
+    closePopup(null, 'registerPopup');
+  };
+});
+
+
+
+
+// --- LOGIN HANDLING (NEW) ---
+document.getElementById('loginForm').addEventListener('submit', function(event) {
+    event.preventDefault();
+    // TODO: Add your real authentication logic here!
+    isLoggedIn = true; // Now the user is logged in
+    currentUsername = document.getElementById('loginUsername').value || 'User';
+    closePopup({target: {classList: ['popup-overlay']}}, 'popup0');
+    alert('Login successful! You can now enter chat rooms.');
+    // Optionally update profile section here
+    document.getElementById('profile').innerHTML = `<p>Welcome, ${currentUsername}!</p>`;
+});
+
+// --- BLOCK CHAT ROOM ACCESS UNTIL LOGGED IN (CHANGED) ---
+images.forEach(image => {
+    image.addEventListener('click', () => {
+        if (!isLoggedIn) {
+            alert('Please log in before entering any chat room!');
+            openPopup('popup0'); // Open login popup
+            return;
+        }
+        const roomName = image.dataset.room;
+        openChat(roomName);
+    });
+});
+</script>
 
 </head>
 <body onclick="confirmAge()">
@@ -1178,87 +1259,6 @@
 <!-- Socket.IO -->
 <script src="https://cdn.socket.io/4.12.1/socket.io.min.js" crossorigin="anonymous"></script>
 <script>
-let isAgeVerified = false;
-let isLoggedIn = false; // User is NOT logged in initially
-
-function confirmAge() {
-    if (!isAgeVerified) {
-        const userConfirmed = confirm("Are you 18 years or older?");
-        if (userConfirmed) {
-            isAgeVerified = true;
-            const landingPage = document.getElementById("landingPage");
-            landingPage.classList.add("fade-out");
-            setTimeout(() => {
-                landingPage.style.display = "none";
-                document.getElementById("hiddenPage").style.display = "block";
-                // Show private chats button and tab after verification
-                const privateChatsBtn = document.getElementById("privateChatsBtn");
-                const mySideTab = document.getElementById("mySideTab");
-                if (privateChatsBtn) privateChatsBtn.style.display = "flex";
-                if (mySideTab) mySideTab.style.display = "block";
-            }, 2000);
-        } else {
-            alert("You must be at least 18 years old to proceed.");
-        }
-    }
-}
-
-// Show Register Popup
-document.addEventListener('DOMContentLoaded', function() {
-  document.getElementById('showRegisterBtn').onclick = function(e) {
-    e.stopPropagation();
-    closePopup(null, 'popup0');
-    setTimeout(() => openPopup('registerPopup'), 200);
-  };
-
-  // Register Form Image Preview
-  document.getElementById('imageUploadReg').onchange = function(evt) {
-    const [file] = evt.target.files;
-    if (file) {
-      const preview = document.getElementById('registerImagePreview');
-      preview.src = URL.createObjectURL(file);
-      preview.style.display = 'block';
-    }
-  };
-
-  // Registration Form Handler (demo, replace with your logic)
-  document.getElementById('registerForm').onsubmit = function(e) {
-    e.preventDefault();
-    // Gather form data, send to server, etc.
-    alert('Registration submitted!\n(Implement your backend logic here.)');
-    closePopup(null, 'registerPopup');
-  };
-});
-
-
-
-
-// --- LOGIN HANDLING (NEW) ---
-document.getElementById('loginForm').addEventListener('submit', function(event) {
-    event.preventDefault();
-    // TODO: Add your real authentication logic here!
-    isLoggedIn = true; // Now the user is logged in
-    currentUsername = document.getElementById('loginUsername').value || 'User';
-    closePopup({target: {classList: ['popup-overlay']}}, 'popup0');
-    alert('Login successful! You can now enter chat rooms.');
-    // Optionally update profile section here
-    document.getElementById('profile').innerHTML = `<p>Welcome, ${currentUsername}!</p>`;
-});
-
-// --- BLOCK CHAT ROOM ACCESS UNTIL LOGGED IN (CHANGED) ---
-images.forEach(image => {
-    image.addEventListener('click', () => {
-        if (!isLoggedIn) {
-            alert('Please log in before entering any chat room!');
-            openPopup('popup0'); // Open login popup
-            return;
-        }
-        const roomName = image.dataset.room;
-        openChat(roomName);
-    });
-});
-
-
     const images = document.querySelectorAll('.image-grid img');
     const overlay = document.getElementById('chatOverlay');
     const closeBtn = document.getElementById('closeBtn');
