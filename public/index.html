@@ -912,9 +912,215 @@
     }
 }
 </style>
+</head>
+<body onclick="confirmAge()">
+
+<!-- Landing Page -->
+<div class="container" id="landingPage">
+    <div class="content">
+        <p id="p">Click anywhere to enter the ring!</p>
+    </div>
+</div>
+
+<!-- Hidden Page -->
+<div class="hidden-page" id="hiddenPage" style="display:none;">
+    <h1>Cyberfighters</h1>
+    <div class="button-row">
+        <button style="background-color: limegreen;" onclick="openPopup('popup0')">Login</button>
+        <button style="background-color: skyblue;" onclick="openPopup('popup1')">About</button>
+        <button style="background-color: blue;" onclick="openPopup('popup2')">Rules</button>
+        <button style="background-color: orange;" onclick="openPopup('popup3')">Contact</button>
+        <button style="background-color: grey;" onclick="openPopup('popup4')">Settings</button>
+        <button style="background-color: red;" onclick="openPopup('logout')">Logout</button>
+    </div>
+
+    <div class="image-grid">
+        <div class="image-item">
+            <img src="https://raw.githubusercontent.com/CyberFights/chat/refs/heads/main/public/assets/images/maindesk.jpg" alt="Main Chat" data-room="Main_Chat" />
+            <div class="room-label">Main Desk</div>
+        </div>
+        <div class="image-item">
+            <img src="https://raw.githubusercontent.com/CyberFights/chat/refs/heads/main/public/assets/images/lobby.jpg" alt="Lobby" data-room="Lobby" />
+            <div class="room-label">Lobby</div>
+        </div>
+        <div class="image-item">
+            <img src="https://raw.githubusercontent.com/CyberFights/chat/refs/heads/main/public/assets/images/wrestlingring.jpg" alt="Public Ring" data-room="Public_Ring" />
+            <div class="room-label">Wrestling Ring</div>
+        </div>
+        <div class="image-item">
+            <img src="https://raw.githubusercontent.com/CyberFights/chat/refs/heads/main/public/assets/images/weightroom.jpg" alt="Weight Room" data-room="Weight_Room" />
+            <div class="room-label">Weight Room</div>
+        </div>
+        <div class="image-item">
+            <img src="https://raw.githubusercontent.com/CyberFights/chat/refs/heads/main/public/assets/images/lockerroom.jpg" alt="Locker Room" data-room="Locker_Room" />
+            <div class="room-label">Locker Room</div>
+        </div>
+        <div class="image-item">
+            <img src="https://raw.githubusercontent.com/CyberFights/chat/refs/heads/main/public/assets/images/pool.jpg" alt="Public Pool" data-room="Public_Pool" />
+            <div class="room-label">Pool</div>
+        </div>
+    </div>
+
+    <!-- Chat Overlay (hidden by default) -->
+    <div class="overlay" id="chatOverlay" style="display:none;">
+        <div class="overlay-content">
+            <span class="close-button" id="closeBtn">&times;</span>
+            <div id="messages-column">
+                <div id="roomTitle"></div>
+                <ul id="messages"></ul>
+            </div>
+            <div id="online-members">
+                <b>Online:</b>
+                <ul id="members-list"></ul>
+            </div>
+            <form id="form">
+                <input id="m" autocomplete="off" placeholder="Type your message..." />
+                <button>Send</button>
+                <label>
+                    <span class="material-icons">attach_file</span>
+                    <input type="file" />
+                </label>
+            </form>
+        </div>
+    </div>
+
+    <!-- Profile and Updates -->
+    <div class="profile-section">
+        <h2>User Profile</h2>
+        <div id="profile" class="blank-profile">
+            <p>Please log in to see your profile.</p>
+        </div>
+    </div>
+    <div class="updates-section">
+        <h2>Website Updates</h2>
+        <ul id="updates-list">
+            <li>No updates available.</li>
+        </ul>
+    </div>
+</div>
+
+<!-- Popups -->
+<div id="popup0" class="popup-overlay" style="display:none;" onclick="closePopup(event, 'popup0')">
+  <div class="popup-box" onclick="event.stopPropagation();">
+    <button class="close-btn" onclick="closePopup(event, 'popup0')">&times;</button>
+    <h3>Login</h3>
+    <form id="loginForm">
+      <input type="text" id="loginUsername" placeholder="Username" required />
+      <input type="password" id="loginPassword" placeholder="Password" required />
+      <button type="submit">Login</button>
+    </form>
+    <button id="showRegisterBtn" type="button" style="margin-top:15px; width:100%; background: #0077ff; color: #fff; border-radius:8px; font-size:16px;">Register</button>
+  </div>
+</div>
+
+<div id="registerPopup" class="popup-overlay" style="display:none;" onclick="closePopup(event, 'registerPopup')">
+  <div class="popup-box" onclick="event.stopPropagation();">
+    <button class="close-btn" onclick="closePopup(event, 'registerPopup')">&times;</button>
+    <h3>Register</h3>
+    <form id="registerForm" enctype="multipart/form-data">
+      <input type="text" name="username" placeholder="Username" required />
+      <input type="password" name="password" placeholder="Password" required />
+      <input type="email" name="email" placeholder="Email" required />
+      <input type="number" name="age" placeholder="Age" min="13" max="120" required />
+      <input type="text" name="height" placeholder="Height (e.g. 5'9&quot; or 175cm)" required />
+      <input type="text" name="weight" placeholder="Weight (e.g. 160 lbs or 72kg)" required />
+      <textarea name="info" placeholder="Tell us about yourself" required></textarea>
+      <label for="nativeLanguage">Native Language:</label>
+      <select name="nativeLanguage" id="nativeLanguageReg" required>
+        <option value="">Select</option>
+        <option value="en">English</option>
+        <option value="es">Spanish</option>
+        <option value="mandarin">Mandarin</option>
+        <option value="hi">Hindi</option>
+        <option value="ar">Arabic</option>
+      </select>
+      <label for="colorReg">Name Color:</label>
+      <input type="color" id="colorReg" name="color" value="#ff0000" style="height:40px;width:60px;" />
+      <label for="imageUploadReg">Profile Image:</label>
+      <input type="file" id="imageUploadReg" name="image" accept="image/*" />
+      <div id="registerImagePreviewContainer" style="margin-bottom:10px;text-align:center;">
+        <img id="registerImagePreview" style="max-width:50%;max-height:120px;border-radius:10px;display:none;" />
+      </div>
+      <button type="submit" style="background:green;color:white;width:100%;border-radius:8px;font-size:18px;">Register</button>
+    </form>
+  </div>
+</div>
+
+<div id="popup1" class="popup-overlay" style="display:none;" onclick="closePopup(event, 'popup1')">
+    <div class="popup-box" onclick="event.stopPropagation();">
+        <button class="close-btn" onclick="closePopup(event, 'popup1')">&times;</button>
+        <h3>About</h3>
+        <p>This site lets you join different chat rooms by clicking the images below.</p>
+    </div>
+</div>
+
+<div id="popup2" class="popup-overlay" style="display:none;" onclick="closePopup(event, 'popup2')">
+    <div class="popup-box" onclick="event.stopPropagation();">
+        <button class="close-btn" onclick="closePopup(event, 'popup2')">&times;</button>
+        <h3>Rules</h3>
+        <p>Click a chat room image to join. Use the buttons above for info or assistance.</p>
+    </div>
+</div>
+
+<div id="popup3" class="popup-overlay" style="display:none;" onclick="closePopup(event, 'popup3')">
+    <div class="popup-box" onclick="event.stopPropagation();">
+        <button class="close-btn" onclick="closePopup(event, 'popup3')">&times;</button>
+        <h3>Contact</h3>
+        <p>For support, email: <a href="mailto:support@cyberfighters.com">support@cyberfighters.com</a></p>
+    </div>
+</div>
+
+<div id="popup4" class="popup-overlay" style="display:none;" onclick="closePopup(event, 'popup4')">
+    <div class="popup-box" onclick="event.stopPropagation();">
+        <button class="close-btn" onclick="closePopup(event, 'popup4')">&times;</button>
+        <h3>Settings</h3>
+        <form id="settingsForm">
+            <input type="text" id="username" placeholder="Username" />
+            <label for="imageUpload">Profile Image:</label>
+            <input type="file" id="imageUpload" accept="image/*" />
+            <div id="imagePreviewContainer">
+                <img id="imagePreview" style="max-width:50%;max-height:150px;display:none;" />
+            </div>
+            <button type="submit" style="background:green;color:white;width:100%;border-radius:8px;font-size:18px;">Save</button>
+        </form>
+    </div>
+</div>
+
+<!-- Profile Overlay (Demo only) -->
+<div id="myNavi2" class="pop-up" style="display:none;">
+    <div class="profile2">
+        <div class="top" onclick="toggleOpen()">
+            <p style="text-align:center; font-size:20px; top-margin:1%;">Click here to close</p>
+            <div class="light"></div>
+        </div>
+        <div class="middle closed">
+            <svg height="400" width="300">
+                <circle cx="0" cy="0" r="100" fill="rgba(90,140,240,1)"></circle>
+                <circle cx="90" cy="110" r="20" fill="rgba(90,140,240,1)"></circle>
+                <circle cx="0" cy="310" r="100" fill="rgba(90,140,240,0.75)"></circle>
+            </svg>
+            <div class="middlecont">
+                <br>
+                <p style="margin-left:69px; margin-bottom: 0;" id="profile-name"></p>
+                <p style="margin-left: 55px;" id="profile-age"></p><br>
+                <p style="margin-left: 55px;" id="profile-stats"></p><br>
+                <br><br>
+                <p id="profile-info"></p>
+                <img src="" class="profile-img" id="profile-img">
+                <button onclick="startPrivateChat(document.getElementById('profile-name').textContent)">Msg</button>
+            </div>
+        </div>
+        <div onclick="toggleOpen()" class="bottom"></div>
+    </div>
+</div>
+
 <script>
 let isAgeVerified = false;
-let isLoggedIn = false; // User is NOT logged in initially
+let isLoggedIn = false;
+let currentUsername = 'User';
+let socket = null;
+let currentRoom = null;
+let privateChats = {};
 
 function confirmAge() {
     if (!isAgeVerified) {
@@ -926,11 +1132,6 @@ function confirmAge() {
             setTimeout(() => {
                 landingPage.style.display = "none";
                 document.getElementById("hiddenPage").style.display = "block";
-                // Show private chats button and tab after verification
-                const privateChatsBtn = document.getElementById("privateChatsBtn");
-                const mySideTab = document.getElementById("mySideTab");
-                if (privateChatsBtn) privateChatsBtn.style.display = "flex";
-                if (mySideTab) mySideTab.style.display = "block";
             }, 2000);
         } else {
             alert("You must be at least 18 years old to proceed.");
@@ -938,81 +1139,94 @@ function confirmAge() {
     }
 }
 
-// Show Register Popup
 document.addEventListener('DOMContentLoaded', function() {
-  document.getElementById('showRegisterBtn').onclick = function(e) {
-    e.stopPropagation();
-    closePopup(null, 'popup0');
-    setTimeout(() => openPopup('registerPopup'), 200);
-  };
+    // Login form
+    document.getElementById('loginForm').addEventListener('submit', function(event) {
+        event.preventDefault();
+        isLoggedIn = true;
+        currentUsername = document.getElementById('loginUsername').value || 'User';
+        closePopup({target: {classList: {contains: () => true}}}, 'popup0');
+        alert('Login successful! You can now enter chat rooms.');
+        document.getElementById('profile').innerHTML = `<p>Welcome, ${currentUsername}!</p>`;
+    });
 
-  // Register Form Image Preview
-  document.getElementById('imageUploadReg').onchange = function(evt) {
-    const [file] = evt.target.files;
-    if (file) {
-      const preview = document.getElementById('registerImagePreview');
-      preview.src = URL.createObjectURL(file);
-      preview.style.display = 'block';
-    }
-  };
+    // Register popup
+    document.getElementById('showRegisterBtn').onclick = function(e) {
+        e.stopPropagation();
+        closePopup(null, 'popup0');
+        setTimeout(() => openPopup('registerPopup'), 200);
+    };
 
-  // Registration Form Handler (demo, replace with your logic)
-  document.getElementById('registerForm').onsubmit = function(e) {
-    e.preventDefault();
-    // Gather form data, send to server, etc.
-    alert('Registration submitted!\n(Implement your backend logic here.)');
-    closePopup(null, 'registerPopup');
-  };
-});
-
-
-
-
-// --- LOGIN HANDLING (NEW) ---
-document.getElementById('loginForm').addEventListener('submit', function(event) {
-    event.preventDefault();
-    // TODO: Add your real authentication logic here!
-    isLoggedIn = true; // Now the user is logged in
-    currentUsername = document.getElementById('loginUsername').value || 'User';
-    closePopup({target: {classList: ['popup-overlay']}}, 'popup0');
-    alert('Login successful! You can now enter chat rooms.');
-    // Optionally update profile section here
-    document.getElementById('profile').innerHTML = `<p>Welcome, ${currentUsername}!</p>`;
-});
-
-// --- BLOCK CHAT ROOM ACCESS UNTIL LOGGED IN (CHANGED) ---
-images.forEach(image => {
-    image.addEventListener('click', () => {
-        if (!isLoggedIn) {
-            alert('Please log in before entering any chat room!');
-            openPopup('popup0'); // Open login popup
-            return;
+    document.getElementById('imageUploadReg').onchange = function(evt) {
+        const [file] = evt.target.files;
+        if (file) {
+            const preview = document.getElementById('registerImagePreview');
+            preview.src = URL.createObjectURL(file);
+            preview.style.display = 'block';
         }
-        const roomName = image.dataset.room;
-        openChat(roomName);
+    };
+
+    document.getElementById('registerForm').onsubmit = function(e) {
+        e.preventDefault();
+        alert('Registration submitted!\n(Implement your backend logic here.)');
+        closePopup({target: {classList: {contains: () => true}}}, 'registerPopup');
+    };
+
+    // Chat room images click
+    document.querySelectorAll('.image-grid img').forEach(image => {
+        image.addEventListener('click', () => {
+            if (!isLoggedIn) {
+                alert('Please log in before entering any chat room!');
+                openPopup('popup0');
+                return;
+            }
+            const roomName = image.dataset.room;
+            openChat(roomName);
+        });
+    });
+
+    // Chat overlay close
+    document.getElementById('closeBtn')?.addEventListener('click', closeChat);
+
+    // Settings image preview
+    document.getElementById('imageUpload')?.addEventListener('change', function(event) {
+        const file = event.target.files[0];
+        const preview = document.getElementById('imagePreview');
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                preview.src = e.target.result;
+                preview.style.display = 'block';
+            };
+            reader.readAsDataURL(file);
+        } else {
+            preview.src = '';
+            preview.style.display = 'none';
+        }
+    });
+
+    // Settings form submit
+    document.getElementById('settingsForm')?.addEventListener('submit', function(event) {
+        event.preventDefault();
+        currentUsername = document.getElementById('username').value || 'User';
+        const profilePic = document.getElementById('imagePreview').src;
+        // Optionally update profile picture preview in main UI
+        // document.getElementById('profilepic1').src = profilePic;
+        closePopup(event, 'popup4');
+        alert('Settings updated! Username is now: ' + currentUsername);
     });
 });
-// Side tab open/close using class toggle
-    function openNav() {
-        sideTab.classList.add('open');
-    }
 
-    function closeNav() {
-        sideTab.classList.remove('open');
-    }
-
-    // Popup open/close
-    
+// Popup open/close
 function openPopup(id) {
     document.getElementById(id).style.display = 'flex';
 }
-
 function closePopup(event, id) {
-    if (event.target.classList.contains('popup-overlay') || event.target.classList.contains('close-btn')) {
+    if (!event || event.target.classList.contains('popup-overlay') || event.target.classList.contains('close-btn')) {
         document.getElementById(id).style.display = 'none';
     }
 }
-const images = document.querySelectorAll('.image-grid img');
+   const images = document.querySelectorAll('.image-grid img');
     const overlay = document.getElementById('chatOverlay');
     const closeBtn = document.getElementById('closeBtn');
     const messages = document.getElementById('messages');
@@ -1211,274 +1425,6 @@ images.forEach(image => {
         closePopup(event, 'popup4');
         alert('Settings updated! Username is now: ' + currentUsername);
     });
-</script>
-
-</head>
-<body onclick="confirmAge()">
-
-<!-- Landing Page -->
-<div class="container" id="landingPage">
-    <div class="content">
-        <p id="p">Click anywhere to enter the ring!</p>
-    </div>
-</div>
-
-<!-- Hidden Page -->
-<div class="hidden-page" id="hiddenPage" >
-
-    <h1>Cyberfighters</h1>
-
-    <div class="button-row">
-        <button style="background-color: limegreen;" onclick="openPopup('popup0')">Login</button>
-        <button style="background-color: skyblue;" onclick="openPopup('popup1')">About</button>
-        <button style="background-color: blue;"onclick="openPopup('popup2')">Rules</button>
-        <button style="background-color: orange;"onclick="openPopup('popup3')">Contact</button>
-        <button style="background-color: grey;" onclick="openPopup('popup4')">Settings</button>
-         <button style="background-color: red;" onclick="openPopup('logout')">Logout</button>
-    </div>
-
-<div class="image-grid">
-    <div class="image-item">
-        <img src="https://raw.githubusercontent.com/CyberFights/chat/refs/heads/main/public/assets/images/maindesk.jpg" alt="Main Chat" data-room="Main_Chat" />
-        <div class="room-label">Main Desk</div>
-    </div>
-    <div class="image-item">
-        <img src="https://raw.githubusercontent.com/CyberFights/chat/refs/heads/main/public/assets/images/lobby.jpg" alt="Lobby" data-room="Main_Chat" />
-        <div class="room-label">Lobby</div>
-    </div>
-    <div class="image-item">
-        <img src="https://raw.githubusercontent.com/CyberFights/chat/refs/heads/main/public/assets/images/wrestlingring.jpg" alt="Public Ring" data-room="Public_Ring" />
-        <div class="room-label">Wrestling Ring</div>
-    </div>
-    <div class="image-item">
-        <img src="https://raw.githubusercontent.com/CyberFights/chat/refs/heads/main/public/assets/images/weightroom.jpg" alt="Weight Room" data-room="Weight_Room" />
-        <div class="room-label">Weight Room</div>
-    </div>
-    <div class="image-item">
-        <img src="https://raw.githubusercontent.com/CyberFights/chat/refs/heads/main/public/assets/images/lockerroom.jpg" alt="Locker Room" data-room="Locker_Room" />
-        <div class="room-label">Locker Room</div>
-    </div>
-    <div class="image-item">
-        <img src="https://raw.githubusercontent.com/CyberFights/chat/refs/heads/main/public/assets/images/pool.jpg" alt="Public Pool" data-room="Public_Pool" />
-        <div class="room-label">Pool</div>
-    </div>
-</div>
-
-
-
-<div id="popup0" class="popup-overlay" onclick="closePopup(event, 'popup0')">
-  <div class="popup-box">
-    <button class="close-btn" onclick="closePopup(event, 'popup0')">&times;</button>
-    <h3>Login</h3>
-    <form id="loginForm">
-      <input type="text" id="loginUsername" placeholder="Username" required />
-      <input type="password" id="loginPassword" placeholder="Password" required />
-      <button type="submit">Login</button>
-    </form>
-    <!-- Register Button Here -->
-    <button id="showRegisterBtn" type="button" style="margin-top:15px; width:100%; background: #0077ff; color: #fff; border-radius:8px; font-size:16px;">Register</button>
-  </div>
-</div>
-
-<div id="registerPopup" class="popup-overlay" onclick="closePopup(event, 'registerPopup')">
-  <div class="popup-box" onclick="event.stopPropagation();">
-    <button class="close-btn" onclick="closePopup(event, 'registerPopup')">&times;</button>
-    <h3>Register</h3>
-    <form id="registerForm" enctype="multipart/form-data">
-      <input type="text" name="username" placeholder="Username" required />
-      <input type="password" name="password" placeholder="Password" required />
-      <input type="email" name="email" placeholder="Email" required />
-      <input type="number" name="age" placeholder="Age" min="13" max="120" required />
-      <input type="text" name="height" placeholder="Height (e.g. 5'9&quot; or 175cm)" required />
-      <input type="text" name="weight" placeholder="Weight (e.g. 160 lbs or 72kg)" required />
-      <textarea name="info" placeholder="Tell us about yourself" required></textarea>
-      <label for="nativeLanguage">Native Language:</label>
-      <select name="nativeLanguage" id="nativeLanguageReg" required>
-        <option value="">Select</option>
-        <option value="en">English</option>
-        <option value="es">Spanish</option>
-        <option value="mandarin">Mandarin</option>
-        <option value="hi">Hindi</option>
-        <option value="ar">Arabic</option>
-      </select>
-      <label for="colorReg">Name Color:</label>
-      <input type="color" id="colorReg" name="color" value="#ff0000" style="height:40px;width:60px;" />
-      <label for="imageUploadReg">Profile Image:</label>
-      <input type="file" id="imageUploadReg" name="image" accept="image/*" />
-      <div id="registerImagePreviewContainer" style="margin-bottom:10px;text-align:center;">
-        <img id="registerImagePreview" style="max-width:50%;max-height:120px;border-radius:10px;display:none;" />
-      </div>
-      <button type="submit" style="background:green;color:white;width:100%;border-radius:8px;font-size:18px;">Register</button>
-    </form>
-  </div>
-</div>
-
-
-    <!-- Profile and Updates -->
-    <div class="profile-section">
-        <h2>User Profile</h2>
-        <div id="profile" class="blank-profile">
-            <p>Please log in to see your profile.</p>
-        </div>
-    </div>
-
-    <div class="updates-section">
-        <h2>Website Updates</h2>
-        <ul id="updates-list">
-            <li>No updates available.</li>
-        </ul>
-    </div>
-
-</div>
-
-<!-- Popups -->
-   <div id="myNavi2" class="pop-up">
-
-        <!-- Button to close the overlay navigation -->
-
-      <div class="profile2">
-        <div class="top" onclick="toggleOpen()">
-        <p style="text-align:center; font-size:20px; top-margin:1%;">Click here to close</p>  <div class="light"></div>
-        </div>
-        <div class="middle closed">
-        <svg height="400" width="300">
-      <circle cx="0" cy="0" r="100" fill="rgba(90,140,240,1)"></circle>
-
-      <circle cx="90" cy="110" r="20" fill="rgba(90,140,240,1)"></circle>
-
-      <circle cx="0" cy="310" r="100" fill="rgba(90,140,240,0.75)"></circle>
-      </svg>
-        <div class="middlecont">
-        <br>
-        <p style="margin-left:69px; margin-bottom: 0;" id="profile-name" ></p>
-      <p style="margin-left: 55px;" id="profile-age"></p><br>
-           <p style="margin-left: 55px;" id="profile-stats"></p><br>
-        <br><br>
-      <p id="profile-info"></p>
-        <img src="" class="profile-img" id="profile-img">
-         <button onclick="startPrivateChat('${user}')">Msg</button>
-         </div>
-        </div>
-        <div onclick="toggleOpen()" class="bottom">
-        </div>
-      </div>
-      </div>
-<div id="popup1" class="popup-overlay" onclick="closePopup(event, 'popup1')">
-    <div class="popup-box">
-        <button class="close-btn" onclick="closePopup(event, 'popup1')">&times;</button>
-        <h3>About</h3>
-        <p>This site lets you join different chat rooms by clicking the images below.</p>
-    </div>
-</div>
-
-<div id="popup2" class="popup-overlay" onclick="closePopup(event, 'popup2')">
-    <div class="popup-box">
-        <button class="close-btn" onclick="closePopup(event, 'popup2')">&times;</button>
-        <h3>Help</h3>
-        <p>Click a chat room image to join. Use the buttons above for info or assistance.</p>
-    </div>
-</div>
-
-<div id="popup3" class="popup-overlay" onclick="closePopup(event, 'popup3')">
-    <div class="popup-box">
-        <button class="close-btn" onclick="closePopup(event, 'popup3')">&times;</button>
-        <h3>Contact</h3>
-        <p>Email us at support@example.com</p>
-    </div>
-</div>
-
-<div id="popup4" class="popup-overlay" onclick="closePopup(event, 'popup4')">
-    <div class="popup-box palak">
-        <button class="close-btn" onclick="closePopup(event, 'popup4')">&times;</button>
-        <div class="img">
-            <span>
-                <img id="profilepic1" src="" alt="Profile Picture" />
-            </span>
-        </div>
-        <div class="head">User Settings</div>
-        <form id="settingsForm" method="post" enctype="multipart/form-data">
-            <div class="head2">
-                <label>Username:
-                    <input id="username" name="username" type="text" placeholder="Enter username" required />
-                </label>
-                <label>Password:
-                    <input id="password" name="password" type="password" placeholder="Enter password" required />
-                </label>
-                <label>Height:
-                    <input id="height" name="height" type="text" placeholder="Enter height" required />
-                </label>
-                <label>Weight:
-                    <input id="weight" name="weight" type="text" placeholder="Enter weight" required />
-                </label>
-                <label>Age:
-                    <input id="age" name="age" type="text" placeholder="Enter age" required />
-                </label>
-                <label>Info:
-                    <textarea id="user-info" name="info" placeholder="Enter info" required></textarea>
-                </label>
-                <label for="nativeLanguage">Select your language:</label>
-                <select name="nativeLanguage" id="nativeLanguage">
-                    <option value="en">English</option>
-                    <option value="es">Spanish</option>
-                    <option value="mandarin">Mandarin</option>
-                    <option value="hi">Hindi</option>
-                    <option value="ar">Arabic</option>
-                </select>
-                <label>Name Color:
-                    <input type="color" id="favcolor" style="height:50px; width:70px;" value="#ff0000" />
-                </label>
-                <label for="sounds">Sounds:</label>
-                <select name="sounds" id="sounds">
-                    <option value="on">On</option>
-                    <option value="off">Off</option>
-                </select>
-                <label>Image:
-                    <input type="file" id="imageUpload" name="imageUpload" accept="image/*" />
-                </label>
-                <div id="imagePreviewContainer">
-                    <img id="imagePreview" alt="Image Preview" />
-                </div>
-                <button class="register" type="submit">Update</button>
-            </div>
-        </form>
-    </div>
-</div>
-
-<!-- Chat Overlay -->
-<div class="overlay" id="chatOverlay">
-    <div class="overlay-content">
-        <span class="close-button" id="closeBtn" title="Close Chat">&times;</span>
-        <div id="messages-column">
-            <div id="roomTitle"></div>
-            <ul id="messages"></ul>
-        </div>
-        <div id="online-members">
-            <div style="text-shadow: 0 0 7px green, 0 0 4px green, 0 0 10px green, 0 0 12px green; color: ghostwhite; font-size:18px; margin-bottom: 10px;">Online Members</div>
-            <ul id="members-list"></ul>
-        </div>
-        <form id="form" enctype="multipart/form-data">
-            <input id="m" placeholder="Type your message here..." autocomplete="off" />
-            <button type="submit">Send</button>
-            <label for="image-input" title="Attach Image"><i class="material-icons" style="font-size:24px; color:#333;">attachment</i></label>
-            <input type="file" id="image-input" accept="image/*" />
-        </form>
-    </div>
-</div>
-
-<!-- Private Chats Side Tab Button (hidden by default) -->
-<button class="open-tab" id="privateChatsBtn" onclick="openNav()" aria-label="Open Private Chats">☰ Private Chats</button>
-
-<!-- Private Chats Side Tab (hidden by default) -->
-<div id="mySideTab" class="side-tab" aria-label="Private Chats Side Tab">
-    <a href="javascript:void(0)" class="closebtn" onclick="closeNav()" aria-label="Close Private Chats">×</a>
-    <div class="title">Private Chats</div>
-    <ul id="private-chats"></ul>
-</div>
-
-<!-- Socket.IO -->
-<script src="https://cdn.socket.io/4.12.1/socket.io.min.js" crossorigin="anonymous"></script>
-<script>
-    
 </script>
 </body>
 </html>
