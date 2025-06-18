@@ -1147,7 +1147,10 @@ function closePopup(event, id) {
   </div>
 </div>
 
-
+<div id="registerPopup" class="popup-overlay" style="display:none;" onclick="closePopup(event, 'registerPopup')">
+  <div class="popup-box" onclick="event.stopPropagation();">
+    <button class="close-btn" onclick="closePopup(event, 'registerPopup')">&times;</button>
+    <h3>Register</h3>
 <form id="registerForm" enctype="multipart/form-data">
   <input type="text" name="username" placeholder="Username" required />
   <input type="password" name="password" placeholder="Password" required />
