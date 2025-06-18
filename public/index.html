@@ -1151,11 +1151,10 @@ function closePopup(event, id) {
       <input type="password" name="password" placeholder="Password" required />
       <input type="email" name="email" placeholder="Email" required />
       <input type="number" name="age" placeholder="Age" min="13" max="120" required />
-      <input type="text" name="height" placeholder="Height (e.g. 5'9&quot; or 175cm)" required />
-      <input type="text" name="weight" placeholder="Weight (e.g. 160 lbs or 72kg)" required />
+      <input type="text" name="stats" placeholder="Height e.g. 5'9&quot; or 175cm and Weight e.g. 160 lbs or 72kh" required />
       <textarea name="info" placeholder="Tell us about yourself" required></textarea>
       <label for="nativeLanguage">Native Language:</label>
-      <select name="nativeLanguage" id="nativeLanguageReg" required>
+      <select name="nativeLanguage" id="nativeLanguage" required>
         <option value="">Select</option>
         <option value="en">English</option>
         <option value="es">Spanish</option>
@@ -1164,9 +1163,9 @@ function closePopup(event, id) {
         <option value="ar">Arabic</option>
       </select>
       <label for="colorReg">Name Color:</label>
-      <input type="color" id="colorReg" name="color" value="#ff0000" style="height:40px;width:60px;" />
+      <input type="color" id="colorPreference" name="colorPreference" value="#ff0000" style="height:40px;width:60px;" />
       <label for="imageUploadReg">Profile Image:</label>
-      <input type="file" id="imageUploadReg" name="image" accept="image/*" />
+      <input type="file" id="image" name="image" accept="image/*" />
       <div id="registerImagePreviewContainer" style="margin-bottom:10px;text-align:center;">
         <img id="registerImagePreview" style="max-width:50%;max-height:120px;border-radius:10px;display:none;" />
       </div>
