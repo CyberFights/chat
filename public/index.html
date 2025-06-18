@@ -960,11 +960,30 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     };
 
-    document.getElementById('registerForm').onsubmit = function(e) {
-        e.preventDefault();
-        alert('Registration submitted!\n(Implement your backend logic here.)');
-        closePopup({target: {classList: {contains: () => true}}}, 'registerPopup');
-    };
+document.getElementById('registerForm').onsubmit = async function(e) {
+    e.preventDefault();
+
+    // Collect form data including the file
+    const form = e.target;
+    const formData = new FormData(form);
+
+    try {
+        const response = await fetch('https://backend-api-production-a19d.up.railway.app/register', {
+            method: 'POST',
+            body: formData // No need to set Content-Type; browser sets it automatically for FormData
+        });
+
+        if (response.ok) {
+            alert('Registration successful!');
+            closePopup({target: {classList: {contains: () => true}}}, 'registerPopup');
+        } else {
+            const error = await response.json().catch(() => ({}));
+            alert('Registration failed: ' + (error.message || response.statusText));
+        }
+    } catch (err) {
+        alert('Error: ' + err.message);
+    }
+};
 
     // Chat room images click
     document.querySelectorAll('.image-grid img').forEach(image => {
