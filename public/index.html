@@ -912,46 +912,7 @@
     }
 }
 </style>
-<script>
-let isAgeVerified = false;
-let isLoggedIn = false; 
 
-function confirmAge(){
-    if (!isAgeVerified) {
-        const userConfirmed = confirm("Are you 18 years or older?");
-        if (userConfirmed) {
-            isAgeVerified = true;
-            const landingPage = document.getElementById("landingPage");
-            if (landingPage) {
-                landingPage.classList.add("fade-out");
-                setTimeout(() => {
-                    landingPage.style.display = "none";
-                    const hiddenPage = document.getElementById("hiddenPage");
-                    if (hiddenPage) hiddenPage.style.display = "block";
-                    // Show private chats button and tab after verification
-                    const privateChatsBtn = document.getElementById("privateChatsBtn");
-                    const mySideTab = document.getElementById("mySideTab");
-                    if (privateChatsBtn) privateChatsBtn.style.display = "flex";
-                    if (mySideTab) mySideTab.style.display = "block";
-                }, 2000);
-            }
-        } else {
-            alert("You must be at least 18 years old to proceed.");
-        }
-    }
-}
-
-// Popup open/close helpers
-function openPopup(id) {
-  document.getElementById(id).style.display = 'flex';
-}
-function closePopup(event, id) {
-  if (!event || event.target.classList.contains('popup-overlay')) {
-    document.getElementById(id).style.display = 'none';
-  }
-}
-
-</script>
 </head>
 <body onclick="confirmAge()">
 
@@ -1217,6 +1178,30 @@ function closePopup(event, id) {
 <!-- Socket.IO -->
 <script src="https://cdn.socket.io/4.12.1/socket.io.min.js" crossorigin="anonymous"></script>
 <script>
+let isAgeVerified = false;
+let isLoggedIn = false; // User is NOT logged in initially
+
+function confirmAge() {
+    if (!isAgeVerified) {
+        const userConfirmed = confirm("Are you 18 years or older?");
+        if (userConfirmed) {
+            isAgeVerified = true;
+            const landingPage = document.getElementById("landingPage");
+            landingPage.classList.add("fade-out");
+            setTimeout(() => {
+                landingPage.style.display = "none";
+                document.getElementById("hiddenPage").style.display = "block";
+                // Show private chats button and tab after verification
+                const privateChatsBtn = document.getElementById("privateChatsBtn");
+                const mySideTab = document.getElementById("mySideTab");
+                if (privateChatsBtn) privateChatsBtn.style.display = "flex";
+                if (mySideTab) mySideTab.style.display = "block";
+            }, 2000);
+        } else {
+            alert("You must be at least 18 years old to proceed.");
+        }
+    }
+}
 
 // Show Register Popup
 document.addEventListener('DOMContentLoaded', function() {
@@ -1247,12 +1232,30 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 
+
+// --- LOGIN HANDLING (NEW) ---
 document.getElementById('loginForm').addEventListener('submit', function(event) {
     event.preventDefault();
     // TODO: Add your real authentication logic here!
     isLoggedIn = true; // Now the user is logged in
+    currentUsername = document.getElementById('loginUsername').value || 'User';
     closePopup({target: {classList: ['popup-overlay']}}, 'popup0');
     alert('Login successful! You can now enter chat rooms.');
+    // Optionally update profile section here
+    document.getElementById('profile').innerHTML = `<p>Welcome, ${currentUsername}!</p>`;
+});
+
+// --- BLOCK CHAT ROOM ACCESS UNTIL LOGGED IN (CHANGED) ---
+images.forEach(image => {
+    image.addEventListener('click', () => {
+        if (!isLoggedIn) {
+            alert('Please log in before entering any chat room!');
+            openPopup('popup0'); // Open login popup
+            return;
+        }
+        const roomName = image.dataset.room;
+        openChat(roomName);
+    });
 });
 
 
@@ -1274,68 +1277,67 @@ document.getElementById('loginForm').addEventListener('submit', function(event) 
 
     // Open chat overlay and join room
     function openChat(roomName) {
-        overlay.style.display = 'flex';
-        roomTitle.textContent = roomName;
+    overlay.style.display = 'flex';
+    roomTitle.textContent = roomName;
 
-        if (!socket) {
-            socket = io('http://localhost:3000'); // Replace with your server URL
-            setupSocketListeners();
-        }
-
-        if (currentRoom) {
-            socket.emit('leaveRoom', { room: currentRoom, username: currentUsername });
-        }
-
-        currentRoom = roomName;
-        socket.emit('joinRoom', { room: roomName, username: currentUsername });
+    if (!socket) {
+        socket = io('http://localhost:3000'); // Replace with your server URL
+        setupSocketListeners();
     }
 
-    // Setup socket event listeners once
-    function setupSocketListeners() {
-        socket.on('loadMessages', (previousMessages) => {
-            messages.innerHTML = '';
-            previousMessages.forEach(msg => {
-                const item = document.createElement('li');
-                item.textContent = msg;
-                messages.appendChild(item);
-            });
-            scrollToBottom();
-        });
+    if (currentRoom) {
+        socket.emit('leaveRoom', { room: currentRoom, username: currentUsername });
+    }
 
-        socket.on('chat message', (data) => {
+    currentRoom = roomName;
+    socket.emit('joinRoom', { room: roomName, username: currentUsername });
+}
+
+function setupSocketListeners() {
+    socket.on('loadMessages', (previousMessages) => {
+        messages.innerHTML = '';
+        previousMessages.forEach(msg => {
             const item = document.createElement('li');
-            item.textContent = `${data.username}: ${data.message}`;
+            item.textContent = msg;
             messages.appendChild(item);
-            scrollToBottom();
         });
+        scrollToBottom();
+    });
 
-        socket.on('updateMembers', (members) => {
-            membersList.innerHTML = '';
-            members.forEach(member => {
-                const memberItem = document.createElement('li');
-                memberItem.classList.add('member-item');
-                memberItem.innerHTML = `
-                    <img src="${member.profilePic || 'https://via.placeholder.com/30'}" alt="${member.username}" />
-                    <span>${member.username}</span>
-                `;
-                memberItem.addEventListener('click', () => openProfile(member.username));
-                membersList.appendChild(memberItem);
-            });
+    socket.on('chat message', (data) => {
+        const item = document.createElement('li');
+        item.textContent = `${data.username}: ${data.message}`;
+        messages.appendChild(item);
+        scrollToBottom();
+    });
+
+    socket.on('updateMembers', (members) => {
+        membersList.innerHTML = '';
+        members.forEach(member => {
+            const memberItem = document.createElement('li');
+            memberItem.classList.add('member-item');
+            memberItem.innerHTML = `
+                <img src="${member.profilePic || 'https://via.placeholder.com/30'}" alt="${member.username}" />
+                <span>${member.username}</span>
+            `;
+            memberItem.addEventListener('click', () => openProfile(member.username));
+            membersList.appendChild(memberItem);
         });
+    });
 
-        socket.on('private message', (data) => {
-            const sender = data.from;
-            const message = data.message;
+    socket.on('private message', (data) => {
+        const sender = data.from;
+        const message = data.message;
 
-            if (!privateChats[sender]) {
-                privateChats[sender] = { username: sender, messages: [] };
-                addPrivateChat(sender);
-            }
+        if (!privateChats[sender]) {
+            privateChats[sender] = { username: sender, messages: [] };
+            addPrivateChat(sender);
+        }
 
-            privateChats[sender].messages.push(message);
-            console.log(`Received private message from ${sender}: ${message}`);
-        });
-    }
+        privateChats[sender].messages.push(message);
+        console.log(`Received private message from ${sender}: ${message}`);
+    });
+}
 
     // Start a private chat
     function startPrivateChat(username) {
@@ -1436,16 +1438,16 @@ images.forEach(image => {
     }
 
     // Popup open/close
-    function openPopup(id) {
-        document.getElementById(id).style.display = 'flex';
-    }
+    
+function openPopup(id) {
+    document.getElementById(id).style.display = 'flex';
+}
 
-    function closePopup(event, id) {
-        if (event.target.classList.contains('popup-overlay') || event.target.classList.contains('close-btn')) {
-            document.getElementById(id).style.display = 'none';
-        }
+function closePopup(event, id) {
+    if (event.target.classList.contains('popup-overlay') || event.target.classList.contains('close-btn')) {
+        document.getElementById(id).style.display = 'none';
     }
-
+}
     // Image preview in settings
     document.getElementById('imageUpload').addEventListener('change', function(event) {
         const file = event.target.files[0];
