@@ -1270,7 +1270,7 @@ const images = document.querySelectorAll('.image-grid img');
     roomTitle.textContent = roomName;
 
     if (!socket) {
-        socket = io('http://localhost:3000'); // Replace with your server URL
+        socket = io(); // Replace with your server URL
         setupSocketListeners();
     }
 
@@ -1440,7 +1440,7 @@ images.forEach(image => {
 
         // Optionally update profile picture preview in main UI
         const profilePic = document.getElementById('imagePreview').src;
-        llkif (profilePic) {
+        if (profilePic) {
             document.getElementById('profilepic1').src = profilePic;
         }
 
