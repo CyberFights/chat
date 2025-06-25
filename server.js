@@ -1,47 +1,95 @@
-// server.js (rename this as the src in your package.json)
-const express = require("express");
-const http = require("http");
-const socketIo = require("socket.io");
-const path = require("path");
+// server.js
+const express = require('express');
+const http = require('http');
+const { Server } = require('socket.io');
+const cors = require('cors');
+const path = require('path');
 
 const app = express();
 const server = http.createServer(app);
-const io = socketIo(server);
+const io = new Server(server);
 
-app.use(express.static(path.join(__dirname, "public")));
+app.use(cors());
+app.use(express.static(path.join(__dirname, 'public')));
 
-io.on("connection", (socket) => {
-  console.log("A user connected");
+// In-memory structures
+const chatHistory = {};     // { roomName: [message objects] }
+const roomMembers = {};     // { roomName: [ {username, profilePic} ] }
+const userSockets = {};     // { username: socket.id }
 
-  socket.on("disconnect", () => {
-    console.log("User disconnected");
+io.on('connection', (socket) => {
+  let currentRoom = null;
+  let currentUser = null;
+  let profilePic = null;
+
+  // Join a room
+  socket.on('joinRoom', ({ room, username }) => {
+    currentRoom = room;
+    currentUser = username;
+    // Optionally, set profilePic if you want to support it from the client
+    profilePic = socket.handshake.query.profilePic || null;
+
+    socket.join(room);
+
+    // Track socket for private messaging
+    userSockets[username] = socket.id;
+
+    // Add member to room
+    if (!roomMembers[room]) roomMembers[room] = [];
+    if (!roomMembers[room].some(m => m.username === username)) {
+      roomMembers[room].push({ username, profilePic });
+    }
+
+    // Send chat history
+    socket.emit('loadMessages', (chatHistory[room] || []).map(msg => `${msg.username}: ${msg.message}`));
+
+    // Update members for all in room
+    io.to(room).emit('updateMembers', roomMembers[room]);
   });
 
-  socket.on("chat message", (msg) => {
-    const messageWithMeta = {
-      username: socket.username,
-      message: msg,
-      date: new Date().toLocaleString(),
-    };
-
-    io.emit("chat message", messageWithMeta);
+  // Leave a room
+  socket.on('leaveRoom', ({ room, username }) => {
+    socket.leave(room);
+    if (roomMembers[room]) {
+      roomMembers[room] = roomMembers[room].filter(m => m.username !== username);
+      io.to(room).emit('updateMembers', roomMembers[room]);
+    }
+    delete userSockets[username];
   });
 
-  socket.on("set username", (username) => {
-    socket.username = username;
+  // Handle chat messages
+  socket.on('chat message', ({ room, username, message }) => {
+    if (!chatHistory[room]) chatHistory[room] = [];
+    chatHistory[room].push({ username, message });
+    io.to(room).emit('chat message', { username, message });
   });
 
-  socket.on("publish media", ({ dataUrl, fileType }) => {
-    console.log("Media publishing functionality removed");
+  // Handle private messages
+  socket.on('private message', ({ to, from, message }) => {
+    const toSocketId = userSockets[to];
+    if (toSocketId) {
+      io.to(toSocketId).emit('private message', { from, message });
+    }
+  });
+
+  // On disconnect, remove from room members
+  socket.on('disconnect', () => {
+    if (currentRoom && currentUser) {
+      if (roomMembers[currentRoom]) {
+        roomMembers[currentRoom] = roomMembers[currentRoom].filter(m => m.username !== currentUser);
+        io.to(currentRoom).emit('updateMembers', roomMembers[currentRoom]);
+      }
+      delete userSockets[currentUser];
+    }
   });
 });
 
-// Handle 404 errors
-app.use((req, res, next) => {
-  res.status(404).sendFile(path.join(__dirname, "public", "404.html"));
+// Serve the main page
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
 const PORT = process.env.PORT || 3000;
 server.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
+  console.log(`Server listening at http://localhost:${PORT}`);
 });
