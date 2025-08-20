@@ -1003,33 +1003,57 @@ document.addEventListener('DOMContentLoaded', function() {
     const ageBtn = document.getElementById('ageBtn');
     if(ageBtn) ageBtn.addEventListener('click', confirmAge);
 
-    // Example loginForm logic
-    const loginForm = document.getElementById('loginForm');
-    if(loginForm) loginForm.addEventListener('submit', async function(event) {
-        event.preventDefault();
-        const username = document.getElementById('loginUsername').value;
-        const password = document.getElementById('loginPassword').value;
+// --- LocalStorage Logic ---
+document.addEventListener('DOMContentLoaded', () => {
+  const savedUsername = localStorage.getItem('username');
+  const savedImage = localStorage.getItem('profileImage');
+  if (savedUsername) {
+    currentUsername = savedUsername;
+    isLoggedIn = true;
+    let profileHtml = `<p>Welcome back, ${currentUsername}</p>`;
+    if (savedImage) {
+      const imgUrl = savedImage.startsWith('http') ? savedImage : window.location.origin + '/' + savedImage;
+      profileHtml += `<img src="${imgUrl}" alt="Profile Picture" style="max-width:100px; border-radius:50%;">`;
+    }
+    document.getElementById('profile').innerHTML = profileHtml;
+  }
+});
 
-        try {
-            const response = await fetch("/login", {
-                method: "POST",
-                headers: {"Content-Type": "application/json"},
-                body: JSON.stringify({ username, password })
-            });
-            const data = await response.json();
-            if(data.success){
-                currentUser = username;
-                document.getElementById('loginForm').style.display = "none";
-                document.getElementById('profile').innerHTML = `<p>Welcome, ${currentUser}!</p>`;
-                document.getElementById('popup0').style.display = 'none';
-                alert('Login successful! You can now enter chat rooms.');
-            } else {
-                alert(data.error || "Login failed");
-            }
-        } catch(err){
-            alert("Login error: " + err.message);
-        }
+// --- Login Handler ---
+document.getElementById('loginForm')?.addEventListener('submit', async e => {
+  e.preventDefault();
+  const username = document.getElementById('loginUsername').value;
+  const password = document.getElementById('loginPassword').value;
+  try {
+    const res = await fetch('/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ username, password })
     });
+    const data = await res.json();
+    if (data.success && data.user) {
+      localStorage.setItem('username', data.user.username || '');
+      localStorage.setItem('profileImage', data.user.imagePath || '');
+      currentUsername = data.user.username;
+      isLoggedIn = true;
+      alert('Login successful! Welcome, ' + currentUsername);
+      if (data.user.imagePath) {
+        const profilePicUrl = data.user.imagePath.startsWith('http') 
+          ? data.user.imagePath 
+          : window.location.origin + '/' + data.user.imagePath;
+        document.getElementById('profile').innerHTML = `
+          <p>Welcome, ${currentUsername}</p>
+          <img src="${profilePicUrl}" alt="Profile Picture" style="max-width:100px; border-radius:50%;">
+        `;
+      }
+      closePopup(null, 'popup0');
+    } else {
+      alert('Login failed: ' + (data.error || 'Check your credentials and try again.'));
+    }
+  } catch (err) {
+    alert('Login error: ' + err.message);
+  }
+});
 
 
     // Register popup button
@@ -1404,43 +1428,6 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('profile').innerHTML = profileHtml;
   }
 });
-
-// --- Login Handler ---
-document.getElementById('loginForm')?.addEventListener('submit', async e => {
-  e.preventDefault();
-  const username = document.getElementById('loginUsername').value;
-  const password = document.getElementById('loginPassword').value;
-  try {
-    const res = await fetch('/login', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ username, password })
-    });
-    const data = await res.json();
-    if (data.success && data.user) {
-      localStorage.setItem('username', data.user.username || '');
-      localStorage.setItem('profileImage', data.user.imagePath || '');
-      currentUsername = data.user.username;
-      isLoggedIn = true;
-      alert('Login successful! Welcome, ' + currentUsername);
-      if (data.user.imagePath) {
-        const profilePicUrl = data.user.imagePath.startsWith('http') 
-          ? data.user.imagePath 
-          : window.location.origin + '/' + data.user.imagePath;
-        document.getElementById('profile').innerHTML = `
-          <p>Welcome, ${currentUsername}</p>
-          <img src="${profilePicUrl}" alt="Profile Picture" style="max-width:100px; border-radius:50%;">
-        `;
-      }
-      closePopup(null, 'popup0');
-    } else {
-      alert('Login failed: ' + (data.error || 'Check your credentials and try again.'));
-    }
-  } catch (err) {
-    alert('Login error: ' + err.message);
-  }
-});
-
 // --- Notification Badge ---
 function updatePrivateChatBadge() {
   if (unseenPrivateMessages > 0) {
