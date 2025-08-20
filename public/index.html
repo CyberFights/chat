@@ -977,6 +977,15 @@ window.addEventListener('DOMContentLoaded', function() {
         }
     });
 });
+    window.openPopup = function(id) {
+    document.getElementById(id).style.display = 'flex';
+};
+
+window.closePopup = function(event, id) {
+    if (!event || event.target.classList.contains('popup-overlay') || event.target.classList.contains('close-btn')) {
+        document.getElementById(id).style.display = 'none';
+    }
+};
 </script>
 </head>
 
@@ -1227,16 +1236,6 @@ const privateChatsList = document.getElementById('private-chats');
 const openPrivateChatsBtn = document.getElementById('openPrivateChats');
 const privateChatBadge = document.getElementById('privateChatBadge');
 const sideTab = document.getElementById('mySideTab');
-
-// Popup open/close
-function openPopup(id) {
-    document.getElementById(id).style.display = 'flex';
-}
-function closePopup(event, id) {
-    if (!event || event.target.classList.contains('popup-overlay') || event.target.classList.contains('close-btn')) {
-        document.getElementById(id).style.display = 'none';
-    }
-}
 
 // --- LocalStorage Logic ---
 function loadProfileFromStorage() {
