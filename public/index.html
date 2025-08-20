@@ -965,61 +965,88 @@ function confirmAge() {
     }
 }
 
+let currentUser = null;
+let currentRoom = null;
+
 document.addEventListener('DOMContentLoaded', function() {
     // Login form
-    document.getElementById('loginForm').addEventListener('submit', function(event) {
+    document.getElementById('loginForm').addEventListener('submit', async function(event) {
         event.preventDefault();
-        isLoggedIn = true;
-        currentUsername = document.getElementById('loginUsername').value || 'User';
-        closePopup({target: {classList: {contains: () => true}}}, 'popup0');
-        alert('Login successful! You can now enter chat rooms.');
-        document.getElementById('profile').innerHTML = `<p>Welcome, ${currentUsername}!</p>`;
+        const username = document.getElementById('loginUsername').value;
+        const password = document.getElementById('loginPassword').value;
+        
+        try {
+            const response = await fetch("/login", {
+                method: "POST",
+                headers: {"Content-Type": "application/json"},
+                body: JSON.stringify({ username, password })
+            });
+            const data = await response.json();
+            if(data.success){
+                currentUser = username;
+                document.getElementById('loginForm').style.display = "none";
+                document.getElementById('profile').innerHTML = `<p>Welcome, ${currentUser}!</p>`;
+                closePopup({target: {classList: {contains: () => true }}}, 'popup0');
+                alert('Login successful! You can now enter chat rooms.');
+                initSocket();
+            } else {
+                alert(data.error || "Login failed");
+                document.getElementById("loginForm").innerText = data.error || "Login failed";
+            }
+        } catch(err){
+            alert("Login error: " + err.message);
+        }
     });
 
-    // Register popup
+    // Register popup button
     document.getElementById('showRegisterBtn').onclick = function(e) {
         e.stopPropagation();
         closePopup(null, 'popup0');
         setTimeout(() => openPopup('registerPopup'), 200);
     };
 
-document.getElementById('imageUploadReg').onchange = function(evt) {
-    const [file] = evt.target.files;
-    if (file) {
-        const preview = document.getElementById('registerImagePreview');
-        preview.src = URL.createObjectURL(file);
-        preview.style.display = 'block';
-    }
-};
-
-document.getElementById('registerForm').onsubmit = async function(e) {
-    e.preventDefault();
-    const btn = this.querySelector('button[type="submit"]');
-    btn.disabled = true;
-    btn.textContent = 'Registering...';
-
-    const form = e.target;
-    const formData = new FormData(form);
-
-    try {
-        const response = await fetch('https://backend-api-production-a19d.up.railway.app/register', {
-            method: 'POST',
-            body: formData
-        });
-        if (response.ok) {
-            alert('Registration successful! Please log in.');
-            closePopup(null, 'registerPopup');
-            openPopup('popup0');
-        } else {
-            const error = await response.json().catch(() => ({}));
-            alert('Registration failed: ' + (error.message || response.statusText));
+    // Image upload preview during registration
+    document.getElementById('imageUploadReg').onchange = function(evt) {
+        const [file] = evt.target.files;
+        if (file) {
+            const preview = document.getElementById('registerImagePreview');
+            preview.src = URL.createObjectURL(file);
+            preview.style.display = 'block';
         }
-    } catch (err) {
-        alert('Error: ' + err.message);
-    }
-    btn.disabled = false;
-    btn.textContent = 'Register';
-};
+    };
+
+    // Registration form
+    document.getElementById('registerForm').onsubmit = async function(e) {
+        e.preventDefault();
+        const btn = this.querySelector('button[type="submit"]');
+        btn.disabled = true;
+        btn.textContent = 'Registering...';
+        const formData = new FormData(e.target);
+
+        try {
+            const response = await fetch("/register", {
+                method: "POST",
+                body: formData
+            });
+
+            if(response.ok){
+                alert('Registration successful! Please log in.');
+                closePopup(null, 'registerPopup');
+                openPopup('popup0');
+            } else {
+                const error = await response.json().catch(() => ({}));
+                alert('Registration failed: ' + (error.message || response.statusText));
+                document.getElementById("registerForm").innerText = JSON.stringify(error);
+            }
+        } catch (err) {
+            alert('Error: ' + err.message);
+        }
+        btn.disabled = false;
+        btn.textContent = 'Register';
+    };
+});
+
+// The initSocket function should be defined elsewhere in your code.
 
 
     // Chat room images click
