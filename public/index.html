@@ -963,8 +963,8 @@ function closePopup(e, popupId) {
     }
 }
 
-function confirmAge(){
 
+function confirmAge() {
 
 
     if (!isAgeVerified) {
@@ -982,43 +982,34 @@ function confirmAge(){
             const landingPage = document.getElementById("landingPage");
 
 
-            if (landingPage) {
+            landingPage.classList.add("fade-out");
 
 
-                landingPage.classList.add("fade-out");
+            setTimeout(() => {
 
 
-                setTimeout(() => {
+                landingPage.style.display = "none";
 
 
-                    landingPage.style.display = "none";
+                document.getElementById("hiddenPage").style.display = "block";
 
 
-                    const hiddenPage = document.getElementById("hiddenPage");
+                // Show private chats button and tab after verification
 
 
-                    if (hiddenPage) hiddenPage.style.display = "block";
+                const privateChatsBtn = document.getElementById("privateChatsBtn");
 
 
-                    // Show private chats button and tab after verification
+                const mySideTab = document.getElementById("mySideTab");
 
 
-                    const privateChatsBtn = document.getElementById("privateChatsBtn");
+                if (privateChatsBtn) privateChatsBtn.style.display = "flex";
 
 
-                    const mySideTab = document.getElementById("mySideTab");
+                if (mySideTab) mySideTab.style.display = "block";
 
 
-                    if (privateChatsBtn) privateChatsBtn.style.display = "flex";
-
-
-                    if (mySideTab) mySideTab.style.display = "block";
-
-
-                }, 2000);
-
-
-            }
+            }, 2000);
 
 
         } else {
@@ -1034,7 +1025,6 @@ function confirmAge(){
 
 
 }
-
 
 
 // Wait for DOM
