@@ -944,66 +944,30 @@
 </style>
 <script src="/socket.io/socket.io.js"></script>
 <script>
-        let isAgeVerified = false;
+let isAgeVerified = false;
 let isLoggedIn = false;
-// Replace button click with click anywhere on landing page!
+
 window.addEventListener('DOMContentLoaded', function() {
-    // The function you want to call (replace with your existing confirmAge logic)
     function launchApp() {
-          if (!isAgeVerified) {
-
-
-        const userConfirmed = confirm("Are you 18 years or older?");
-
-
-        if (userConfirmed) {
-
-
-            isAgeVerified = true;
-
-
-            const landingPage = document.getElementById("landingPage");
-
-
-            landingPage.classList.add("fade-out");
-
-
-            setTimeout(() => {
-
-
-                landingPage.style.display = "none";
-
-
-                document.getElementById("hiddenPage").style.display = "block";
-
-
-                // Show private chats button and tab after verification
-
-
-                const privateChatsBtn = document.getElementById("privateChatsBtn");
-
-
-                const mySideTab = document.getElementById("mySideTab");
-
-
-                if (privateChatsBtn) privateChatsBtn.style.display = "flex";
-
-
-                if (mySideTab) mySideTab.style.display = "block";
-
-
-            }, 2000);
-
-
-        } else {
-
-
-            alert("You must be at least 18 years old to proceed.");
-
-
+        if (!isAgeVerified) {
+            const userConfirmed = confirm("Are you 18 years or older?");
+            if (userConfirmed) {
+                isAgeVerified = true;
+                const landingPage = document.getElementById("landingPage");
+                landingPage.classList.add("fade-out");
+                setTimeout(() => {
+                    landingPage.style.display = "none";
+                    document.getElementById("hiddenPage").style.display = "block";
+                    // Show private chats button and tab after verification
+                    const privateChatsBtn = document.getElementById("privateChatsBtn");
+                    const mySideTab = document.getElementById("mySideTab");
+                    if (privateChatsBtn) privateChatsBtn.style.display = "flex";
+                    if (mySideTab) mySideTab.style.display = "block";
+                }, 2000);
+            } else {
+                alert("You must be at least 18 years old to proceed.");
+            }
         }
-
-
     }
     // Attach the event to the entire landingPage container
     document.getElementById('landingPage').addEventListener('click', function(e) {
