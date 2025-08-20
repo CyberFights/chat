@@ -1475,7 +1475,7 @@ if (registerForm) {
         clearPrivateChatBadge();
     }
     // Close DM overlay
-    dmCloseBtn?.onclick = () => {
+    if (dmCloseBtn) dmCloseBtn.onclick = () => {
         dmOverlay.style.display = 'none';
         dmTarget = null;
         dmInput.value = '';
