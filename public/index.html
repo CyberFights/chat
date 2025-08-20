@@ -1297,26 +1297,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // AGE verification button
-    const ageBtn = document.getElementById('ageBtn');
-    if(ageBtn) ageBtn.addEventListener('click', confirmAge);
-
-// --- LocalStorage Logic ---
-document.addEventListener('DOMContentLoaded', () => {
-  const savedUsername = localStorage.getItem('username');
-  const savedImage = localStorage.getItem('profileImage');
-  if (savedUsername) {
-    currentUsername = savedUsername;
-    isLoggedIn = true;
-    let profileHtml = `<p>Welcome back, ${currentUsername}</p>`;
-    if (savedImage) {
-      const imgUrl = savedImage.startsWith('http') ? savedImage : window.location.origin + '/' + savedImage;
-      profileHtml += `<img src="${imgUrl}" alt="Profile Picture" style="max-width:100px; border-radius:50%;">`;
-    }
-    document.getElementById('profile').innerHTML = profileHtml;
-  }
-});
-
+  
 // --- Login Handler ---
 document.getElementById('loginForm')?.addEventListener('submit', async e => {
   e.preventDefault();
