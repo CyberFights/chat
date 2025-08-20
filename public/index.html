@@ -947,7 +947,23 @@
 <script>
 let isAgeVerified = false;
 let isLoggedIn = false;
+let currentUser = null;
+let currentRoom = null;
 
+function showPopup(popupId) {
+    document.getElementById(popupId).style.display = 'flex';
+}
+
+function closePopup(e, popupId) {
+    if(e && e.target.classList.contains('popup-overlay')) {
+        document.getElementById(popupId).style.display = 'none';
+    }
+    if(e && e.target.classList.contains('close-btn')) {
+        document.getElementById(popupId).style.display = 'none';
+    }
+}
+
+// Age verification and landing page transition
 function confirmAge() {
     if (!isAgeVerified) {
         const userConfirmed = confirm("Are you 18 years or older?");
@@ -965,16 +981,35 @@ function confirmAge() {
     }
 }
 
-let currentUser = null;
-let currentRoom = null;
-
+// Wait for DOM
 document.addEventListener('DOMContentLoaded', function() {
-    // Login form
-    document.getElementById('loginForm').addEventListener('submit', async function(event) {
+    // Show login/register popups
+    document.querySelectorAll('[data-popup]').forEach(btn => {
+        btn.addEventListener('click', function() {
+            showPopup(this.getAttribute('data-popup'));
+        });
+    });
+
+    // Close popups when clicking overlay or close button
+    document.querySelectorAll('.popup-overlay').forEach(overlay => {
+        overlay.addEventListener('click', function(e) {
+            if (e.target.classList.contains('popup-overlay') || e.target.classList.contains('close-btn')) {
+                this.style.display = 'none';
+            }
+        });
+    });
+
+    // AGE verification button
+    const ageBtn = document.getElementById('ageBtn');
+    if(ageBtn) ageBtn.addEventListener('click', confirmAge);
+
+    // Example loginForm logic
+    const loginForm = document.getElementById('loginForm');
+    if(loginForm) loginForm.addEventListener('submit', async function(event) {
         event.preventDefault();
         const username = document.getElementById('loginUsername').value;
         const password = document.getElementById('loginPassword').value;
-        
+
         try {
             const response = await fetch("/login", {
                 method: "POST",
@@ -986,17 +1021,16 @@ document.addEventListener('DOMContentLoaded', function() {
                 currentUser = username;
                 document.getElementById('loginForm').style.display = "none";
                 document.getElementById('profile').innerHTML = `<p>Welcome, ${currentUser}!</p>`;
-                closePopup({target: {classList: {contains: () => true }}}, 'popup0');
+                document.getElementById('popup0').style.display = 'none';
                 alert('Login successful! You can now enter chat rooms.');
-                initSocket();
             } else {
                 alert(data.error || "Login failed");
-                document.getElementById("loginForm").innerText = data.error || "Login failed";
             }
         } catch(err){
             alert("Login error: " + err.message);
         }
     });
+
 
     // Register popup button
     document.getElementById('showRegisterBtn').onclick = function(e) {
