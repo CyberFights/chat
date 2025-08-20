@@ -1308,7 +1308,9 @@ document.addEventListener('DOMContentLoaded', function() {
     loadProfileFromStorage();
 
     // --- Login Handler ---
-    document.getElementById('loginForm')?.addEventListener('submit', async e => {
+const loginForm = document.getElementById('loginForm');
+if (loginForm) {
+    loginForm.addEventListener('submit', async function(e) {
         e.preventDefault();
         const username = document.getElementById('loginUsername').value;
         const password = document.getElementById('loginPassword').value;
@@ -1342,16 +1344,22 @@ document.addEventListener('DOMContentLoaded', function() {
             alert('Login error: ' + err.message);
         }
     });
+}
 
-    // Register popup button
-    document.getElementById('showRegisterBtn')?.onclick = function(e) {
+// --- Register popup button ---
+const showRegisterBtn = document.getElementById('showRegisterBtn');
+if (showRegisterBtn) {
+    showRegisterBtn.onclick = function(e) {
         e.stopPropagation();
         closePopup(null, 'popup0');
-        setTimeout(() => openPopup('registerPopup'), 200);
+        setTimeout(function() { openPopup('registerPopup'); }, 200);
     };
+}
 
-    // Image upload preview during registration
-    document.getElementById('imageUploadReg')?.onchange = function(evt) {
+// --- Image upload preview during registration ---
+const imageUploadReg = document.getElementById('imageUploadReg');
+if (imageUploadReg) {
+    imageUploadReg.onchange = function(evt) {
         const [file] = evt.target.files;
         if (file) {
             const preview = document.getElementById('registerImagePreview');
@@ -1359,9 +1367,12 @@ document.addEventListener('DOMContentLoaded', function() {
             preview.style.display = 'block';
         }
     };
+}
 
-    // Registration form
-    document.getElementById('registerForm')?.onsubmit = async function(e) {
+// --- Registration form ---
+const registerForm = document.getElementById('registerForm');
+if (registerForm) {
+    registerForm.onsubmit = async function(e) {
         e.preventDefault();
         const btn = this.querySelector('button[type="submit"]');
         btn.disabled = true;
@@ -1389,6 +1400,7 @@ document.addEventListener('DOMContentLoaded', function() {
         btn.disabled = false;
         btn.textContent = 'Register';
     };
+}
 
     // --- Chat room images click ---
     images.forEach(image => {
