@@ -19,7 +19,7 @@ app.use(bodyParser.json());
 
 const upload = multer({ dest: "uploads/" });
 
-const client = new MongoClient("mongodb://localhost:27017");
+const client = new MongoClient("mongodb://malecyberfights.up.railway.app:8080");
 let db;
 
 client.connect().then(() => {
@@ -281,5 +281,5 @@ io.on("connection", (socket) => {
 
 const PORT = process.env.PORT || 3000;
 server.listen(PORT, () => {
-  console.log(`Server listening at http://localhost:${PORT}`);
+  console.log(`Server listening at http://malecyberfights.up.railway.app:${PORT}`);
 });
