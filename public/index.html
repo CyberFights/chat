@@ -1346,9 +1346,9 @@ document.addEventListener('DOMContentLoaded', function() {
                         profileElem.innerHTML =
                             '<p>Welcome, ' + currentUsername + '</p>' +
                             '<img src="' + profilePicUrl + '" alt="Profile Picture" style="max-width:100px; border-radius:50%;">';
+                        const profileImageURL = profilePicUrl;
                     }
                     closePopup(null, 'popup0');
-                    localStorage.setItem('profileImageURL', profilePicUrl);
                 } else {
                     alert('Login failed: ' + (data.error || 'Check your credentials and try again.'));
                 }
@@ -1653,7 +1653,7 @@ socket.on('updateMembers', function(members) {
         var member = members[i];
         var memberItem = document.createElement('li');
         memberItem.className += ' member-item';
-        memberItem.innerHTML = '<img src="' + (localStorage.getItem('profileImageURL')) + '" alt="' + member.username + '" /><span>' + member.username + '</span>';
+        memberItem.innerHTML = '<img src="' + profilePicURL + '" alt="' + member.username + '" /><span>' + member.username + '</span>';
         memberItem.addEventListener('click', (function(username) {
             return function() { openProfile(username); };
         })(member.username));
