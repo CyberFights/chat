@@ -1084,11 +1084,11 @@ window.closePopup = function(event, id) {
       <input type="password" id="loginPassword" placeholder="Password" required />
       <button type="submit">Login</button>
     </form>
-    <button id="showRegisterBtn" type="button" style="margin-top:15px; width:100%; background: #0077ff; color: #fff; border-radius:8px; font-size:16px;">Register</button>
+    <button id="showRegisterBtn" type="button" style="margin-top:15px; width:100%; background: #0077ff; color: #fff; border-radius:8px; font-size:16px;" onclick="openPopup('popup5')">Register</button>
   </div>
 </div>
 
-<div id="registerPopup" class="popup-overlay" style="display:none;" onclick="closePopup(event, 'registerPopup')">
+<div id="popup5" class="popup-overlay" style="display:none;" onclick="closePopup(event, 'registerPopup')">
   <div class="popup-box" onclick="event.stopPropagation();">
     <button class="close-btn" onclick="closePopup(event, 'registerPopup')">&times;</button>
     <h3>Register</h3>
