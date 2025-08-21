@@ -1335,6 +1335,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 if (data.success && data.user) {
                     localStorage.setItem('username', data.user.username || '');
                     localStorage.setItem('profileImage', data.user.imagePath || '');
+                    localStorage.setItem('color', data.user.color || 'white');
+                    localStorage.setItem('stats', data.user.stats || '');
+                    localStorage.setItem('info', data.user.info || '');
                     currentUsername = data.user.username;
                     isLoggedIn = true;
                     alert('Login successful! Welcome, ' + currentUsername);
@@ -1345,6 +1348,7 @@ document.addEventListener('DOMContentLoaded', function() {
                             : window.location.origin + '/' + data.user.imagePath;
                         profileElem.innerHTML =
                             '<p>Welcome, ' + currentUsername + '</p>' +
+                            '<p>' + localStorage.getItem('info') + '</p>' + 
                             '<img src="' + profilePicUrl + '" alt="Profile Picture" style="max-width:100px; border-radius:50%;">';
                        localStorage.setItem('profileImageURL', profilePicUrl || '');
                     }
@@ -1643,7 +1647,7 @@ socket.on('loadMessages', function(msgs) {
 });
 socket.on('chat message', function(data) {
     var item = document.createElement('li');
-    item.textContent = data.username + ': ' + data.message;
+    item.textContent = data.username + ': ' + '<br>' + data.message;
     messages.appendChild(item);
     scrollToBottom();
 });
