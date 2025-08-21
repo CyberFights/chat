@@ -19,7 +19,7 @@ app.use(bodyParser.json());
 
 const upload = multer({ dest: "uploads/" });
 
-const client = new MongoClient("mongodb://malecyberfights.up.railway.app:8080");
+const client = new MongoClient(process.env.Mongo_DB);
 let db;
 
 client.connect().then(() => {
