@@ -1647,7 +1647,8 @@ socket.on('loadMessages', function(msgs) {
 });
 socket.on('chat message', function(data) {
     var item = document.createElement('li');
-    item.textContent = data.username + ': ' + '<br>' + data.message;
+    item.textContent = data.username + ': ' + 
+    data.message;
     messages.appendChild(item);
     scrollToBottom();
 });
