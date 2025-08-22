@@ -14,10 +14,10 @@ const io = new Server(server);
 
 app.use(cors());
 app.use(express.static(path.join(__dirname, "public")));
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+app.use('/assets/images/users', express.static(path.join(__dirname, 'users')));
 app.use(bodyParser.json());
 
-const upload = multer({ dest: "uploads/" });
+const upload = multer({ dest: "/assets/images/users" });
 
 const client = new MongoClient(process.env.Mongo_DB);
 let db;
@@ -149,7 +149,7 @@ app.post('/private/messages', upload.single('image'), async (req, res) => {
 
     let fullMessage = message || '';
     if (req.file) {
-      const imageUrl = `/uploads/${req.file.filename}`;
+      const imageUrl = `/assets/images/users/${req.file.filename}`;
       fullMessage = fullMessage ? fullMessage + ' [Image]' : '[Image]';
     }
 
@@ -229,7 +229,7 @@ io.on("connection", (socket) => {
   socket.on("chat message", async ({ room, username, message }) => {
     try {
       await db.collection("messages").insertOne({ room, username, message, timestamp: new Date() });
-      io.to(room).emit("chat message", { username, message });
+      io.to(room).emit("chat message", { username, message, timestamp });
     } catch (err) {
       console.error(err);
     }
