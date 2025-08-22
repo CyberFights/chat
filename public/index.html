@@ -1084,6 +1084,7 @@ window.closePopup = function(event, id) {
       <input type="password" id="loginPassword" placeholder="Password" required />
       <button type="submit">Login</button>
     </form>
+    <br>
     <button id="showRegisterBtn" type="button" style="margin-top:15px; width:100%; background: #0077ff; color: #fff; border-radius:8px; font-size:16px;" onclick="openPopup('popup5')">Register</button>
   </div>
 </div>
@@ -1093,13 +1094,13 @@ window.closePopup = function(event, id) {
     <button class="close-btn" onclick="closePopup(event, 'popup5')">&times;</button>
     <h3>Register</h3>
 <form id="registerForm" enctype="multipart/form-data">
-  <input type="text" name="username" placeholder="Username" required />
-  <input type="password" name="password" placeholder="Password" required />
-  <input type="email" name="email" placeholder="Email" required />
+  <input type="text" name="username" placeholder="Username" required /> <br>
+  <input type="password" name="password" placeholder="Password" required /> <br>
+  <input type="email" name="email" placeholder="Email" required /> <br> 
   <input type="number" name="age" placeholder="Age" min="13" max="120" required />
-  <input type="text" name="stats" placeholder="Height and Weight" required />
+  <input type="text" name="stats" placeholder="Height and Weight" required /> <br>
   <textarea name="info" placeholder="Tell us about yourself" required></textarea>
-  <label for="nativeLanguage">Native Language:</label>
+  <label for="nativeLanguage">Native Language:</label> <br>
   <select name="nativeLanguage" id="nativeLanguage" required>
     <option value="">Select</option>
     <option value="en">English</option>
@@ -1109,7 +1110,7 @@ window.closePopup = function(event, id) {
     <option value="ar">Arabic</option>
   </select>
   <label for="colorReg">Name Color:</label>
-  <input type="color" id="colorPreference" name="colorPreference" value="#ff0000" style="height:40px;width:60px;" />
+  <input type="color" id="colorPreference" name="colorPreference" value="#ff0000" style="height:40px;width:60px;" /> <br>
   <label for="imageUploadReg">Profile Image:</label>
   <input type="file" id="imageUploadReg" name="image" accept="image/*" />
   <div id="registerImagePreviewContainer" style="margin-bottom:10px;text-align:center;">
