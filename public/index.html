@@ -1648,11 +1648,38 @@ socket.on('loadMessages', function(msgs) {
 });
 socket.on('chat message', function(data) {
     var item = document.createElement('li');
-    item.textContent = data.timestamp + data.username + ': ' + 
-    data.message;
+    item.style.textAlign = 'left'; // Ensure everything is left-aligned
+
+    // Create timestamp
+    var timestamp = document.createElement('span');
+    timestamp.textContent = `[${data.timestamp}] `;
+    timestamp.style.fontSize = '0.8em';
+    timestamp.style.color = '#999';
+
+    // Create username
+    var username = document.createElement('strong');
+    username.textContent = data.username;
+    var userColor = localStorage.getItem('color') || '#007bff';
+    username.style.color = userColor;
+    username.style.marginLeft = '5px';
+
+    // Line break before message
+    var br = document.createElement('br');
+
+    // Create message
+    var msg = document.createElement('span');
+    msg.textContent = data.message;
+
+    // Append in order
+    item.appendChild(timestamp);
+    item.appendChild(username);
+    item.appendChild(br);
+    item.appendChild(msg);
+
     messages.appendChild(item);
     scrollToBottom();
 });
+
 socket.on('updateMembers', function(members) {
     membersList.innerHTML = '';
     for (var i = 0; i < members.length; i++) {
