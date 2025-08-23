@@ -1278,8 +1278,8 @@ if (openPrivateChatsBtn) {
 }
 
 // --- Profile Modal ---
-function openProfile(user) {
-      fetch('/user/' + user)
+function openProfile(username) {
+      fetch('/user/' + username)
         .then(function(response) { return response.json(); })
         .then(function(data) {
             var img = data.image;
@@ -1648,7 +1648,7 @@ socket.on('loadMessages', function(msgs) {
 });
 socket.on('chat message', function(data) {
     var item = document.createElement('li');
-    item.textContent = data.username + ': ' + 
+    item.textContent = data.timestamp + data.username + ': ' + 
     data.message;
     messages.appendChild(item);
     scrollToBottom();
