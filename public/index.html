@@ -1081,7 +1081,7 @@ window.closePopup = function(event, id) {
     <h3>Login</h3>
     <form id="loginForm">
       <input type="text" id="loginUsername" placeholder="Username" required />
-      <input type="password" id="loginPassword" placeholder="Password" required />
+      <input type="password" id="loginPassword" placeholder="Password" required /> <br>
       <button type="submit">Login</button>
     </form>
     <br>
@@ -1099,7 +1099,7 @@ window.closePopup = function(event, id) {
   <input type="email" name="email" placeholder="Email" required /> <br> 
   <input type="number" name="age" placeholder="Age" min="13" max="120" required />
   <input type="text" name="stats" placeholder="Height and Weight" required /> <br>
-  <textarea name="info" placeholder="Tell us about yourself" required></textarea>
+  <textarea name="info" placeholder="Tell us about yourself" required></textarea> <br>
   <label for="nativeLanguage">Native Language:</label> <br>
   <select name="nativeLanguage" id="nativeLanguage" required>
     <option value="">Select</option>
@@ -1108,14 +1108,14 @@ window.closePopup = function(event, id) {
     <option value="mandarin">Mandarin</option>
     <option value="hi">Hindi</option>
     <option value="ar">Arabic</option>
-  </select>
+  </select> <br>
   <label for="colorReg">Name Color:</label>
   <input type="color" id="colorPreference" name="colorPreference" value="#ff0000" style="height:40px;width:60px;" /> <br>
   <label for="imageUploadReg">Profile Image:</label>
   <input type="file" id="imageUploadReg" name="image" accept="image/*" />
   <div id="registerImagePreviewContainer" style="margin-bottom:10px;text-align:center;">
     <img id="registerImagePreview" style="max-width:50%;max-height:120px;border-radius:10px;display:none;" />
-  </div>
+  </div><br>
   <button type="submit" style="background:green;color:white;width:100%;border-radius:8px;font-size:18px;">Register</button>
 </form>
 </div>
@@ -1298,7 +1298,7 @@ function openProfile(username) {
             console.error('Error:', error);
         });
     var naviElem = document.getElementById('myNavi2');
-    if (naviElem) naviElem.style.display = 'block';
+    if (naviElem) naviElem.style.display = 'flex';
     localStorage.setItem('receiver', user);
 }
 
@@ -1312,7 +1312,7 @@ function toggleOpen() {
         el.className = 'middle open';
     } else {
         el.className = 'middle open';
-        if (naviElem) naviElem.style.display = 'block';
+        if (naviElem) naviElem.style.display = 'flex';
     }
 }
 
