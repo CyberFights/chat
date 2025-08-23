@@ -1162,7 +1162,7 @@ window.closePopup = function(event, id) {
 </div>
 
 <!-- Profile Overlay (Demo only) -->
-<div id="myNavi2" class="pop-up" style="display:none;">
+<div id="myNavi2" class="pop-up" style="display:none; z-index:1;">
     <div class="profile2">
         <div class="top" onclick="toggleOpen()">
             <p style="text-align:center; font-size:20px; top-margin:1%;">Click here to close</p>
@@ -1279,10 +1279,10 @@ if (openPrivateChatsBtn) {
 
 // --- Profile Modal ---
 function openProfile(user) {
-    var img = 'https://cyberfighters.replit.app/uploads/' + user + '-image.jpg';
-    fetch('/get-details?username=' + user)
+      fetch('/user/' + user)
         .then(function(response) { return response.json(); })
         .then(function(data) {
+            var img = data.image;
             var infoElem = document.getElementById('profile-info');
             var statsElem = document.getElementById('profile-stats');
             var ageElem = document.getElementById('profile-age');
