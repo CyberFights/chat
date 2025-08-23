@@ -17,7 +17,17 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use('/assets/images/users', express.static(path.join(__dirname, 'users')));
 app.use(bodyParser.json());
 
-const upload = multer({ dest: "/assets/images/users" });
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, path.join(__dirname, "users")); // Make sure "users" points to a persistent volume
+  },
+  filename: function (req, file, cb) {
+    cb(null, Date.now() + path.extname(file.originalname));
+  }
+});
+
+const upload = multer({ storage });
+
 
 const client = new MongoClient(process.env.Mongo_DB);
 let db;
