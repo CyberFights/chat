@@ -237,9 +237,13 @@ io.on("connection", (socket) => {
   });
 
   socket.on("chat message", async ({ room, username, message }) => {
+    const now = new Date();
+    const hours = now.getHours();
+    const minutes = now.getMinutes();
+    const timestamp = hours:minutes;
     try {
-      await db.collection("messages").insertOne({ room, username, message, timestamp: new Date() });
-      io.to(room).emit("chat message", { username, message, timestamp: new Date() });
+      await db.collection("messages").insertOne({ room, username, message, timestamp });
+      io.to(room).emit("chat message", { username, message, timestamp });
     } catch (err) {
       console.error(err);
     }
