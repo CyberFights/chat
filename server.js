@@ -239,7 +239,7 @@ io.on("connection", (socket) => {
   socket.on("chat message", async ({ room, username, message }) => {
     try {
       await db.collection("messages").insertOne({ room, username, message, timestamp: new Date() });
-      io.to(room).emit("chat message", { username, message, timestamp });
+      io.to(room).emit("chat message", { username, message, timestamp: new Date() });
     } catch (err) {
       console.error(err);
     }
