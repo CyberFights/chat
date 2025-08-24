@@ -152,8 +152,8 @@
 .image-item {
     position: relative;
     display: grid;
-    align-items: center;
-    justify-content: center;
+    align-items: left;
+    justify-content: left;
     gap: 6px;
 }
 .image-grid img {
@@ -184,6 +184,8 @@
     box-shadow: 0 2px 8px rgba(0,0,0,0.3);
     text-shadow: 0 1px 8px #000;
     z-index: 2;
+    align-items: left;
+    justify-content: left;
 }
 
 /* Arrows */
@@ -198,7 +200,7 @@
     border-radius: 50%;
     background: rgba(0,0,0,0.4);
     user-select: none;
-    z-index: 1;
+    z-index: 2;
     transition: background 0.3s;
 }
 .arrow:hover {
