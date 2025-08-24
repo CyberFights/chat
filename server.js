@@ -236,11 +236,7 @@ io.on("connection", (socket) => {
     delete userSockets[username];
   });
 
-  socket.on("chat message", async ({ room, username, message }) => {
-    const now = new Date();
-    const hours = now.getHours();
-    const minutes = now.getMinutes();
-    const timestamp = `${hours}:${minutes}`;
+  socket.on("chat message", async ({ room, username, message, timestamp }) => {
     try {
       await db.collection("messages").insertOne({ room, username, message, timestamp });
       io.to(room).emit("chat message", { username, message, timestamp });
