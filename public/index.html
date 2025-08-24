@@ -1622,11 +1622,17 @@ function closeChat() {
 if (form) {
     form.addEventListener('submit', function(e) {
         e.preventDefault();
+        const now = new Date();
+    const hours = now.getHours();
+    const minutes = now.getMinutes();
+    const timestamp = `${hours}:${minutes}`;
+    
         if (currentRoom && input.value.trim() && isLoggedIn) {
             socket.emit('chat message', {
                 room: currentRoom,
                 username: currentUsername,
-                message: input.value
+                message: input.value,
+                timestamp: timestamp
             });
             input.value = '';
         }
