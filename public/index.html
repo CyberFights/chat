@@ -118,35 +118,55 @@
             background-color: #cc0000;
         }
 
-        /* Image grid */
-        .image-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 20px;
-            max-width: 900px;
-            margin: 0 auto 40px auto;
-        }
+        /* Carousel */
+.grid-wrapper {
+    position: relative;
+    max-width: 920px;
+    margin: 0 auto 40px auto;
+    overflow: hidden;
+    background: rgba(22,22,70,0.08);
+    border-radius: 16px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.3);
+}
 
-        .image-grid img {
-            width: 100%;
-            max-width: 280px;
-            border-radius: 10px;
-            cursor: pointer;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
-            transition: transform 0.2s, box-shadow 0.2s;
-        }
+/* Track slides ALL grids together */
+.grid-track {
+    display: flex;
+    transition: transform 0.6s cubic-bezier(0.6,0,0.25,1);
+    width: 200%; /* 2 grids side-by-side */
+}
 
-        .image-grid img:hover {
-            transform: scale(1.05);
-            box-shadow: 0 4px 16px rgba(0,0,0,0.5);
-        }
+/* Individual grid styling */
+.grid {
+    flex: 0 0 100%;
+    box-sizing: border-box;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    padding: 30px;
+    min-height: 340px;
+    background: rgba(10, 10, 44, 0.17);
+}
+
+/* Image cards */
 .image-item {
     position: relative;
     display: flex;
     align-items: center;
     justify-content: center;
 }
-
+.image-grid img {
+    width: 100%;
+    max-width: 260px;
+    border-radius: 10px;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+.image-grid img:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 16px rgba(0,0,0,0.5);
+}
 .room-label {
     position: absolute;
     top: 14px;
@@ -164,6 +184,32 @@
     text-shadow: 0 1px 8px #000;
     z-index: 2;
 }
+
+/* Arrows */
+.arrow {
+    position: absolute;
+    top: 46%;
+    transform: translateY(-50%);
+    font-size: 3rem;
+    color: white;
+    cursor: pointer;
+    padding: 11px 19px;
+    border-radius: 50%;
+    background: rgba(0,0,0,0.4);
+    user-select: none;
+    z-index: 10;
+    transition: background 0.3s;
+}
+.arrow:hover {
+    background: rgba(0,0,0,0.85);
+}
+.arrow.left {
+    left: -51px;
+}
+.arrow.right {
+    right: -51px;
+}
+
         /* Popups */
         .popup-overlay {
             display: none;
@@ -941,6 +987,30 @@
         border-radius: 6px;
     }
 }
+
+/* Responsive */
+@media (max-width: 800px) {
+    .grid {
+        grid-template-columns: 1fr 1fr;
+        padding: 15px;
+        min-height: 210px;
+    }
+    .arrow {
+        font-size: 2.2rem;
+        left: -24px;
+        right: -24px;
+    }
+    .wrapper-container { margin-top: 22px; }
+}
+@media (max-width: 540px) {
+    .grid {
+        grid-template-columns: 1fr;
+        gap: 9px;
+        padding: 8px;
+        min-height: 60px;
+    }
+    .arrow { font-size: 1.4rem; left: 0; right: 0; }
+}
 </style>
 <script src="/socket.io/socket.io.js"></script>
 <script>
@@ -1008,8 +1078,14 @@ window.closePopup = function(event, id) {
         <button style="background-color: grey;" onclick="openPopup('popup4')">Settings</button>
         <button style="background-color: red;" onclick="openPopup('logout')">Logout</button>
     </div>
+<div class="grid-wrapper">
+  <!-- Left Arrow -->
+  <span class="arrow left" onclick="showPrevGrid()">&#10094;</span>
 
-    <div class="image-grid">
+  <!-- Track for sliding -->
+  <div class="grid-track">
+    <!-- Grid 1 -->
+    <div class="image-grid grid">
         <div class="image-item">
             <img src="https://raw.githubusercontent.com/CyberFights/chat/refs/heads/main/public/assets/images/maindesk.jpg" alt="Main Chat" data-room="Main_Chat" />
             <div class="room-label">Main Desk</div>
@@ -1035,7 +1111,36 @@ window.closePopup = function(event, id) {
             <div class="room-label">Pool</div>
         </div>
     </div>
-
+  <div class="image-grid grid">
+                <div class="image-item">
+                    <img src="https://via.placeholder.com/280x180.png?text=VIP+Room" alt="VIP" data-room="VIP" />
+                    <div class="room-label">VIP Lounge</div>
+                </div>
+                <div class="image-item">
+                    <img src="https://via.placeholder.com/280x180.png?text=Training" alt="Training" data-room="Training" />
+                    <div class="room-label">Training</div>
+                </div>
+                <div class="image-item">
+                    <img src="https://via.placeholder.com/280x180.png?text=Arcade" alt="Arcade" data-room="Arcade" />
+                    <div class="room-label">Arcade</div>
+                </div>
+                <div class="image-item">
+                    <img src="https://via.placeholder.com/280x180.png?text=Showroom" alt="Showroom" data-room="Showroom" />
+                    <div class="room-label">Showroom</div>
+                </div>
+                <div class="image-item">
+                    <img src="https://via.placeholder.com/280x180.png?text=Gym" alt="Gym" data-room="Gym" />
+                    <div class="room-label">Gym</div>
+                </div>
+                <div class="image-item">
+                    <img src="https://via.placeholder.com/280x180.png?text=VIP+Pool" alt="VIP Pool" data-room="VIP_Pool" />
+                    <div class="room-label">VIP Pool</div>
+                </div>
+            </div>
+        </div>
+        <span class="arrow right" onclick="showNextGrid()">&#10095;</span>
+    </div>
+</div>
     <!-- Chat Overlay (hidden by default) -->
     <div class="overlay" id="chatOverlay" style="display:none;">
         <div class="overlay-content">
@@ -1236,6 +1341,24 @@ var privateChatsList = document.getElementById('private-chats');
 var openPrivateChatsBtn = document.getElementById('openPrivateChats');
 var privateChatBadge = document.getElementById('privateChatBadge');
 var sideTab = document.getElementById('mySideTab');
+
+let currentGrid = 0;
+const track = document.querySelector('.grid-track');
+const totalGrids = document.querySelectorAll('.image-grid.grid').length;
+
+function updateSlide() {
+    track.style.transform = `translateX(-${currentGrid * 100}%)`;
+}
+
+function showNextGrid() {
+    currentGrid = (currentGrid + 1) % totalGrids;
+    updateSlide();
+}
+
+function showPrevGrid() {
+    currentGrid = (currentGrid - 1 + totalGrids) % totalGrids;
+    updateSlide();
+}
 
 // --- LocalStorage Logic ---
 function loadProfileFromStorage() {
