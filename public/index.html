@@ -1060,88 +1060,94 @@ window.closePopup = function(event, id) {
 </head>
 
 
+<body>
+
 <!-- Landing Page -->
 <div class="container" id="landingPage">
-    <div class="content">
-         <button style="color:black; background-color:skyblue;">Click anywhere to enter the ring!</button>
-    </div>
+  <div class="content">
+    <button id="enterBtn" style="color:black; background-color:skyblue;">
+      Click anywhere to enter the ring!
+    </button>
+  </div>
 </div>
 
 <!-- Hidden Page -->
 <div class="hidden-page" id="hiddenPage" style="display:none;">
-    <h1>Cyberfighters</h1>
-    <div class="button-row">
-        <button style="background-color: limegreen;" onclick="openPopup('popup0')">Login</button>
-        <button style="background-color: skyblue;" onclick="openPopup('popup1')">About</button>
-        <button style="background-color: blue;" onclick="openPopup('popup2')">Rules</button>
-        <button style="background-color: orange;" onclick="openPopup('popup3')">Contact</button>
-        <button style="background-color: grey;" onclick="openPopup('popup4')">Settings</button>
-        <button style="background-color: red;" onclick="openPopup('logout')">Logout</button>
-    </div>
-<div class="grid-wrapper">
-  <!-- Left Arrow -->
-  <span class="arrow left" onclick="showPrevGrid()">&#10094;</span>
+  <h1>Cyberfighters</h1>
 
-  <!-- Track for sliding -->
-  <div class="grid-track">
-    <!-- Grid 1 -->
-    <div class="image-grid grid">
+  <!-- Buttons -->
+  <div class="button-row">
+    <button style="background-color: limegreen;" onclick="openPopup('popup0')">Login</button>
+    <button style="background-color: skyblue;" onclick="openPopup('popup1')">About</button>
+    <button style="background-color: blue;" onclick="openPopup('popup2')">Rules</button>
+    <button style="background-color: orange;" onclick="openPopup('popup3')">Contact</button>
+    <button style="background-color: grey;" onclick="openPopup('popup4')">Settings</button>
+    <button style="background-color: red;" onclick="openPopup('logout')">Logout</button>
+  </div>
+
+  <!-- Room selector (grid slider) -->
+  <div class="grid-wrapper">
+    <span class="arrow left" onclick="showPrevGrid()">&#10094;</span>
+    <div class="grid-track">
+      <!-- Grid 1 -->
+      <div class="image-grid grid">
         <div class="image-item">
-            <img src="https://raw.githubusercontent.com/CyberFights/chat/refs/heads/main/public/assets/images/maindesk.jpg" alt="Main Chat" data-room="Main_Chat" />
-            <div class="room-label">Main Desk</div>
+          <img src="https://raw.githubusercontent.com/CyberFights/chat/refs/heads/main/public/assets/images/maindesk.jpg" alt="Main Chat" data-room="Main_Chat" />
+          <div class="room-label">Main Desk</div>
         </div>
         <div class="image-item">
-            <img src="https://raw.githubusercontent.com/CyberFights/chat/refs/heads/main/public/assets/images/lobby.jpg" alt="Lobby" data-room="Lobby" />
-            <div class="room-label">Lobby</div>
+          <img src="https://raw.githubusercontent.com/CyberFights/chat/refs/heads/main/public/assets/images/lobby.jpg" alt="Lobby" data-room="Lobby" />
+          <div class="room-label">Lobby</div>
         </div>
         <div class="image-item">
-            <img src="https://raw.githubusercontent.com/CyberFights/chat/refs/heads/main/public/assets/images/wrestlingring.jpg" alt="Public Ring" data-room="Public_Ring" />
-            <div class="room-label">Wrestling Ring</div>
+          <img src="https://raw.githubusercontent.com/CyberFights/chat/refs/heads/main/public/assets/images/wrestlingring.jpg" alt="Public Ring" data-room="Public_Ring" />
+          <div class="room-label">Wrestling Ring</div>
         </div>
         <div class="image-item">
-            <img src="https://raw.githubusercontent.com/CyberFights/chat/refs/heads/main/public/assets/images/weightroom.jpg" alt="Weight Room" data-room="Weight_Room" />
-            <div class="room-label">Weight Room</div>
+          <img src="https://raw.githubusercontent.com/CyberFights/chat/refs/heads/main/public/assets/images/weightroom.jpg" alt="Weight Room" data-room="Weight_Room" />
+          <div class="room-label">Weight Room</div>
         </div>
         <div class="image-item">
-            <img src="https://raw.githubusercontent.com/CyberFights/chat/refs/heads/main/public/assets/images/lockerroom.jpg" alt="Locker Room" data-room="Locker_Room" />
-            <div class="room-label">Locker Room</div>
+          <img src="https://raw.githubusercontent.com/CyberFights/chat/refs/heads/main/public/assets/images/lockerroom.jpg" alt="Locker Room" data-room="Locker_Room" />
+          <div class="room-label">Locker Room</div>
         </div>
         <div class="image-item">
-            <img src="https://raw.githubusercontent.com/CyberFights/chat/refs/heads/main/public/assets/images/pool.jpg" alt="Public Pool" data-room="Public_Pool" />
-            <div class="room-label">Pool</div>
+          <img src="https://raw.githubusercontent.com/CyberFights/chat/refs/heads/main/public/assets/images/pool.jpg" alt="Public Pool" data-room="Public_Pool" />
+          <div class="room-label">Pool</div>
         </div>
+      </div>
+
+      <!-- Grid 2 -->
+      <div class="image-grid grid">
+        <div class="image-item">
+          <img src="https://via.placeholder.com/280x180.png?text=VIP+Room" alt="VIP" data-room="VIP" />
+          <div class="room-label">VIP Lounge</div>
+        </div>
+        <div class="image-item">
+          <img src="https://via.placeholder.com/280x180.png?text=Training" alt="Training" data-room="Training" />
+          <div class="room-label">Training</div>
+        </div>
+        <div class="image-item">
+          <img src="https://via.placeholder.com/280x180.png?text=Arcade" alt="Arcade" data-room="Arcade" />
+          <div class="room-label">Arcade</div>
+        </div>
+        <div class="image-item">
+          <img src="https://via.placeholder.com/280x180.png?text=Showroom" alt="Showroom" data-room="Showroom" />
+          <div class="room-label">Showroom</div>
+        </div>
+        <div class="image-item">
+          <img src="https://via.placeholder.com/280x180.png?text=Gym" alt="Gym" data-room="Gym" />
+          <div class="room-label">Gym</div>
+        </div>
+        <div class="image-item">
+          <img src="https://via.placeholder.com/280x180.png?text=VIP+Pool" alt="VIP Pool" data-room="VIP_Pool" />
+          <div class="room-label">VIP Pool</div>
+        </div>
+      </div>
     </div>
-  <div class="image-grid grid">
-                <div class="image-item">
-                    <img src="https://via.placeholder.com/280x180.png?text=VIP+Room" alt="VIP" data-room="VIP" />
-                    <div class="room-label">VIP Lounge</div>
-                </div>
-                <div class="image-item">
-                    <img src="https://via.placeholder.com/280x180.png?text=Training" alt="Training" data-room="Training" />
-                    <div class="room-label">Training</div>
-                </div>
-                <div class="image-item">
-                    <img src="https://via.placeholder.com/280x180.png?text=Arcade" alt="Arcade" data-room="Arcade" />
-                    <div class="room-label">Arcade</div>
-                </div>
-                <div class="image-item">
-                    <img src="https://via.placeholder.com/280x180.png?text=Showroom" alt="Showroom" data-room="Showroom" />
-                    <div class="room-label">Showroom</div>
-                </div>
-                <div class="image-item">
-                    <img src="https://via.placeholder.com/280x180.png?text=Gym" alt="Gym" data-room="Gym" />
-                    <div class="room-label">Gym</div>
-                </div>
-                <div class="image-item">
-                    <img src="https://via.placeholder.com/280x180.png?text=VIP+Pool" alt="VIP Pool" data-room="VIP_Pool" />
-                    <div class="room-label">VIP Pool</div>
-                </div>
-            </div>
-        </div>
-        <span class="arrow right" onclick="showNextGrid()">&#10095;</span>
-    </div>
-</div>
-</div>
+    <span class="arrow right" onclick="showNextGrid()">&#10095;</span>
+  </div>
+
     <!-- Chat Overlay (hidden by default) -->
     <div class="overlay" id="chatOverlay" style="display:none;">
         <div class="overlay-content">
@@ -1307,7 +1313,6 @@ window.closePopup = function(event, id) {
     </form>
     <div id="dmImagePreview" style="margin-top:8px; max-height:120px;"></div>
   </div>
-</div>
 </div>
 <script>
 const socket = io();
