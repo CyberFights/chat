@@ -1,14 +1,15 @@
-require('dotenv').config();
-const express = require("express");
-const http = require("http");
-const { Server } = require("socket.io");
-const cors = require("cors");
+
 const path = require("path");
-const bodyParser = require("body-parser");
-const multer = require("multer");
-const bcrypt = require("bcrypt");
-const { MongoClient } = require("mongodb");
-const fetch = require('node-fetch');
+import express from "express";
+import http from "http";
+import { Server } from "socket.io";
+import dotenv from "dotenv";
+import fetch from "node-fetch";
+import bodyParser from "body-parser";
+import cors from "cors";
+import multer from "multer";
+import bcrypt from "bcrypt";
+import { MongoClient } from "mongodb";
 
 const app = express();
 const server = http.createServer(app);
