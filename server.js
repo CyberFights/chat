@@ -7,6 +7,9 @@ const bodyParser = require("body-parser");
 const multer = require("multer");
 const bcrypt = require("bcrypt");
 const { MongoClient } = require("mongodb");
+require('dotenv').config();
+
+const fetch = require('node-fetch');
 
 const app = express();
 const server = http.createServer(app);
@@ -40,8 +43,42 @@ client.connect().then(() => {
 const roomMembers = {};   // room -> [{username, profilePic}]
 const userSockets = {};   // username -> socketId
 
-// REST API
+const DISCORD_WEBHOOK_URL = process.env.Discord_webhook;
 
+async function sendDiscordWebhookMessage(username, message, avatarUrl) {
+  if (!DISCORD_WEBHOOK_URL) {
+    console.error('Discord webhook URL is not defined in environment variables!');
+    return;
+  }
+
+  const payload = {
+    username: username || 'Chat Message',
+    content: message,
+    avatar_url: avatarUrl || ''
+  };
+
+  try {
+    const response = await fetch(DISCORD_WEBHOOK_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+    if (!response.ok) {
+      console.error('Failed to send webhook:', response.statusText);
+    }
+  } catch (err) {
+    console.error('Error sending webhook:', err);
+  }
+}
+
+
+// REST API
+// API endpoint to receive chat message data from client
+app.post('/api/sendChatMessage', async (req, res) => {
+  const { username, message, avatarUrl } = req.body;
+  await sendDiscordWebhookMessage(username, message, avatarUrl);
+  res.json({ success: true });
+});
 // Register new user
 app.post("/register", upload.single("image"), async (req, res) => {
   try {
