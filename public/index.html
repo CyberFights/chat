@@ -1740,7 +1740,7 @@ function openChat(roomName) {
     currentRoom = roomName;
     socket.emit('joinRoom', { room: roomName, username: currentUsername });
 }
-..
+
 function closeChat() {
     overlay.style.display = 'none';
     if (socket && currentRoom) {
