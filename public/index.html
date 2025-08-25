@@ -1411,6 +1411,7 @@ function openProfile(username) {
       fetch('/user/' + username)
         .then(function(response) { return response.json(); })
         .then(function(data) {
+            localStorage.setItem('receiver', data.username);
             var img = data.image;
             var infoElem = document.getElementById('profile-info');
             var statsElem = document.getElementById('profile-stats');
@@ -1428,7 +1429,7 @@ function openProfile(username) {
         });
     var naviElem = document.getElementById('myNavi2');
     if (naviElem) naviElem.style.display = 'flex';
-    localStorage.setItem('receiver', user);
+    
 }
 
 function toggleOpen() {
