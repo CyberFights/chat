@@ -10,14 +10,16 @@ import multer from "multer";
 import bcrypt from "bcrypt";
 import { MongoClient } from "mongodb";
 
+dotenv.config();
+
 const app = express();
 const server = http.createServer(app);
-const io = new Server(server);
+const io = new Server(server, { cors: { origin: "*" } });
 
+// Middleware
 app.use(cors());
-app.use(express.static(path.join(__dirname, "public")));
-app.use('/assets/images/users', express.static(path.join(__dirname, 'users')));
 app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
