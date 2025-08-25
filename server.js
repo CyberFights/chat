@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require("express");
 const http = require("http");
 const { Server } = require("socket.io");
@@ -7,8 +8,6 @@ const bodyParser = require("body-parser");
 const multer = require("multer");
 const bcrypt = require("bcrypt");
 const { MongoClient } = require("mongodb");
-require('dotenv').config();
-
 const fetch = require('node-fetch');
 
 const app = express();
