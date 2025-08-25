@@ -190,24 +190,24 @@
     position: absolute;
     top: 46%;
     transform: translateY(-50%);
-    font-size: 4rem;
+    font-size: 6rem;
     color: white;
     cursor: pointer;
     padding: 11px 19px;
     border-radius: 50%;
     background: rgba(0,0,0,0.4);
     user-select: none;
-    z-index: 100;
+    z-index: 2;
     transition: background 0.3s;
 }
 .arrow:hover {
     background: rgba(0,0,0,0.85);
 }
 .arrow.left {
-    left: -45px;
+    left: -51px;
 }
 .arrow.right {
-    right: -45px;
+    right: -51px;
 }
 
         /* Popups */
@@ -1740,7 +1740,7 @@ function openChat(roomName) {
     currentRoom = roomName;
     socket.emit('joinRoom', { room: roomName, username: currentUsername });
 }
-
+..
 function closeChat() {
     overlay.style.display = 'none';
     if (socket && currentRoom) {
@@ -1820,14 +1820,19 @@ socket.on('updateMembers', function(members) {
     for (var i = 0; i < members.length; i++) {
         var member = members[i];
         var memberItem = document.createElement('li');
-        memberItem.className += ' member-item';
-        memberItem.innerHTML = '<img src="' + localStorage.getItem('profileImageURL') + '" alt="' + member.username + '" /><span>' + member.username + '</span>';
+        memberItem.className = 'member-item';
+        memberItem.innerHTML =
+            `<img src="${localStorage.getItem('profileImageURL')}" alt="${member.username}">
+            <span>${member.username}</span>`;
         memberItem.addEventListener('click', (function(username) {
-            return function() { openProfile(username); };
+            return function() {
+                openProfile(username); // <--- This is correct
+            }
         })(member.username));
         membersList.appendChild(memberItem);
     }
 });
+
 socket.on('private message', function(obj) {
     var from = obj.from;
     var message = obj.message;
