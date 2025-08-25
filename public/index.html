@@ -1412,14 +1412,14 @@ function openProfile(username) {
         .then(function(response) { return response.json(); })
         .then(function(data) {
             localStorage.setItem('receiver', data.username);
-            var img = data.image;
+            var img = data.imagePath;
             var infoElem = document.getElementById('profile-info');
             var statsElem = document.getElementById('profile-stats');
             var ageElem = document.getElementById('profile-age');
             var nameElem = document.getElementById('profile-name');
             var imgElem = document.getElementById('profile-img');
             if (infoElem) infoElem.innerHTML = 'Info: ' + data.info;
-            if (statsElem) statsElem.innerHTML = 'Stats: Height - ' + data.height + ', Weight - ' + data.weight;
+            if (statsElem) statsElem.innerHTML = 'Stats: ' + data.stats;
             if (ageElem) ageElem.innerHTML = 'Age: ' + data.age;
             if (nameElem) nameElem.innerHTML = data.username;
             if (imgElem) imgElem.src = img;
