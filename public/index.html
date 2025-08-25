@@ -1429,7 +1429,11 @@ function openProfile(username) {
         });
     var naviElem = document.getElementById('myNavi2');
     if (naviElem) naviElem.style.display = 'flex';
-    
+    var middleDiv = document.querySelector('#myNavi2 .middle');
+if (middleDiv) {
+    middleDiv.classList.remove('closed');
+    middleDiv.classList.add('open');
+}
 }
 
 function toggleOpen() {
