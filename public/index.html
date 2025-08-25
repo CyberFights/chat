@@ -1420,7 +1420,7 @@ function openProfile(username) {
             if (infoElem) infoElem.innerHTML = 'Info: ' + data.info;
             if (statsElem) statsElem.innerHTML = 'Stats: Height - ' + data.height + ', Weight - ' + data.weight;
             if (ageElem) ageElem.innerHTML = 'Age: ' + data.age;
-            if (nameElem) nameElem.innerHTML = user;
+            if (nameElem) nameElem.innerHTML = data.username;
             if (imgElem) imgElem.src = img;
         })
         .catch(function(error) {
