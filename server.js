@@ -194,6 +194,22 @@ app.get('/private/messages/:userA/:userB', async (req, res) => {
   }
 });
 
+// Send message via Socket.IO to a specific room from REST
+app.post("/broadcast", async (req, res) => {
+  try {
+    const { room, username, message, timestamp } = req.body;
+    if (!room || !username || !message)
+      return res.status(400).json({ error: "Room, username, and message required" });
+
+    io.to(room).emit("chat message", { room, username, message, timestamp });
+
+    res.json({ success: true });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Broadcast failed" });
+  }
+});
+
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "index.html"));
 });
