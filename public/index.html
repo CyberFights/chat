@@ -1820,6 +1820,60 @@ socket.on('chat message', function(data) {
     scrollToBottom();
 });
 
+// Your Discord webhook URL
+const DISCORD_WEBHOOK_URL = process.env.Discord_webhook;
+
+// Function to send message to Discord webhook with custom username and avatar from localStorage
+function sendDiscordWebhookMessage(username, message, timestamp) {
+  const avatarUrl = localStorage.getItem('profileImageURL') || '';
+
+  const payload = {
+    username: username || 'Chat Message',
+    content: message,
+    avatar_url: avatarUrl
+  };
+
+  fetch(DISCORD_WEBHOOK_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload)
+  }).catch(err => {
+    console.error('Failed to send Discord webhook:', err);
+  });
+}
+
+// Modified socket.on('chat message') listener to forward message to Discord webhook
+socket.on('chat message', function(data) {
+  var item = document.createElement('li');
+  item.style.textAlign = 'left';
+
+  var timestamp = document.createElement('span');
+  timestamp.textContent = `${data.timestamp}  `;
+  timestamp.style.fontSize = '0.8em';
+  timestamp.style.color = '#999';
+
+  var username = document.createElement('strong');
+  username.textContent = data.username;
+  var userColor = localStorage.getItem('color') || '#007bff';
+  username.style.color = userColor;
+  username.style.marginLeft = '5px';
+
+  var br = document.createElement('br');
+  var msg = document.createElement('span');
+  msg.textContent = data.message;
+
+  item.appendChild(timestamp);
+  item.appendChild(username);
+  item.appendChild(br);
+  item.appendChild(msg);
+て
+  messages.appendChild(item);
+  scrollToBottom();
+
+  // Send message and avatar from localStorage to Discord webhook
+  sendDiscordWebhookMessage(data.username, data.message, data.timestamp);
+});
+
 socket.on('updateMembers', function(members) {
     membersList.innerHTML = '';
     for (var i = 0; i < members.length; i++) {
