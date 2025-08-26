@@ -1480,7 +1480,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     if (data.user.imagePath && profileElem) {
                         var profilePicUrl = data.user.imagePath.indexOf('http') === 0
                             ? data.user.imagePath
-                            : window.location.origin + '/' + data.user.imagePath;
+                            : window.location.origin + data.user.imagePath;
                         profileElem.innerHTML =
                             '<p>Welcome, ' + currentUsername + '</p>' +
                             '<p>' + localStorage.getItem('info') + '</p>' + 
