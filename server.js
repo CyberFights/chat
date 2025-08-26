@@ -9,9 +9,11 @@ import cors from "cors";
 import multer from "multer";
 import bcrypt from "bcrypt";
 import { MongoClient } from "mongodb";
-
+import fs from "fs";
 dotenv.config();
 
+const userDir = path.join("/app/persist", "users");
+if (!fs.existsSync(userDir)) fs.mkdirSync(userDir, { recursive: true });
 const app = express();
 const server = http.createServer(app);
 const io = new Server(server, { cors: { origin: "*" } });
@@ -26,7 +28,8 @@ const __dirname = path.dirname(__filename);
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, path.join(__dirname, "users")); // Make sure "users" points to a persistent volume
+    // On Railway, use persistent volume
+    cb(null, path.join("/app/persist", "users"));
   },
   filename: function (req, file, cb) {
     cb(null, Date.now() + path.extname(file.originalname));
