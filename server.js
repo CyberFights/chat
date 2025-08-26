@@ -94,7 +94,7 @@ app.post('/api/sendChatMessage', async (req, res) => {
 // REST API endpoint to add chat message and broadcast it
 app.post("/api/chatMessage", async (req, res) => {
   try {
-    const { room, username, message, timestamp } = req.body;
+    const { room, username, message, timestamp, avatar } = req.body;
     if (!room || !username || !message) {
       return res.status(400).json({ error: "Room, username, and message are required" });
     }
@@ -105,7 +105,7 @@ app.post("/api/chatMessage", async (req, res) => {
     await db.collection("messages").insertOne({ room, username, message, timestamp: msgTimestamp });
 
     // Broadcast message to room clients
-    io.to(room).emit("chat message", { username, message, timestamp: msgTimestamp.toLocaleTimeString() });
+    io.to(room).emit("chat message", { username, message, avatar, timestamp: msgTimestamp.toLocaleTimeString() });
 
     res.json({ success: true, message: "Message saved and broadcasted" });
   } catch (err) {
