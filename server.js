@@ -10,10 +10,18 @@ import multer from "multer";
 import bcrypt from "bcrypt";
 import { MongoClient } from "mongodb";
 import fs from "fs";
+import { fileURLToPath } from "url";
 dotenv.config();
 
+// Get __dirname for ES modules
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+// Directory for uploads
 const userDir = path.join("/app/persist", "users");
 if (!fs.existsSync(userDir)) fs.mkdirSync(userDir, { recursive: true });
+
+// Express setup
 const app = express();
 const server = http.createServer(app);
 const io = new Server(server, { cors: { origin: "*" } });
@@ -23,47 +31,45 @@ app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-import { fileURLToPath } from "url";
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+// Serve uploaded images from a public endpoint for frontend compatibility
+app.use('/assets/images/users', express.static(userDir));
 
+// Multer for file uploads
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    // On Railway, use persistent volume
-    cb(null, path.join("/app/persist", "users"));
+    cb(null, userDir);
   },
   filename: function (req, file, cb) {
     cb(null, Date.now() + path.extname(file.originalname));
   }
 });
-
 const upload = multer({ storage });
 
+// MongoDB setup
 const client = new MongoClient(process.env.Mongo_DB);
 let db;
-
 client.connect().then(() => {
   db = client.db("chatApp");
   db.collection("users").createIndex({ username: 1 }, { unique: true });
 }).catch(err => console.error("MongoDB connection error:", err));
 
-const roomMembers = {};   // room -> [{username, profilePic}]
-const userSockets = {};   // username -> socketId
+// State for rooms and sockets
+const roomMembers = {};  // room -> [{username, profilePic}]
+const userSockets = {};  // username -> socketId
 
 const DISCORD_WEBHOOK_URL = process.env.Discord_webhook;
 
+// Discord webhook utility
 async function sendDiscordWebhookMessage(username, message, avatarUrl) {
   if (!DISCORD_WEBHOOK_URL) {
     console.error('Discord webhook URL is not defined in environment variables!');
     return;
   }
-
   const payload = {
     username: username || 'Chat Message',
     content: message,
     avatar_url: avatarUrl || ''
   };
-
   try {
     const response = await fetch(DISCORD_WEBHOOK_URL, {
       method: 'POST',
@@ -78,25 +84,22 @@ async function sendDiscordWebhookMessage(username, message, avatarUrl) {
   }
 }
 
-// REST API
-// API endpoint to receive chat message data from client
+// REST API: send chat message to Discord
 app.post('/api/sendChatMessage', async (req, res) => {
   const { username, message, avatarUrl } = req.body;
   await sendDiscordWebhookMessage(username, message, avatarUrl);
   res.json({ success: true });
 });
+
 // Register new user
 app.post("/register", upload.single("image"), async (req, res) => {
   try {
     const { username, password, email, language, color, age, stats, info, nativeLanguage, colorPreference } = req.body;
-
     if (!username || !password) {
       return res.status(400).json({ error: "Username and password required" });
     }
-
     const hashed = await bcrypt.hash(password, 10);
-    const imagePath = req.file ? req.file.path : null;
-
+    const imagePath = req.file ? `/assets/images/users/${req.file.filename}` : null;
     const newUser = {
       username,
       password: hashed,
@@ -108,9 +111,7 @@ app.post("/register", upload.single("image"), async (req, res) => {
       info,
       imagePath
     };
-
     await db.collection("users").insertOne(newUser);
-
     res.json({ success: true, message: "User registered!" });
   } catch (err) {
     console.error(err);
@@ -123,12 +124,9 @@ app.post("/login", async (req, res) => {
   try {
     const { username, password } = req.body;
     const user = await db.collection("users").findOne({ username });
-
     if (!user) return res.status(400).json({ error: "No such user" });
-
     const match = await bcrypt.compare(password, user.password);
     if (!match) return res.status(400).json({ error: "Invalid password" });
-
     res.json({ success: true, user });
   } catch (err) {
     console.error(err);
@@ -153,14 +151,11 @@ app.put("/user/:username", upload.single("image"), async (req, res) => {
   try {
     const { username } = req.params;
     const { email, language, color, age, stats, info } = req.body;
-
-    const imagePath = req.file ? req.file.path : null;
-
+    const imagePath = req.file ? `/assets/images/users/${req.file.filename}` : null;
     await db.collection("users").updateOne(
       { username },
       { $set: { email, language, color, age, stats, info, imagePath } }
     );
-
     res.json({ success: true });
   } catch (err) {
     console.error(err);
@@ -173,9 +168,7 @@ app.post("/rooms/:room/messages", async (req, res) => {
   try {
     const { room } = req.params;
     const { username, message } = req.body;
-
     await db.collection("messages").insertOne({ room, username, message, timestamp: new Date() });
-
     res.json({ success: true });
   } catch (err) {
     console.error(err);
@@ -199,13 +192,10 @@ app.post('/private/messages', upload.single('image'), async (req, res) => {
   try {
     const { from_user, to_user, message } = req.body;
     if (!from_user || !to_user) return res.status(400).json({ error: 'Missing users' });
-
     let fullMessage = message || '';
     if (req.file) {
-      const imageUrl = `/assets/images/users/${req.file.filename}`;
       fullMessage = fullMessage ? fullMessage + ' [Image]' : '[Image]';
     }
-
     await db.collection("private_messages").insertOne({
       user1: from_user,
       user2: to_user,
@@ -214,7 +204,6 @@ app.post('/private/messages', upload.single('image'), async (req, res) => {
       message: fullMessage,
       timestamp: new Date()
     });
-
     res.json({ success: true });
   } catch (err) {
     console.error(err);
@@ -229,7 +218,6 @@ app.get('/private/messages/:userA/:userB', async (req, res) => {
       user1: { $in: [req.params.userA, req.params.userB] },
       user2: { $in: [req.params.userA, req.params.userB] }
     }).sort({ timestamp: 1 }).toArray();
-
     res.json(messages);
   } catch (err) {
     console.error(err);
@@ -243,9 +231,7 @@ app.post("/broadcast", async (req, res) => {
     const { room, username, message, timestamp } = req.body;
     if (!room || !username || !message)
       return res.status(400).json({ error: "Room, username, and message required" });
-
     io.to(room).emit("chat message", { room, username, message, timestamp });
-
     res.json({ success: true });
   } catch (err) {
     console.error(err);
@@ -253,6 +239,7 @@ app.post("/broadcast", async (req, res) => {
   }
 });
 
+// Serve frontend
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "index.html"));
 });
@@ -268,18 +255,14 @@ io.on("connection", (socket) => {
       currentRoom = room;
       currentUser = username;
       profilePic = socket.handshake.query.profilePic || null;
-
       socket.join(room);
       userSockets[username] = socket.id;
-
       if (!roomMembers[room]) roomMembers[room] = [];
       if (!roomMembers[room].some(m => m.username === username)) {
         roomMembers[room].push({ username, profilePic });
       }
-
       const history = await db.collection("messages").find({ room }).sort({ timestamp: 1 }).toArray();
       socket.emit("loadMessages", history.map(m => `${m.username}: ${m.message}`));
-
       io.to(room).emit("updateMembers", roomMembers[room]);
     } catch (err) {
       console.error(err);
@@ -310,7 +293,6 @@ io.on("connection", (socket) => {
       if (recipientSocket) {
         io.to(recipientSocket).emit("private message", { from, message });
       }
-
       await db.collection("private_messages").insertOne({
         user1: from,
         user2: to,
@@ -330,7 +312,6 @@ io.on("connection", (socket) => {
         user1: { $in: [userA, userB] },
         user2: { $in: [userA, userB] }
       }).sort({ timestamp: 1 }).toArray();
-
       callback(messages);
     } catch (err) {
       console.error(err);
@@ -348,6 +329,7 @@ io.on("connection", (socket) => {
   });
 });
 
+// Start server
 const PORT = process.env.PORT || 3000;
 server.listen(PORT, () => {
   console.log(`Server listening at http://malecyberfights.up.railway.app:${PORT}`);
