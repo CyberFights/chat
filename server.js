@@ -22,6 +22,7 @@ const io = new Server(server, { cors: { origin: "*" } });
 app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+
 import { fileURLToPath } from "url";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -37,7 +38,6 @@ const storage = multer.diskStorage({
 });
 
 const upload = multer({ storage });
-
 
 const client = new MongoClient(process.env.Mongo_DB);
 let db;
@@ -77,7 +77,6 @@ async function sendDiscordWebhookMessage(username, message, avatarUrl) {
     console.error('Error sending webhook:', err);
   }
 }
-
 
 // REST API
 // API endpoint to receive chat message data from client
