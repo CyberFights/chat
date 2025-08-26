@@ -1,5 +1,3 @@
 toml
 [volumes]
-  [volumes.users]
-  mountPoint = "users"
-  size = "1GB"
+  users = "/app/persist/users"
