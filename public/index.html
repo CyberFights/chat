@@ -1037,8 +1037,11 @@ window.addEventListener('DOMContentLoaded', function() {
   </div>
 
   <!-- Room selector (grid slider) -->
-  <div class="grid-wrapper">
+ <div class="grid-wrapper">
+  <div style="display: flex; justify-content: center; align-items: center; gap: 40px; margin-bottom: 12px;">
     <span class="arrow left" onclick="showPrevGrid()">&#10094;</span>
+    <span class="arrow right" onclick="showNextGrid()">&#10095;</span>
+  </div>
     <div class="grid-track">
       <!-- Grid 1 -->
       <div class="image-grid grid">
@@ -1096,7 +1099,6 @@ window.addEventListener('DOMContentLoaded', function() {
         </div>
       </div>
     </div>
-    <span class="arrow right" onclick="showNextGrid()">&#10095;</span>
   </div>
 
     <!-- Chat Overlay (hidden by default) -->
@@ -1927,12 +1929,23 @@ socket.on('updateMembers', function(members) {
         memberItem.className = 'member-item';
         memberItem.innerHTML =
             `<img src="${localStorage.getItem('profileImageURL')}" alt="${member.username}">
-            <span>${member.username}</span>`;
-        memberItem.addEventListener('click', (function(username) {
-            return function() {
-                openProfile(username);
-            }
-        })(member.username));
+            <span class="profile-link" style="cursor:pointer;">${member.username}</span>`;
+
+        // Make sure only the username span opens the profile
+        memberItem.querySelector('.profile-link').addEventListener('click', function(e) {
+            e.stopPropagation();
+            openProfile(member.username);
+        });
+
+        // Optionally, add a DM button if you want
+         let dmBtn = document.createElement('button');
+         dmBtn.textContent = 'Msg';
+         dmBtn.onclick = function(e) {
+            e.stopPropagation();
+            startPrivateChat(member.username);
+         };
+         memberItem.appendChild(dmBtn);
+
         membersList.appendChild(memberItem);
     }
 });
