@@ -1491,8 +1491,8 @@
                 const msg = document.createElement('span');
                 msg.textContent = data.message;
 
-                item.appendChild(timestamp);
                 item.appendChild(username);
+                item.appendChild(timestamp);
                 item.appendChild(br);
                 item.appendChild(msg);
 
@@ -1511,6 +1511,36 @@
                 }).catch(err => console.error('Failed to send chat message to backend:', err));
             });
 
+socket.on('discord message', function (data) {
+                const item = document.createElement('li');
+                item.style.textAlign = 'left';
+
+                const timestamp = document.createElement('span');
+                timestamp.textContent = `[${data.timestamp}] `;
+                timestamp.style.fontSize = '0.8em';
+                timestamp.style.color = '#999';
+
+                const username = document.createElement('strong');
+                username.textContent = data.username;
+                const userColor = localStorage.getItem('color') || '#007bff';
+                username.style.color = userColor;
+                username.style.marginLeft = '5px';
+
+                const br = document.createElement('br');
+
+                const msg = document.createElement('span');
+                msg.textContent = data.message;
+
+                item.appendChild(username);
+                item.appendChild(timestamp);
+                item.appendChild(br);
+                item.appendChild(msg);
+
+                messages.appendChild(item);
+                scrollToBottom();
+                }).catch(err => console.error('Failed to send chat message to backend:', err));
+            });
+                
             socket.on('updateMembers', function (members) {
                 membersList.innerHTML = '';
                 members.forEach(member => {
