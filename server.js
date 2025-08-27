@@ -105,7 +105,7 @@ app.post("/api/chatMessage", async (req, res) => {
     await db.collection("messages").insertOne({ room, username, message, timestamp: msgTimestamp });
 
     // Broadcast message to room clients
-    io.to(room).emit("chat message", { username, message, avatar, timestamp: msgTimestamp.toLocaleTimeString() });
+    io.to(room).emit("discord message", { username, message, avatar, timestamp: msgTimestamp.toLocaleTimeString() });
 
     res.json({ success: true, message: "Message saved and broadcasted" });
   } catch (err) {
