@@ -1036,30 +1036,7 @@ window.addEventListener('DOMContentLoaded', function() {
                 }, 2000);
             } else {
                 alert("You must be at least 18 years old to proceed.");
-            }
-        }
-    }
-    // Attach the event to the entire landingPage container
-    document.getElementById('landingPage').addEventListener('click', function (e) {
-    if (
-        e.target.id === 'landingPage' ||
-        e.target.classList.contains('content') ||
-        e.target.tagName === 'BUTTON'
-    ) {
-        launchApp();
-    }
-});
-
-});
-    window.openPopup = function(id) {
-    document.getElementById(id).style.display = 'flex';
-};
-
-window.closePopup = function(event, id) {
-    if (!event || event.target.classList.contains('popup-overlay') || event.target.classList.contains('close-btn')) {
-        document.getElementById(id).style.display = 'none';
-    }
-};
+            });
 </script>
 </head>
 
