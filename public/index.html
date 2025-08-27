@@ -1040,12 +1040,16 @@ window.addEventListener('DOMContentLoaded', function() {
         }
     }
     // Attach the event to the entire landingPage container
-    document.getElementById('landingPage').addEventListener('click', function(e) {
-        // Prevent double firing if child elements also have handlers
-        if (e.target.id === 'landingPage' || e.target.classList.contains('content') || e.target.tagName === 'BUTTON') {
-            launchApp();
-        }
-    });
+    document.getElementById('landingPage').addEventListener('click', function (e) {
+    if (
+        e.target.id === 'landingPage' ||
+        e.target.classList.contains('content') ||
+        e.target.tagName === 'BUTTON'
+    ) {
+        launchApp();
+    }
+});
+
 });
     window.openPopup = function(id) {
     document.getElementById(id).style.display = 'flex';
@@ -1070,6 +1074,7 @@ window.closePopup = function(event, id) {
     </button>
   </div>
 </div>
+
 
 <!-- Hidden Page -->
 <div class="hidden-page" id="hiddenPage" style="display:none;">
