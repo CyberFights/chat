@@ -17,9 +17,20 @@ dotenv.config();
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// Directory for uploads
-const userDir = path.join("/app/persist", "users");
-if (!fs.existsSync(userDir)) fs.mkdirSync(userDir, { recursive: true });
+// Set uploads directory to Railway volume
+const uploadsDir = path.join("/app/persist", "users");
+if (!fs.existsSync(uploadsDir)) fs.mkdirSync(uploadsDir, { recursive: true });
+
+// Multer storage configuration
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, uploadsDir); // Always save to Railway volume
+  },
+  filename: function (req, file, cb) {
+    cb(null, Date.now() + '-' + Math.round(Math.random() * 1E9) + path.extname(file.originalname));
+  }
+});
+const upload = multer({ storage });
 
 // Express setup
 const app = express();
@@ -31,19 +42,8 @@ app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-// Serve uploaded images from a public endpoint for frontend compatibility
-app.use('/assets/images/users', express.static(userDir));
-
-// Multer for file uploads
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, userDir);
-  },
-  filename: function (req, file, cb) {
-    cb(null, Date.now() + path.extname(file.originalname));
-  }
-});
-const upload = multer({ storage });
+// Serve uploaded images from Railway volume
+app.use('/assets/images/users', express.static(uploadsDir));
 
 // MongoDB setup
 const client = new MongoClient(process.env.Mongo_DB);
