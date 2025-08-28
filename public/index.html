@@ -1176,8 +1176,8 @@ window.addEventListener('DOMContentLoaded', function() {
   </select> <br>
   <label for="colorReg">Name Color:</label>
   <input type="color" id="colorPreference" name="colorPreference" value="#ff0000" style="height:40px;width:60px;" /> <br>
-  <label for="imageUploadReg">Profile Image:</label>
-  <input type="file" id="imageUploadReg" name="image" accept="image/*" />
+  <label for="image">Profile Image:</label>
+  <input type="file" id="image" name="image" accept="image/*" />
   <div id="registerImagePreviewContainer" style="margin-bottom:10px;text-align:center;">
     <img id="registerImagePreview" style="max-width:50%;max-height:120px;border-radius:10px;display:none;" />
   </div><br>
@@ -1574,9 +1574,9 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // --- Image upload preview during registration ---
-    var imageUploadReg = document.getElementById('imageUploadReg');
-    if (imageUploadReg) {
-        imageUploadReg.onchange = function(evt) {
+    var image = document.getElementById('image');
+    if (image) {
+        image.onchange = function(evt) {
             var file = evt.target.files[0];
             if (file) {
                 var preview = document.getElementById('registerImagePreview');
