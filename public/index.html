@@ -179,30 +179,25 @@
         z-index: 2;
     }
 
-    .arrow {
-        position: absolute;
-        top: 46%;
-        transform: translateY(-50%);
-        font-size: 6rem;
+      display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 18px;
+        margin-bottom: 8px;
+      }
+      .arrow {
+        font-size: 2.3rem;
+        padding: 5px 10px;
         color: white;
         cursor: pointer;
-        padding: 11px 19px;
         border-radius: 50%;
         background: rgba(0,0,0,0.4);
         user-select: none;
-        z-index: 2;
         transition: background 0.3s;
-    }
-    .arrow:hover {
+      }
+      .arrow:hover {
         background: rgba(0,0,0,0.85);
-    }
-    .arrow.left {
-        left: -51px;
-    }
-    .arrow.right {
-        right: -51px;
-    }
-
+      }
     /* Popups */
     .popup-overlay {
         display: none;
@@ -1038,7 +1033,7 @@ window.addEventListener('DOMContentLoaded', function() {
 
   <!-- Room selector (grid slider) -->
  <div class="grid-wrapper">
-  <div style="display: flex; justify-content: center; align-items: center; gap: 40px; margin-bottom: 12px;">
+  <div class="grid-arrow-row">
     <span class="arrow left" onclick="showPrevGrid()">&#10094;</span>
     <span class="arrow right" onclick="showNextGrid()">&#10095;</span>
   </div>
