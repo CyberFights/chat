@@ -18,7 +18,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 // Set uploads directory to Railway volume
-const uploadsDir = path.join("/public/assets/images", "users");
+const uploadsDir = path.join("public/assets/images", "users");
 if (!fs.existsSync(uploadsDir)) fs.mkdirSync(uploadsDir, { recursive: true });
 
 // Multer storage configuration
@@ -43,7 +43,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 // Serve uploaded images from Railway volume
-app.use('/public/assets/images/users', express.static(uploadsDir));
+app.use('public/assets/images/users', express.static(uploadsDir));
 
 // MongoDB setup
 const client = new MongoClient(process.env.Mongo_DB);
