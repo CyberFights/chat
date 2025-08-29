@@ -18,7 +18,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 // Set uploads directory to Railway volume
-const uploadsDir = path.join("/public/assets/images/users", "users");
+const uploadsDir = path.join("/public/assets/images", "users");
 if (!fs.existsSync(uploadsDir)) fs.mkdirSync(uploadsDir, { recursive: true });
 
 // Multer storage configuration
