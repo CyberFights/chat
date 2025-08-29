@@ -675,7 +675,7 @@
         display: block;
         position: relative;
         box-shadow: inset 6px 6px 5px rgba(200,200,205,0.4), inset -6px 6px 6px rgba(10,10,15,0.4), inset -2px -2px 2px rgba(10,10,15,0.4);
-        z-index:5;
+        z-index:1000;
     }
 
     .light{
@@ -707,7 +707,7 @@
         max-width: 92%;
         max-height: 80%;
         transition: all 1s ease;
-        z-index:1;
+        z-index:1000;
         overflow: hidden;
         margin: 0;
         padding: 0;
@@ -772,7 +772,7 @@
         display: block;
         position: relative;
         box-shadow: inset -6px -6px 6px rgba(10,10,15,0.5), inset 6px -6px 6px rgba(200, 200, 205, 0.4), inset 2px 2px 2px rgba(200,200,205,0.2);
-        z-index:4;
+        z-index:1000;
     }
 
     #dmMessages li {
@@ -1037,8 +1037,8 @@ window.addEventListener('DOMContentLoaded', function() {
   <!-- Room selector (grid slider) -->
  <div class="grid-wrapper">
   <div class="grid-arrow-row">
-    <span class="arrow left" onclick="showPrevGrid()">&#10094;</span>
-    <span class="arrow right" onclick="showNextGrid()">&#10095;</span>
+    <button class="arrow left" onclick="showPrevGrid()">&#10094;</button>
+    <button class="arrow right" onclick="showNextGrid()">&#10095;</button>
   </div>
     <div class="grid-track">
       <!-- Grid 1 -->
