@@ -1252,7 +1252,7 @@ window.addEventListener('DOMContentLoaded', function() {
     </div>
 </div>    
 <!-- DM Overlay -->
-<div id="dmOverlay" style="display:none; position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,0.6);justify-content:center;align-items:center;z-index:2000;display:flex;">
+<div id="dmOverlay" style="display:none; position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,0.6);justify-content:center;align-items:center;z-index:2000;">
   <div style="background:#fff; color:#222;padding:24px; border-radius:12px; max-width:350px; position:relative;">
     <span id="dmCloseBtn" style="font-size:2em;position:absolute;top:14px;right:20px;cursor:pointer;">&times;</span>
     <h3 id="dmTitle" style="margin-bottom:10px;"></h3>
@@ -1267,8 +1267,6 @@ window.addEventListener('DOMContentLoaded', function() {
   </div>
 </div>
 <script>
-let isAgeVerified = false;
-let isLoggedIn = false;
 const socket = io();
 
 let currentUsername = '';
