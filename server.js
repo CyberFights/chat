@@ -6,7 +6,9 @@ import dotenv from "dotenv";
 import fetch from "node-fetch";
 import bodyParser from "body-parser";
 import cors from "cors";
-import multer from "multer";
+import AWS from 'aws-sdk';
+import multer from 'multer';
+import multerS3 from 'multer-s3';
 import bcrypt from "bcrypt";
 import { MongoClient } from "mongodb";
 import fs from "fs";
@@ -17,20 +19,23 @@ dotenv.config();
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// Set uploads directory to Railway volume
-const uploadsDir = path.join("public/assets/images", "users");
-if (!fs.existsSync(uploadsDir)) fs.mkdirSync(uploadsDir, { recursive: true });
+const s3 = new AWS.S3({
+  accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+  secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+  region: process.env.AWS_REGION
+});
 
 // Multer storage configuration
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, uploadsDir); // Always save to Railway volume
-  },
-  filename: function (req, file, cb) {
-    cb(null, Date.now() + '-' + Math.round(Math.random() * 1E9) + path.extname(file.originalname));
-  }
+const upload = multer({
+  storage: multerS3({
+    s3: s3,
+    bucket: process.env.AWS_S3_BUCKET, // Your S3 bucket name
+    acl: 'public-read', // Or 'private' if you want restricted access
+    key: function (req, file, cb) {
+      cb(null, `users/${Date.now()}-${file.originalname}`); // Save in 'users/' folder
+    }
+  })
 });
-const upload = multer({ storage });
 
 // Express setup
 const app = express();
@@ -122,7 +127,8 @@ app.post("/register", upload.single("image"), async (req, res) => {
       return res.status(400).json({ error: "Username and password required" });
     }
     const hashed = await bcrypt.hash(password, 10);
-    const imagePath = req.file ? `/assets/images/users/${req.file.filename}` : null;
+    const imagePath = req.file ? req.file.location : null; // Handle missing file
+
     const newUser = {
       username,
       password: hashed,
