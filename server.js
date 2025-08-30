@@ -32,7 +32,7 @@ const s3 = new S3Client({
 const upload = multer({
   storage: multerS3({
     s3,
-    bucket: process.env.AWS_S3_BUCKET,
+    bucket: process.env.AWS_BUCKET,
     acl: 'public-read',
     key: (req, file, cb) => {
       cb(null, `users/${Date.now()}-${file.originalname}`);
