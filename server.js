@@ -29,7 +29,7 @@ const s3 = new AWS.S3({
 const upload = multer({
   storage: multerS3({
     s3: s3,
-    bucket: process.env.AWS_S3_BUCKET, // Your S3 bucket name
+    bucket: process.env.AWS_BUCKET, // Your S3 bucket name
     acl: 'public-read', // Or 'private' if you want restricted access
     key: function (req, file, cb) {
       cb(null, `users/${Date.now()}-${file.originalname}`); // Save in 'users/' folder
