@@ -1923,6 +1923,7 @@ socket.on('updateMembers', function(members) {
     for (var i = 0; i < members.length; i++) {
         var member = members[i];
         var memberItem = document.createElement('li');
+        memberItem.style.backgroundColor = 'grey';
         memberItem.className = 'member-item';
         memberItem.innerHTML =
             `<img src="${localStorage.getItem('profileImageURL')}" alt="${member.username}">
@@ -1941,7 +1942,16 @@ socket.on('updateMembers', function(members) {
             e.stopPropagation();
             startPrivateChat(member.username);
          };
+         let blkBtn = document.createElement('button');
+         blkBtn.textContent = 'Block';
+         blkBtn.onclick = function(e) {
+            e.stopPropagation();
+            blockMember(member.username);
+         };
+         var br = document.createElement('br');
+         memberItem.appendChild(br);
          memberItem.appendChild(dmBtn);
+         memberItem.appendChild(blkBtn);
 
         membersList.appendChild(memberItem);
     }
