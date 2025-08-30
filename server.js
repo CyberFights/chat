@@ -47,9 +47,6 @@ app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-// Serve uploaded images from Railway volume
-app.use('public/assets/images/users', express.static(uploadsDir));
-
 // MongoDB setup
 const client = new MongoClient(process.env.Mongo_DB);
 let db;
