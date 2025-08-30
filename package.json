@@ -14,7 +14,8 @@
     "socket.io",
     "sqlite",
     "mongodb",
-    "private-messaging"
+    "private-messaging",
+    "multer-s3"
   ],
   "author": "",
   "license": "MIT",
