@@ -442,6 +442,25 @@
         margin-right: 10px;
         object-fit: cover;
     }
+/* --- Added styles for new sidebar */
+    #chatOverlay .overlay-content {
+      display: flex; /* two columns */
+      height: 480px;
+      width: 100%;
+    }
+
+    #roomList li {
+      padding: 8px 12px;
+      cursor: pointer;
+      background-color: #222;
+      border-radius: 6px;
+      margin-bottom: 6px;
+      transition: background-color 0.3s;
+    }
+
+    #roomList li:hover {
+      background-color: #444;
+    }
 
     #form {
         grid-column: 1 / 3;
@@ -1099,28 +1118,38 @@ window.addEventListener('DOMContentLoaded', function() {
     </div>
   </div>
 
-    <!-- Chat Overlay (hidden by default) -->
-    <div class="overlay" id="chatOverlay" style="display:none;">
-        <div class="overlay-content">
-            <span class="close-button" id="closeBtn">&times;</span>
-            <div id="messages-column">
-                <div id="roomTitle"></div>
-                <ul id="messages"></ul>
-            </div>
-            <div id="online-members">
-                <b>Online:</b>
-                <ul id="members-list"></ul>
-            </div>
-            <form id="form">
-                <input id="m" autocomplete="off" placeholder="Type your message..." />
-                <button>Send</button>
-                <label>
-                    <span class="material-icons">attach_file</span>
-                    <input type="file" />
-                </label>
-            </form>
+    
+  <!-- Chat Overlay hidden by default -->
+  <div class="overlay" id="chatOverlay" style="display:none;">
+    <div class="overlay-content">
+      <!-- Added sidebar container -->
+      <div id="chatSidebar" style="width:220px; background-color:#111; color:white; display:flex; flex-direction:column; padding:10px; box-sizing:border-box; border-right:1px solid #333;">
+        <div style="display:flex; justify-content:space-between; margin-bottom:12px;">
+          <button id="btnDMs" style="flex:1; margin-right:8px; padding:8px; background-color:#222; border:none; color:white; cursor:pointer;">DMs</button>
+          <button id="btnRooms" style="flex:1; padding:8px; background-color:#222; border:none; color:white; cursor:pointer;">Rooms</button>
         </div>
+        <button id="btnCreateRoom" style="margin-bottom:12px; padding:8px; background-color:#3700ff; border:none; color:white; cursor:pointer; border-radius:6px;">Create New Room</button>
+        <ul id="roomList" style="list-style:none; padding:0; margin:0; overflow-y:auto; flex-grow:1;">
+          <!-- Rooms inserted dynamically -->
+        </ul>
+      </div>
+
+      <div id="messages-column" style="flex-grow:1; border-left:1px solid #444; padding-left:10px;">
+        <div id="roomTitle"></div>
+        <ul id="messages"></ul>
+      </div>
+
+      <div id="online-members" style="color:white; width:15%; padding-left:10px;">
+        <b>Online:</b>
+        <ul id="members-list"></ul>
+      </div>
+
+      <form id="form" style="margin-top:10px; display:flex; gap:10px;">
+        <input id="m" autocomplete="off" placeholder="Type your message..." style="flex-grow:1; padding:8px; border-radius:4px; border:none;" />
+        <button style="padding:8px 12px; border-radius:4px; background:#1700fb; color:white; border:none;">Send</button>
+      </form>
     </div>
+  </div>
 
     <!-- Profile and Updates -->
     <div class="profile-section">
@@ -1842,7 +1871,55 @@ if (form) {
 function scrollToBottom() {
     messages.scrollTop = messages.scrollHeight;
 }
+// --- Sidebar Room List and Button Handling ---
+const rooms = [
+  "Main Chat", "Lobby", "Public Ring", "Weight Room", "Locker Room",
+  "Public Pool", "Mat Room", "Field", "Urban Brawl"
+];
 
+const roomList = document.getElementById('roomList');
+const btnDMs = document.getElementById('btnDMs');
+const btnRooms = document.getElementById('btnRooms');
+const btnCreateRoom = document.getElementById('btnCreateRoom');
+
+function populateRooms() {
+  roomList.innerHTML = '';
+  rooms.forEach(roomName => {
+    const li = document.createElement('li');
+    li.textContent = roomName;
+    li.onclick = () => {
+      if (typeof openChatroomName === 'function') {
+        openChatroomName(roomName);
+      } else if (typeof openChat === 'function') {
+        openChat(roomName);
+      } else {
+        alert('Function to join chat room does not exist.');
+      }
+    };
+    roomList.appendChild(li);
+  });
+}
+
+btnDMs.onclick = () => {
+  alert("DMs view toggle - implement your UI logic here.");
+};
+
+btnRooms.onclick = () => {
+  alert("Rooms view toggle - implement your UI logic here.");
+};
+
+btnCreateRoom.onclick = () => {
+  const newRoom = prompt("Enter the new room name:");
+  if (newRoom && newRoom.trim()) {
+    rooms.push(newRoom.trim());
+    populateRooms();
+    if (typeof openChatroomName === 'function') {
+      openChatroomName(newRoom.trim());
+    }
+  }
+};
+
+populateRooms();
 // --- Socket Listeners ---
 socket.on('loadMessages', function(msgs) {
     messages.innerHTML = '';
