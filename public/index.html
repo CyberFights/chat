@@ -1143,10 +1143,10 @@ window.addEventListener('DOMContentLoaded', function() {
         <b>Online:</b>
         <ul id="members-list"></ul>
       </div>
-
+<br>
       <form id="form" style="margin-top:10px; display:flex; gap:10px;">
         <input id="m" autocomplete="off" placeholder="Type your message..." style="flex-grow:1; padding:8px; border-radius:4px; border:none;" />
-        <button style="padding:8px 12px; border-radius:4px; background:#1700fb; color:white; border:none;">Send</button>
+        <button style="padding:8px 12px; border-radius:4px; background:limegreen; color:white; border:none;">Send</button>
       </form>
     </div>
   </div>
@@ -1888,13 +1888,7 @@ function populateRooms() {
     const li = document.createElement('li');
     li.textContent = roomName;
     li.onclick = () => {
-      if (typeof openChatroomName === 'function') {
-        openChatroomName(roomName);
-      } else if (typeof openChat === 'function') {
         openChat(roomName);
-      } else {
-        alert('Function to join chat room does not exist.');
-      }
     };
     roomList.appendChild(li);
   });
