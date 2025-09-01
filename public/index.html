@@ -1354,8 +1354,10 @@ window.addEventListener('DOMContentLoaded', function() {
                     landingPage.style.display = "none";
                     document.getElementById("hiddenPage").style.display = "block";
                     // Show private chats button and tab after verification
-                    document.getElementById("privateChatsBtn")?.style.display = "flex";
-                    document.getElementById("mySideTab")?.style.display = "block";
+                    const privateChatsBtn = document.getElementById("privateChatsBtn");
+                    const mySideTab = document.getElementById("mySideTab");
+                    if (privateChatsBtn) privateChatsBtn.style.display = "flex";
+                    if (mySideTab) mySideTab.style.display = "block";
                 }, 2000);
             } else {
                 alert("You must be at least 18 years old to proceed.");
