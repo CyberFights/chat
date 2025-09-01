@@ -1309,6 +1309,8 @@ let dmAttachedFile = null;
 let unseenPrivateMessages = 0;
 let privateChats = {};
 let currentUser = null;
+let isLoggedIn = false;
+let isAgeVerified = false;
 
 // DOM elements (cache references)
 var images, overlay, closeBtn, messages, form, input, roomTitle, membersList, dmOverlay, dmTitle, dmMessages, dmForm, dmInput, dmFileInput, dmAttachBtn, dmImagePreview, dmCloseBtn, privateChatsList, openPrivateChatsBtn, privateChatBadge, sideTab;
@@ -1336,13 +1338,12 @@ function cacheDOM() {
     privateChatBadge = document.getElementById('privateChatBadge');
     sideTab = document.getElementById('mySideTab');
 }
-cacheDOM();
 
 // --- Age Verification and App Launch ---
 window.addEventListener('DOMContentLoaded', function() {
     cacheDOM();
 
-    document.getElementById("enterBtn").addEventListener('click', function() {
+    document.getElementById("enterBtn")?.addEventListener('click', function() {
         if (!isAgeVerified) {
             const userConfirmed = confirm("Are you 18 years or older?");
             if (userConfirmed) {
@@ -1353,10 +1354,8 @@ window.addEventListener('DOMContentLoaded', function() {
                     landingPage.style.display = "none";
                     document.getElementById("hiddenPage").style.display = "block";
                     // Show private chats button and tab after verification
-                    const privateChatsBtn = document.getElementById("privateChatsBtn");
-                    const mySideTab = document.getElementById("mySideTab");
-                    if (privateChatsBtn) privateChatsBtn.style.display = "flex";
-                    if (mySideTab) mySideTab.style.display = "block";
+                    document.getElementById("privateChatsBtn")?.style.display = "flex";
+                    document.getElementById("mySideTab")?.style.display = "block";
                 }, 2000);
             } else {
                 alert("You must be at least 18 years old to proceed.");
@@ -1370,7 +1369,7 @@ let currentGrid = 0;
 const track = document.querySelector('.grid-track');
 const totalGrids = document.querySelectorAll('.image-grid.grid').length;
 function updateSlide() {
-    track.style.transform = `translateX(-${currentGrid * 100}%)`;
+    if (track) track.style.transform = `translateX(-${currentGrid * 100}%)`;
 }
 function showNextGrid() {
     currentGrid = (currentGrid + 1) % totalGrids;
@@ -1430,6 +1429,7 @@ window.openProfile = openProfile;
 function toggleOpen() {
     var el = document.getElementsByClassName('middle')[0];
     var naviElem = document.getElementById('myNavi2');
+    if (!el) return;
     if (el.className.indexOf('open') !== -1) {
         el.className = 'middle closed';
     } else if (el.className.indexOf('closed') !== -1) {
@@ -1463,11 +1463,13 @@ function loadProfileFromStorage() {
 
 // --- Notification Badge ---
 function updatePrivateChatBadge() {
-    if (unseenPrivateMessages > 0) {
-        privateChatBadge.textContent = unseenPrivateMessages;
-        privateChatBadge.style.display = 'inline-block';
-    } else {
-        privateChatBadge.style.display = 'none';
+    if (privateChatBadge) {
+        if (unseenPrivateMessages > 0) {
+            privateChatBadge.textContent = unseenPrivateMessages;
+            privateChatBadge.style.display = 'inline-block';
+        } else {
+            privateChatBadge.style.display = 'none';
+        }
     }
 }
 function incrementPrivateMessageBadge() {
@@ -1482,70 +1484,8 @@ if (openPrivateChatsBtn) {
     openPrivateChatsBtn.addEventListener('click', clearPrivateChatBadge);
 }
 
-// --- Profile Modal ---
-function openProfile(username) {
-      fetch('/user/' + username)
-        .then(function(response) { return response.json(); })
-        .then(function(data) {
-            localStorage.setItem('receiver', data.username);
-            var img = data.imagePath;
-            var infoElem = document.getElementById('profile-info');
-            var statsElem = document.getElementById('profile-stats');
-            var ageElem = document.getElementById('profile-age');
-            var nameElem = document.getElementById('profile-name');
-            var imgElem = document.getElementById('profile-img');
-            if (infoElem) infoElem.innerHTML = 'Info: ' + data.info;
-            if (statsElem) statsElem.innerHTML = 'Stats: ' + data.stats;
-            if (ageElem) ageElem.innerHTML = 'Age: ' + data.age;
-            if (nameElem) nameElem.innerHTML = data.username;
-            if (imgElem) imgElem.src = img;
-        })
-        .catch(function(error) {
-            console.error('Error:', error);
-        });
-    var naviElem = document.getElementById('myNavi2');
-    if (naviElem) naviElem.style.display = 'flex';
-    var middleDiv = document.querySelector('#myNavi2 .middle');
-if (middleDiv) {
-    middleDiv.classList.remove('closed');
-    middleDiv.classList.add('open');
-}
-}
-
-function toggleOpen() {
-    var el = document.getElementsByClassName('middle')[0];
-    var naviElem = document.getElementById('myNavi2');
-    if (el.className.indexOf('open') !== -1) {
-        el.className = 'middle closed';
-    } else if (el.className.indexOf('closed') !== -1) {
-        if (naviElem) naviElem.style.display = 'none';
-        el.className = 'middle open';
-    } else {
-        el.className = 'middle open';
-        if (naviElem) naviElem.style.display = 'flex';
-    }
-}
-
 document.addEventListener('DOMContentLoaded', function() {
     cacheDOM();
-    // --- Load profile info from localStorage ---
-    function loadProfileFromStorage() {
-        var savedUsername = localStorage.getItem('username');
-        var savedImage = localStorage.getItem('profileImage');
-        if (savedUsername) {
-            currentUsername = savedUsername;
-            isLoggedIn = true;
-            var profileHtml = '<p>Welcome back, ' + currentUsername + '</p>';
-            if (savedImage) {
-                var imgUrl = savedImage.indexOf('http') === 0 ? savedImage : window.location.origin + '/' + savedImage;
-                profileHtml += '<img src="' + imgUrl + '" alt="Profile Picture" style="max-width:100px; border-radius:50%;">';
-            }
-            var profileElem = document.getElementById('profile');
-            if (profileElem) {
-                profileElem.innerHTML = profileHtml;
-            }
-        }
-    }
     loadProfileFromStorage();
 
     // --- Login Handler ---
@@ -1659,16 +1599,18 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // --- Chat room images click ---
-    for (var i = 0; i < images.length; i++) {
-        images[i].addEventListener('click', function() {
-            if (!isLoggedIn) {
-                alert('Please log in before entering any chat room!');
-                openPopup('popup0');
-                return;
-            }
-            var roomName = this.dataset.room;
-            openChat(roomName);
-        });
+    if (images) {
+        for (var i = 0; i < images.length; i++) {
+            images[i].addEventListener('click', function() {
+                if (!isLoggedIn) {
+                    alert('Please log in before entering any chat room!');
+                    openPopup('popup0');
+                    return;
+                }
+                var roomName = this.dataset.room;
+                openChat(roomName);
+            });
+        }
     }
 
     // --- Chat overlay close ---
@@ -1887,6 +1829,7 @@ const btnRooms = document.getElementById('btnRooms');
 const btnCreateRoom = document.getElementById('btnCreateRoom');
 
 function populateRooms() {
+  if (!roomList) return;
   roomList.innerHTML = '';
   rooms.forEach(roomName => {
     const li = document.createElement('li');
@@ -1898,24 +1841,28 @@ function populateRooms() {
   });
 }
 
-btnDMs.onclick = () => {
-  alert("DMs view toggle - implement your UI logic here.");
-};
-
-btnRooms.onclick = () => {
-  alert("Rooms view toggle - implement your UI logic here.");
-};
-
-btnCreateRoom.onclick = () => {
-  const newRoom = prompt("Enter the new room name:");
-  if (newRoom && newRoom.trim()) {
-    rooms.push(newRoom.trim());
-    populateRooms();
-    if (typeof openChatroomName === 'function') {
-      openChatroomName(newRoom.trim());
-    }
-  }
-};
+if (btnDMs) {
+    btnDMs.onclick = () => {
+      alert("DMs view toggle - implement your UI logic here.");
+    };
+}
+if (btnRooms) {
+    btnRooms.onclick = () => {
+      alert("Rooms view toggle - implement your UI logic here.");
+    };
+}
+if (btnCreateRoom) {
+    btnCreateRoom.onclick = () => {
+      const newRoom = prompt("Enter the new room name:");
+      if (newRoom && newRoom.trim()) {
+        rooms.push(newRoom.trim());
+        populateRooms();
+        if (typeof openChatroomName === 'function') {
+          openChatroomName(newRoom.trim());
+        }
+      }
+    };
+}
 
 populateRooms();
 // --- Socket Listeners ---
@@ -2004,29 +1951,27 @@ socket.on('updateMembers', function(members) {
             `<img src="${localStorage.getItem('profileImageURL')}" alt="${member.username}">
             <span class="profile-link" style="cursor:pointer;">${member.username}</span>`;
 
-        // Make sure only the username span opens the profile
         memberItem.querySelector('.profile-link').addEventListener('click', function(e) {
             e.stopPropagation();
             openProfile(member.username);
         });
 
-        // Optionally, add a DM button if you want
-         let dmBtn = document.createElement('button');
-         dmBtn.textContent = 'Msg';
-         dmBtn.onclick = function(e) {
+        let dmBtn = document.createElement('button');
+        dmBtn.textContent = 'Msg';
+        dmBtn.onclick = function(e) {
             e.stopPropagation();
             startPrivateChat(member.username);
-         };
-         let blkBtn = document.createElement('button');
-         blkBtn.textContent = 'Block';
-         blkBtn.onclick = function(e) {
+        };
+        let blkBtn = document.createElement('button');
+        blkBtn.textContent = 'Block';
+        blkBtn.onclick = function(e) {
             e.stopPropagation();
             blockMember(member.username);
-         };
-         var br = document.createElement('br');
-         memberItem.appendChild(br);
-         memberItem.appendChild(dmBtn);
-         memberItem.appendChild(blkBtn);
+        };
+        var br = document.createElement('br');
+        memberItem.appendChild(br);
+        memberItem.appendChild(dmBtn);
+        memberItem.appendChild(blkBtn);
 
         membersList.appendChild(memberItem);
     }
@@ -2044,27 +1989,8 @@ socket.on('private message', function(obj) {
     }
 });
 
-// --- Notification Badge ---
-function updatePrivateChatBadge() {
-    if (unseenPrivateMessages > 0 && privateChatBadge) {
-        privateChatBadge.textContent = unseenPrivateMessages;
-        privateChatBadge.style.display = 'inline-block';
-    } else if (privateChatBadge) {
-        privateChatBadge.style.display = 'none';
-    }
-}
-function incrementPrivateMessageBadge() {
-    unseenPrivateMessages++;
-    updatePrivateChatBadge();
-}
-function clearPrivateChatBadge() {
-    unseenPrivateMessages = 0;
-    updatePrivateChatBadge();
-}
-if (openPrivateChatsBtn) {
-    openPrivateChatsBtn.addEventListener('click', clearPrivateChatBadge);
-}
- function openProfileWindow() {
+// --- Profile Holographic Window ---
+function openProfileWindow() {
     const newWindow = window.open('', '_blank', 'width=600,height=700');
     const htmlContent = `
       <!DOCTYPE html>
@@ -2074,100 +2000,18 @@ if (openPrivateChatsBtn) {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <title>Holographic UI Search Profile</title>
         <style>
-          body {
-      margin: 0;
-      background: radial-gradient(circle, #1a1a2e, #16213e);
-      font-family: 'Arial', sans-serif;
-      overflow: hidden;
-      justify-content: center;
-      align-items: center;
-    }
-
-    .holo-container {
-      
-      justify-content: center;
-      align-items: center;
-      height: 80%;
-      perspective: 1000px;
-      margin-top: 25%;
-      margin-left: 10%;
-    }
-
-    .holo-card {
-      justify-content: center;
-      align-items: center;
-      text-align:center;
-      width: 90%;
-      height: 80%;
-      background: linear-gradient(135deg, rgba(255, 255, 255, 0.2), rgba(0, 255, 255, 0.3));
-      border-radius: 20px;
-      box-shadow: 0px 10px 30px rgba(0, 255, 255, 0.5);
-      transform-style: preserve-3d;
-      transform: rotateY(0deg);
-      transition: transform 0.5s ease-in-out;
-    }
-
-    .holo-card:hover {
-      transform: rotateY(30deg) rotateX(15deg);
-    }
-
-          .holo-text {
-      font-size: 2rem;
-      justify-content: center;
-      align-items: center;
-      text-align:center;
-      font-weight: bold;
-      text-transform: uppercase;
-      background: linear-gradient(45deg, #333, #666, #87CEEB, #4682B4, #333);
-      background-size: 200% 200%;
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      animation: shimmer 3s ease infinite;
-      text-shadow: 0px 0px 10px rgba(128, 128, 128, 0.5), 
-                   0px 0px 20px rgba(0, 191, 255, 0.4);
-    }
-
-    @keyframes shimmer {
-      0% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
-    }
-    .animation-overlay {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background-image: url('https://via.placeholder.com/1920x1080'); /* Replace with holographic texture */
-      opacity: 0.1;
-    }
-    
-    @keyframes glow {
-      from { opacity: 0.1; }
-      to { opacity: 0.3; }
-    }
-    
-    .animation-overlay {
-        animation: glow infinite alternate-reverse ease-in-out 2s;
-    }
-    
-    /* Optional cursor effect */
-    body:hover {
-        cursor:url('cursor-image.png'), auto; /* Replace with custom holographic cursor */
-    }
-          #searchBar {
-            width: 100%;
-            padding: 12px;
-            font-size: 16px;
-            margin-bottom: 20px;
-            border-radius: 8px;
-            border: none;
-            outline: none;
-          }
-          #errorMsg {
-            color: red;
-            margin-top: 10px;
-          }
+          body { margin: 0; background: radial-gradient(circle, #1a1a2e, #16213e); font-family: 'Arial', sans-serif; overflow: hidden; justify-content: center; align-items: center; }
+          .holo-container { justify-content: center; align-items: center; height: 80%; perspective: 1000px; margin-top: 25%; margin-left: 10%; }
+          .holo-card { justify-content: center; align-items: center; text-align:center; width: 90%; height: 80%; background: linear-gradient(135deg, rgba(255, 255, 255, 0.2), rgba(0, 255, 255, 0.3)); border-radius: 20px; box-shadow: 0px 10px 30px rgba(0, 255, 255, 0.5); transform-style: preserve-3d; transform: rotateY(0deg); transition: transform 0.5s ease-in-out;}
+          .holo-card:hover { transform: rotateY(30deg) rotateX(15deg);}
+          .holo-text { font-size: 2rem; justify-content: center; align-items: center; text-align:center; font-weight: bold; text-transform: uppercase; background: linear-gradient(45deg, #333, #666, #87CEEB, #4682B4, #333); background-size: 200% 200%; -webkit-background-clip: text; -webkit-text-fill-color: transparent; animation: shimmer 3s ease infinite; text-shadow: 0px 0px 10px rgba(128, 128, 128, 0.5), 0px 0px 20px rgba(0, 191, 255, 0.4);}
+          @keyframes shimmer { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+          .animation-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-image: url('https://via.placeholder.com/1920x1080'); opacity: 0.1; }
+          @keyframes glow { from { opacity: 0.1; } to { opacity: 0.3; } }
+          .animation-overlay { animation: glow infinite alternate-reverse ease-in-out 2s; }
+          body:hover { cursor:url('cursor-image.png'), auto; }
+          #searchBar { width: 100%; padding: 12px; font-size: 16px; margin-bottom: 20px; border-radius: 8px; border: none; outline: none; }
+          #errorMsg { color: red; margin-top: 10px; }
         </style>
       </head>
       <body>
@@ -2247,7 +2091,8 @@ if (openPrivateChatsBtn) {
 
     newWindow.document.write(htmlContent);
     newWindow.document.close();
-  }
+}
+window.openProfileWindow = openProfileWindow;
 </script>
 </body>
 </html>
