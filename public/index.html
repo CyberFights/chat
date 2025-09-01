@@ -1119,37 +1119,40 @@ window.addEventListener('DOMContentLoaded', function() {
   </div>
 
     
-  <!-- Chat Overlay hidden by default -->
   <div class="overlay" id="chatOverlay" style="display:none;">
-    <div class="overlay-content">
-      <!-- Added sidebar container -->
-      <div id="chatSidebar" style="width:220px; background-color:#111; color:white; display:flex; flex-direction:column; padding:10px; box-sizing:border-box; border-right:1px solid #333;">
-        <div style="display:flex; justify-content:space-between; margin-bottom:12px;">
-          <button id="btnDMs" style="flex:1; margin-right:8px; padding:8px; background-color:#222; border:none; color:white; cursor:pointer;">DMs</button>
-          <button id="btnRooms" style="flex:1; padding:8px; background-color:#222; border:none; color:white; cursor:pointer;">Rooms</button>
+  <div class="overlay-content" style="display: flex;">
+    <!-- Sidebar container -->
+    <div id="chatSidebar" style="width:220px; background-color:#111; color:white; display:flex; flex-direction:column; padding:10px; box-sizing:border-box; border-right:1px solid #333;">
+      <div style="display:flex; justify-content:space-between; margin-bottom:12px;">
+        <button id="btnDMs" style="flex:1; margin-right:8px; padding:8px; background-color:#222; border:none; color:white; cursor:pointer;">DMs</button>
+        <button id="btnRooms" style="flex:1; padding:8px; background-color:#222; border:none; color:white; cursor:pointer;">Rooms</button>
+      </div>
+      <button id="btnCreateRoom" style="margin-bottom:12px; padding:8px; background-color:#3700ff; border:none; color:white; cursor:pointer; border-radius:6px;">Create New Room</button>
+      <ul id="roomList" style="list-style:none; padding:0; margin:0; overflow-y:auto; flex-grow:1;">
+        <!-- Rooms inserted dynamically -->
+      </ul>
+    </div>
+
+    <!-- Main chat area including messages, members, and input form -->
+    <div id="main-chat-content" style="flex-grow:1; display:flex; flex-direction:column; border-left:1px solid #444; padding-left:10px;">
+      <div style="display:flex; flex-direction:row; flex-grow:1;">
+        <div id="messages-column" style="flex-grow:2; display:flex; flex-direction:column;">
+          <div id="roomTitle"></div>
+          <ul id="messages" style="flex-grow:1; overflow-y:auto;"></ul>
         </div>
-        <button id="btnCreateRoom" style="margin-bottom:12px; padding:8px; background-color:#3700ff; border:none; color:white; cursor:pointer; border-radius:6px;">Create New Room</button>
-        <ul id="roomList" style="list-style:none; padding:0; margin:0; overflow-y:auto; flex-grow:1;">
-          <!-- Rooms inserted dynamically -->
-        </ul>
+        <div id="online-members" style="color:white; width:15%; padding-left:10px;">
+          <b>Online:</b>
+          <ul id="members-list"></ul>
+        </div>
       </div>
-
-      <div id="messages-column" style="flex-grow:1; border-left:1px solid #444; padding-left:10px;">
-        <div id="roomTitle"></div>
-        <ul id="messages"></ul>
-      </div>
-
-      <div id="online-members" style="color:white; width:15%; padding-left:10px;">
-        <b>Online:</b>
-        <ul id="members-list"></ul>
-      </div>
-<br>
+      <!-- Move form below the messages and members -->
       <form id="form" style="margin-top:10px; display:flex; gap:10px;">
         <input id="m" autocomplete="off" placeholder="Type your message..." style="flex-grow:1; padding:8px; border-radius:4px; border:none;" />
         <button style="padding:8px 12px; border-radius:4px; background:limegreen; color:white; border:none;">Send</button>
       </form>
     </div>
   </div>
+</div>
 
     <!-- Profile and Updates -->
     <div class="profile-section">
