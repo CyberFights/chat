@@ -1,0 +1,94 @@
+      <!DOCTYPE html>
+      <html lang="en">
+      <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>Holographic UI Search Profile</title>
+        <style>
+          body { margin: 0; background: radial-gradient(circle, #1a1a2e, #16213e); font-family: 'Arial', sans-serif; overflow: hidden; justify-content: center; align-items: center; }
+          .holo-container { justify-content: center; align-items: center; height: 80%; perspective: 1000px; margin-top: 25%; margin-left: 10%; }
+          .holo-card { justify-content: center; align-items: center; text-align:center; width: 90%; height: 80%; background: linear-gradient(135deg, rgba(255, 255, 255, 0.2), rgba(0, 255, 255, 0.3)); border-radius: 20px; box-shadow: 0px 10px 30px rgba(0, 255, 255, 0.5); transform-style: preserve-3d; transform: rotateY(0deg); transition: transform 0.5s ease-in-out;}
+          .holo-card:hover { transform: rotateY(30deg) rotateX(15deg);}
+          .holo-text { font-size: 2rem; justify-content: center; align-items: center; text-align:center; font-weight: bold; text-transform: uppercase; background: linear-gradient(45deg, #333, #666, #87CEEB, #4682B4, #333); background-size: 200% 200%; -webkit-background-clip: text; -webkit-text-fill-color: transparent; animation: shimmer 3s ease infinite; text-shadow: 0px 0px 10px rgba(128, 128, 128, 0.5), 0px 0px 20px rgba(0, 191, 255, 0.4);}
+          @keyframes shimmer { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+          .animation-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-image: url('https://via.placeholder.com/1920x1080'); opacity: 0.1; }
+          @keyframes glow { from { opacity: 0.1; } to { opacity: 0.3; } }
+          .animation-overlay { animation: glow infinite alternate-reverse ease-in-out 2s; }
+          body:hover { cursor:url('cursor-image.png'), auto; }
+          #searchBar { width: 100%; padding: 12px; font-size: 16px; margin-bottom: 20px; border-radius: 8px; border: none; outline: none; }
+          #errorMsg { color: red; margin-top: 10px; }
+        </style>
+      </head>
+      <body>
+        <input type="search" id="searchBar" placeholder="Search user by username..." autofocus />
+        <div class="holo-container">
+          <div class="holo-card">
+            <div class="animation-overlay"></div>
+            <p class="holo-text" id="username">Search for a user</p>
+            <img id="profile-img" src="https://via.placeholder.com/200?text=No+Image" alt="Profile Image" />
+            <p class="holo-text">Age:</p>
+            <p id="age" class="answer">-</p>
+            <p class="holo-text">Stats:</p>
+            <p id="stats" class="answer">-</p>
+            <p class="holo-text">Main Language:</p>
+            <p id="lang" class="answer">-</p>
+            <p class="holo-text">Info:</p>
+            <p id="info" class="answer">-</p>
+            <p id="errorMsg"></p>
+          </div>
+        </div>
+
+        <script>
+          const searchBar = document.getElementById('searchBar');
+          const usernameElem = document.getElementById('username');
+          const profileImg = document.getElementById('profile-img');
+          const ageElem = document.getElementById('age');
+          const statsElem = document.getElementById('stats');
+          const langElem = document.getElementById('lang');
+          const infoElem = document.getElementById('info');
+          const errorMsg = document.getElementById('errorMsg');
+
+          searchBar.addEventListener('keydown', function(event) {
+            if (event.key === 'Enter') {
+              const username = searchBar.value.trim();
+              if(!username){
+                return;
+              }
+              errorMsg.textContent = '';
+              usernameElem.textContent = 'Loading...';
+              profileImg.src = 'https://via.placeholder.com/200?text=Loading...';
+              ageElem.textContent = '-';
+              statsElem.textContent = '-';
+              langElem.textContent = '-';
+              infoElem.textContent = '-';
+
+              fetch('/user/' + encodeURIComponent(username))
+                .then(response => {
+                  if (!response.ok) {
+                    throw new Error('User not found');
+                  }
+                  return response.json();
+                })
+                .then(user => {
+                  usernameElem.textContent = user.username || 'Unknown';
+                  profileImg.src = user.profileImageUrl || 'https://via.placeholder.com/200?text=No+Image';
+                  ageElem.textContent = user.age || 'N/A';
+                  statsElem.textContent = user.stats || 'N/A';
+                  langElem.textContent = user.mainLanguage || 'N/A';
+                  infoElem.textContent = user.info || 'N/A';
+                  errorMsg.textContent = '';
+                })
+                .catch(error => {
+                  usernameElem.textContent = 'Search for a user';
+                  profileImg.src = 'https://via.placeholder.com/200?text=No+Image';
+                  ageElem.textContent = '-';
+                  statsElem.textContent = '-';
+                  langElem.textContent = '-';
+                  infoElem.textContent = '-';
+                  errorMsg.textContent = error.message;
+                });
+            }
+          });
+        </script>
+      </body>
+      </html>
