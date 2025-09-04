@@ -1096,11 +1096,10 @@ window.addEventListener('DOMContentLoaded', function() {
           <img src="https://raw.githubusercontent.com/CyberFights/chat/refs/heads/main/public/assets/images/urban.png" alt="Urban Brawl" data-room="Urban_Brawl" />
           <div class="room-label">Urban Brawl</div>
         </div>
-        <div class="image-item">
-          <img src="https://via.placeholder.com/280x180.png?text=Showroom" alt="W.I.P." data-room="W.I.P." />
-          <div class="room-label" style="cursor:pointer;"
-         onclick="openProfileWindow()">User Search</div>
-        </div>
+      <div class="image-item">
+    <img src="https://via.placeholder.com/280x180.png?text=Showroom" alt="W.I.P." data-room="W.I.P." />
+    <div class="room-label" style="cursor:pointer;" onclick="openProfileWindow()">User Search</div>
+</div>
         <div class="image-item">
           <img src="https://via.placeholder.com/280x180.png?text=Gym" alt="W.I.P." data-room="W.I.P." />
           <div class="room-label">W.I.P.</div>
@@ -1818,6 +1817,12 @@ const rooms = [
   "Public_Pool", "Mat_Room", "Field", "Urban_Brawl"
 ];
 
+    function openProfileWindow() {
+    // Open a new window with the specified dimensions and load /public/search.html
+    const newWindow = window.open('/public/search.html', '_blank', 'width=600,height=700');
+}
+
+window.openProfileWindow = openProfileWindow;
 const roomList = document.getElementById('roomList');
 const btnDMs = document.getElementById('btnDMs');
 const btnRooms = document.getElementById('btnRooms');
@@ -1984,13 +1989,7 @@ socket.on('private message', function(obj) {
     }
 });
 
-// --- Profile Holographic Window ---
-function openProfileWindow() {
-    const newWindow = window.open('', '_blank', 'width=600,height=700');
-    
-    newWindow.document.close();
-}
-window.openProfileWindow = openProfileWindow;
+
 </script>
 </body>
 </html>
