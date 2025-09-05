@@ -1819,9 +1819,7 @@ const rooms = [
     
 function openProfileWindow() {
   const newWindow = window.open('', '_blank', 'width=600,height=400');
-  newWindow.document.write(`<!DOCTYPE html>
-<html lang="en">
-<head>
+  newWindow.document.write(`<head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Holographic UI Search Profile</title>
@@ -1840,7 +1838,6 @@ function openProfileWindow() {
     #errorMsg { color: red; margin-top: 10px; }
   </style>
 </head>
-<body>
   <input type="search" id="searchBar" placeholder="Search user by username..." autofocus />
   <div class="holo-container">
     <div class="holo-card">
@@ -1908,10 +1905,7 @@ function openProfileWindow() {
             errorMsg.textContent = error.message;
           });
       }
-    });
-  </script>
-</body>
-</html>`);
+    });`);
   newWindow.document.close();
 }
 const roomList = document.getElementById('roomList');
