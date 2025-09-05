@@ -1221,11 +1221,13 @@ window.addEventListener('DOMContentLoaded', function() {
 </div>
 </div>
 
-<div id="popup1" class="popup-overlay" style="display:none; margin: 0; background: radial-gradient(circle, #1a1a2e, #16213e); font-family: 'Arial', sans-serif; overflow: hidden; justify-content: center; align-items: center; width:600px; height:700px;">
+<div id="popup1" class="popup-overlay" style="display:none; margin-left: 40%; margin-top:25%; background: radial-gradient(circle, #1a1a2e, #16213e); font-family: 'Arial', sans-serif; overflow: hidden; justify-content: center; align-items: center; width:600px; height:80%;">
     <div class="popup-box" onclick="event.stopPropagation();">
         <button class="close-btn" onclick="closePopup(event, 'popup1')">&times;</button>
     </div>
+    <br>
          <input type="search" id="searchBar" placeholder="Search user by username..." autofocus />
+    <br>
   <div class="holo-container">
     <div class="holo-card">
       <div class="animation-overlay"></div>
@@ -1877,10 +1879,10 @@ const rooms = [
           })
           .then(user => {
             usernameElem.textContent = user.username || 'Unknown';
-            profileImg.src = user.profileImageUrl || 'https://via.placeholder.com/200?text=No+Image';
+            profileImg.src = user.imagePath || 'https://via.placeholder.com/200?text=No+Image';
             ageElem.textContent = user.age || 'N/A';
             statsElem.textContent = user.stats || 'N/A';
-            langElem.textContent = user.mainLanguage || 'N/A';
+            langElem.textContent = user.language || 'N/A';
             infoElem.textContent = user.info || 'N/A';
             errorMsg.textContent = '';
           })
