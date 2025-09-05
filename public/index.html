@@ -1816,13 +1816,21 @@ const rooms = [
   "Main_Chat", "Lobby", "Public_Ring", "Weight_Room", "Locker_Room",
   "Public_Pool", "Mat_Room", "Field", "Urban_Brawl"
 ];
-
-    function openProfileWindow() {
-    // Open a new window with the specified dimensions and load /public/search.html
-    const newWindow = window.open('/public/search.html', '_blank', 'width=600,height=700');
+function openProfileWindow() {
+    // Try both relative and absolute path depending on your hosting setup.
+    // If /public/search.html doesn't work, try just 'search.html'
+    const url = '/public/search.html'; // Change to 'search.html' if needed
+    const newWindow = window.open(url, '_blank', 'width=600,height=700');
+    // Optionally focus the new window
+    if (newWindow) {
+        newWindow.focus();
+    } else {
+        alert('Popup blocked! Please allow popups for this site.');
+    }
 }
 
 window.openProfileWindow = openProfileWindow;
+    
 const roomList = document.getElementById('roomList');
 const btnDMs = document.getElementById('btnDMs');
 const btnRooms = document.getElementById('btnRooms');
