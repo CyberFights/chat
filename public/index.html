@@ -979,6 +979,7 @@
       display: none;
       justify-content: center;
       align-items: center;
+        z-index: 1;
     }
     .support {
       background-image: linear-gradient(skyblue, blue);
@@ -1720,11 +1721,15 @@ document.getElementById('supportForm').addEventListener('submit', function(event
     event.preventDefault(); // Prevent default form submission
 
     // Gather form data
-    const formData = new FormData(this);
+   var submittedBy = document.getElementById('submittedBy').value;
+            var reportedPerson = document.getElementById('reportedPerson').value;
+    var topic = document.getElementById('topic').value;
+            var incidentDate = document.getElementById('incidentDate').value;
+    var description = document.getElementById('description').value;
 
     fetch('/submit-support', {
       method: 'POST',
-      body: formData,
+      body: JSON.stringify({ submittedBy: submittedBy, reportedPerson: reportedPerson, description: description, topic: topic, incidentDate: incidentDate })
     })
     .then(response => {
       // Optionally, check for response.ok
