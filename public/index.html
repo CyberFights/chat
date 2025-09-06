@@ -1717,30 +1717,33 @@ function clearPrivateChatBadge() {
 if (openPrivateChatsBtn) {
     openPrivateChatsBtn.addEventListener('click', clearPrivateChatBadge);
 }
-document.getElementById('supportForm').addEventListener('submit', function(event) {
-    event.preventDefault(); // Prevent default form submission
 
-    // Gather form data
-   var submittedBy = document.getElementById('submittedBy').value;
-            var reportedPerson = document.getElementById('reportedPerson').value;
+    document.getElementById('supportForm').addEventListener('submit', function(event) {
+    event.preventDefault();
+    var submittedBy = document.getElementById('submittedBy').value;
+    var reportedPerson = document.getElementById('reportedPerson').value;
     var topic = document.getElementById('topic').value;
-            var incidentDate = document.getElementById('incidentDate').value;
+    var incidentDate = document.getElementById('incidentDate').value;
     var description = document.getElementById('description').value;
 
     fetch('/submit-support', {
-      method: 'POST',
-      body: JSON.stringify({ submittedBy: submittedBy, reportedPerson: reportedPerson, description: description, topic: topic, incidentDate: incidentDate })
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            submittedBy, reportedPerson, topic, incidentDate, description
+        })
     })
     .then(response => {
-      // Optionally, check for response.ok
+        if (!response.ok) throw new Error('Network response was not ok');
         alert('Report Submitted');
-      closePopup(event, 'popup3'); // Call your function to close popup
+        if (typeof closePopup === 'function') closePopup(event, 'popup3');
     })
     .catch(error => {
-        alert('There was an error submitting report please try again');
-      closePopup(event, 'popup3'); // Still close on error, or show error if you prefer
+        alert('There was an error submitting report, please try again');
+        if (typeof closePopup === 'function') closePopup(event, 'popup3');
     });
-  });
+});
+    
 document.addEventListener('DOMContentLoaded', function() {
     cacheDOM();
     loadProfileFromStorage();
