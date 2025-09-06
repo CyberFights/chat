@@ -281,7 +281,7 @@ app.post('/submit-support', async (req, res) => {
         { name: "Description", value: description || "N/A", inline: false },
         { name: "Date of Incident", value: incidentDate || "N/A", inline: true },
         { name: "Reported Person", value: reportedPerson || "N/A", inline: true },
-       { name: "Submitted By", value: submittedBy || "N/A", inline: true },
+        { name: "Submitted By", value: submittedBy || "N/A", inline: true },
       ]
     }]
   };
@@ -294,7 +294,7 @@ app.post('/submit-support', async (req, res) => {
     });
 
     if (response.ok) {
-      res.send('Support request sent to Discord!');
+      res.status(200).send('Support request sent to Discord!');
     } else {
       res.status(500).send('Failed to send support request to Discord.');
     }
