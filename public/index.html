@@ -2060,9 +2060,10 @@ function closeChat() {
 }
 window.closeChat = closeChat;
 
+    var form = document.getElementById('form');
 if (form) {
     form.addEventListener('submit', function(e) {
-        e.preventDefault();
+        event.preventDefault();
         const now = new Date();
         const hours = now.getHours();
         const minutes = now.getMinutes();
