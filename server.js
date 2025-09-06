@@ -268,6 +268,40 @@ app.post("/broadcast", async (req, res) => {
   }
 });
 
+const DISCORD_SUPPORT_URL = process.env.Discord_Support;
+
+app.post('/submit-support', async (req, res) => {
+  const { topic, description, incidentDate, reportedPerson, submittedBy } = req.body;
+
+  const discordMessage = {
+    embeds: [{
+      title: "New Support Request",
+      fields: [
+        { name: "Topic", value: topic || "N/A", inline: true },
+        { name: "Description", value: description || "N/A", inline: false },
+        { name: "Date of Incident", value: incidentDate || "N/A", inline: true },
+        { name: "Reported Person", value: reportedPerson || "N/A", inline: true },
+       { name: "Submitted By", value: submittedBy || "N/A", inline: true },
+      ]
+    }]
+  };
+
+  try {
+    const response = await fetch(DISCORD_SUPPORT_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(discordMessage)
+    });
+
+    if (response.ok) {
+      res.send('Support request sent to Discord!');
+    } else {
+      res.status(500).send('Failed to send support request to Discord.');
+    }
+  } catch (err) {
+    res.status(500).send('Error sending webhook to Discord.');
+  }
+});
 // Serve frontend
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "index.html"));
