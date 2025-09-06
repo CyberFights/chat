@@ -1443,7 +1443,7 @@ window.addEventListener('DOMContentLoaded', function() {
         <button class="close-btn" onclick="closePopup(event, 'popup3')">&times;</button>
            <div class="support">
       <h2>Support Request</h2>
-      <form action="/submit-support" method="post">
+      <form id="supportForm" action="/submit-support" method="post">
               <label for="submittedBy">Your Username</label>
         <input type="text" id="submittedBy" name="submittedBy" placeholder="Enter your username" required>
 
@@ -1716,7 +1716,26 @@ function clearPrivateChatBadge() {
 if (openPrivateChatsBtn) {
     openPrivateChatsBtn.addEventListener('click', clearPrivateChatBadge);
 }
+document.getElementById('supportForm').addEventListener('submit', function(event) {
+    event.preventDefault(); // Prevent default form submission
 
+    // Gather form data
+    const formData = new FormData(this);
+
+    fetch('/submit-support', {
+      method: 'POST',
+      body: formData,
+    })
+    .then(response => {
+      // Optionally, check for response.ok
+        alert('Report Submitted');
+      closePopup(event, 'popup3'); // Call your function to close popup
+    })
+    .catch(error => {
+        alert('There was an error submitting report please try again');
+      closePopup(event, 'popup3'); // Still close on error, or show error if you prefer
+    });
+  });
 document.addEventListener('DOMContentLoaded', function() {
     cacheDOM();
     loadProfileFromStorage();
