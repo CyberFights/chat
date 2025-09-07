@@ -163,6 +163,27 @@ app.post("/login", async (req, res) => {
   }
 });
 
+// Create or ensure DM room for two users; returns room name
+app.post("/dm-room", async (req, res) => {
+  const { userA, userB } = req.body;
+  if (!userA || !userB) return res.status(400).json({ error: "Missing users" });
+  const usersSorted = [userA, userB].sort();
+  const roomName = `dm-${usersSorted[0]}-${usersSorted[1]}`;
+  try {
+    let room = await db.collection("dm_rooms").findOne({ room: roomName });
+    if (!room) {
+      await db.collection("dm_rooms").insertOne({
+        room: roomName,
+        users: usersSorted,
+        createdAt: new Date()
+      });
+    }
+    res.json({ success: true, room: roomName });
+  } catch (err) {
+    res.status(500).json({ error: "Failed to store/load DM room" });
+  }
+});
+
 // Get user info
 app.get("/user/:username", async (req, res) => {
   try {
@@ -215,6 +236,36 @@ app.get("/rooms/:room/messages", async (req, res) => {
     res.status(500).json({ error: "Failed to fetch messages" });
   }
 });
+
+// Save DM message under room name
+app.post('/dm-messages/:room', async (req, res) => {
+  const { room } = req.params;
+  const { from_user, message } = req.body;
+  if (!room || !from_user || !message) return res.status(400).json({ error: 'Missing data' });
+  try {
+    await db.collection("dm_messages").insertOne({
+      room,
+      from_user,
+      message,
+      timestamp: new Date()
+    });
+    res.json({ success: true });
+  } catch (err) {
+    res.status(500).json({ error: "Failed to save DM message" });
+  }
+});
+
+// Load DM messages
+app.get('/dm-messages/:room', async (req, res) => {
+  try {
+    const room = req.params.room;
+    const messages = await db.collection("dm_messages").find({ room }).sort({ timestamp: 1 }).toArray();
+    res.json(messages);
+  } catch (err) {
+    res.status(500).json({ error: "Failed to fetch DM messages" });
+  }
+});
+
 
 // Save private message with optional image upload
 app.post('/private/messages', upload.single('image'), async (req, res) => {
@@ -380,6 +431,26 @@ io.on("connection", (socket) => {
       console.error(err);
     }
   });
+  
+  socket.on('request-create-dm', async ({ from, to, room }) => {
+  const usersSorted = [from, to].sort();
+  try {
+    let savedRoom = await db.collection("dm_rooms").findOne({ room });
+    if (!savedRoom) {
+      await db.collection("dm_rooms").insertOne({
+        room,
+        users: usersSorted,
+        createdAt: new Date()
+      });
+    }
+  } catch (err) { /* log errors optionally */ }
+
+  const recipientSocket = userSockets[to];
+  if (recipientSocket) {
+    io.to(recipientSocket).emit('create-dm', { from, room });
+  }
+});
+
 
   socket.on("disconnect", () => {
     if (currentRoom && currentUser) {
