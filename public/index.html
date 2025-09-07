@@ -1337,7 +1337,7 @@ window.addEventListener('DOMContentLoaded', function() {
         </div>
       </div>
       <!-- Move form below the messages and members -->
-      <form id="form" style="margin-top:10px; display:flex; gap:10px;">
+      <form id="form" style="margin-top:10px; display:flex; gap:10px;" onSubmit="return false;">
         <input id="m" autocomplete="off" placeholder="Type your message..." style="flex-grow:1; padding:8px; border-radius:4px; border:none;" />
         <button style="padding:8px 12px; border-radius:4px; background:limegreen; color:white; border:none;">Send</button>
       </form>
@@ -1365,7 +1365,7 @@ window.addEventListener('DOMContentLoaded', function() {
   <div class="popup-box" onclick="event.stopPropagation();">
     <button class="close-btn" onclick="closePopup(event, 'popup0')">&times;</button>
     <h3>Login</h3>
-    <form id="loginForm">
+    <form id="loginForm" onSubmit="return false;">
       <input type="text" id="loginUsername" placeholder="Username" required />
       <input type="password" id="loginPassword" placeholder="Password" required /> <br>
       <button type="submit">Login</button>
@@ -1444,7 +1444,7 @@ window.addEventListener('DOMContentLoaded', function() {
         <button class="close-btn" onclick="closePopup(event, 'popup3')">&times;</button>
            <div class="support">
       <h2>Support Request</h2>
-      <form id="supportForm" action="/submit-support" method="post">
+      <form id="supportForm" action="/submit-support" method="post" onSubmit="return false;">
               <label for="submittedBy">Your Username</label>
         <input type="text" id="submittedBy" name="submittedBy" placeholder="Enter your username" required>
 
@@ -1478,7 +1478,7 @@ window.addEventListener('DOMContentLoaded', function() {
     <div class="popup-box" onclick="event.stopPropagation();">
         <button class="close-btn" onclick="closePopup(event, 'popup4')">&times;</button>
         <h3>Settings</h3>
-        <form id="settingsForm">
+        <form id="settingsForm" onSubmit="return false;">
             <input type="text" id="username" placeholder="Username" />
             <label for="imageUpload">Profile Image:</label>
             <input type="file" id="imageUpload" accept="image/*" />
@@ -1523,7 +1523,7 @@ window.addEventListener('DOMContentLoaded', function() {
     <span id="dmCloseBtn" style="font-size:2em;position:absolute;top:14px;right:20px;cursor:pointer;">&times;</span>
     <h3 id="dmTitle" style="margin-bottom:10px;"></h3>
     <ul id="dmMessages" style="list-style:none; padding:0; max-height:200px; overflow-y:auto; background:#eee; border-radius:8px; margin-bottom:12px;"></ul>
-    <form id="dmForm" style="display:flex; gap:8px; align-items:center;">
+    <form id="dmForm" style="display:flex; gap:8px; align-items:center;" onSubmit="return false;">
       <input id="dmInput" autocomplete="off" placeholder="Type your private message..." style="flex:1; padding:8px; border-radius:5px; border:1px solid #ccc;" />
       <input type="file" id="dmFileInput" accept="image/*" style="display:none;" />
       <button type="button" id="dmAttachBtn" title="Attach Image" style="background:none; border:none; cursor:pointer; font-size:20px;">ð</button>
