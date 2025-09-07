@@ -1923,31 +1923,32 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // --- DM Overlay ---
     function openDmOverlay(username) {
-        if (username === currentUsername) {
-            alert("You can't DM yourself.");
-            return;
-        }
-        dmTarget = username;
-        dmOverlay.style.display = 'flex';
-        dmTitle.textContent = 'Chat with ' + username;
-        dmMessages.innerHTML = '<li>Loading...</li>';
-
-        socket.emit('get private history', { userA: currentUsername, userB: username }, function(messagesArr) {
-            dmMessages.innerHTML = '';
-            for (var i = 0; i < messagesArr.length; i++) {
-                var msg = messagesArr[i];
-                var li = document.createElement('li');
-                li.textContent = msg.from_user + ': ' + msg.message;
-                if (msg.from_user === currentUsername) li.className += ' me';
-                dmMessages.appendChild(li);
-            }
-            dmMessages.scrollTop = dmMessages.scrollHeight;
-        });
-        clearPrivateChatBadge();
+    if (username === currentUsername) {
+        alert("You can't DM yourself.");
+        return;
     }
-    window.openDmOverlay = openDmOverlay;
-
-    // Close DM overlay
+    const chatObj = privateChats[username];
+    if (!chatObj) return;
+    dmTarget = username;
+    dmOverlay.style.display = 'flex';
+    dmTitle.textContent = 'Chat with ' + username;
+    dmMessages.innerHTML = '<li>Loading...</li>';
+    fetch('/dm-messages/' + encodeURIComponent(chatObj.dmRoom))
+      .then(res => res.json())
+      .then(messagesArr => {
+        dmMessages.innerHTML = '';
+        messagesArr.forEach(msg => {
+            var li = document.createElement('li');
+            li.textContent = msg.from_user + ': ' + msg.message;
+            if (msg.from_user === currentUsername) li.className += ' me';
+            dmMessages.appendChild(li);
+        });
+        dmMessages.scrollTop = dmMessages.scrollHeight;
+      });
+    clearPrivateChatBadge();
+}
+window.openDmOverlay = openDmOverlay;
+   // Close DM overlay
     if (dmCloseBtn) {
         dmCloseBtn.onclick = function() {
             dmOverlay.style.display = 'none';
@@ -1979,57 +1980,93 @@ document.addEventListener('DOMContentLoaded', function() {
         };
     }
     // Add DM message to overlay
-    function addDmMessage(from, message) {
-        var li = document.createElement('li');
-        li.textContent = from + ': ' + message;
-        if (from === currentUsername) li.className += ' me';
-        dmMessages.appendChild(li);
-        dmMessages.scrollTop = dmMessages.scrollHeight;
-    }
-    // Send DM message (text or with image)
-    if (dmForm) {
-        dmForm.onsubmit = function(e) {
-            e.preventDefault();
-            var text = dmInput.value.trim();
-            if (!text && !dmAttachedFile) return;
-            if (dmAttachedFile) {
-                var formData = new FormData();
-                formData.append('from_user', currentUsername);
-                formData.append('to_user', dmTarget);
-                formData.append('message', text);
-                formData.append('image', dmAttachedFile);
-                fetch('/private/messages', { method: 'POST', body: formData })
-                    .then(function(res) {
-                        if (res.ok) {
-                            addDmMessage(currentUsername, text || '[Image]');
-                            dmInput.value = '';
-                            dmImagePreview.innerHTML = '';
-                            dmFileInput.value = '';
-                            dmAttachedFile = null;
-                        } else {
-                            alert('Failed to send message.');
-                        }
-                    })
-                    .catch(function(err) {
-                        alert('Error sending message: ' + err.message);
-                    });
-            } else {
-                socket.emit('private message', { from: currentUsername, to: dmTarget, message: text });
-                addDmMessage(currentUsername, text);
-                dmInput.value = '';
-            }
-        };
-    }
+function addDmMessage(from, message) {
+    var li = document.createElement('li');
+    li.textContent = from + ': ' + message;
+    if (from === currentUsername) li.className += ' me';
+    dmMessages.appendChild(li);
+    dmMessages.scrollTop = dmMessages.scrollHeight;
+}
 
-    // --- Private Chat List ---
-    function startPrivateChat(username) {
-        if (!privateChats[username]) {
-            privateChats[username] = { username: username, messages: [] };
-            addPrivateChat(username);
+// Send DM message (text or with image)
+if (dmForm) {
+    dmForm.onsubmit = function(e) {
+        e.preventDefault();
+        var text = dmInput.value.trim();
+        if (!text && !dmAttachedFile) return;
+        const chatObj = privateChats[dmTarget];
+        if (!chatObj) return;
+
+        // For image sending, you would extend this logic with FormData and proper multipart handling
+        if (dmAttachedFile) {
+            var formData = new FormData();
+            formData.append('from_user', currentUsername);
+            formData.append('to_user', dmTarget);
+            formData.append('message', text);
+            formData.append('image', dmAttachedFile);
+
+            fetch('/private/messages', { method: 'POST', body: formData })
+                .then(function(res) {
+                    if (res.ok) {
+                        addDmMessage(currentUsername, text || '[Image]');
+                        dmInput.value = '';
+                        dmImagePreview.innerHTML = '';
+                        dmFileInput.value = '';
+                        dmAttachedFile = null;
+                    } else {
+                        alert('Failed to send message.');
+                    }
+                })
+                .catch(function(err) {
+                    alert('Error sending message: ' + err.message);
+                });
+        } else {
+            // Save message to DM room via REST API
+            fetch('/dm-messages/' + encodeURIComponent(chatObj.dmRoom), {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ from_user: currentUsername, message: text })
+            })
+            .then(res => {
+                if (res.ok) {
+                    addDmMessage(currentUsername, text);
+                    dmInput.value = '';
+                    dmImagePreview.innerHTML = '';
+                    dmFileInput.value = '';
+                    dmAttachedFile = null;
+                } else {
+                    alert('Failed to send message.');
+                }
+            })
+            .catch(function(err) {
+                alert('Error sending message: ' + err.message);
+            });
         }
-        openDmOverlay(username);
-    }
-    window.startPrivateChat = startPrivateChat;
+    };
+}
+
+    function startPrivateChat(username) {
+    if (username === currentUsername) { alert("You can't DM yourself."); return; }
+    // Always request or create room from backend
+    fetch('/dm-room', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({ userA: currentUsername, userB: username })
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.success && data.room) {
+            const dmRoomName = data.room;
+            if (!privateChats[username]) {
+                privateChats[username] = { username, dmRoom: dmRoomName, messages: [] };
+                addPrivateChat(username);
+                socket.emit('request-create-dm', { from: currentUsername, to: username, room: dmRoomName });
+            }
+            openDmOverlay(username);
+        }
+    });
+}
+window.startPrivateChat = startPrivateChat;
 
     function addPrivateChat(username) {
         var listItem = document.createElement('li');
@@ -2182,6 +2219,44 @@ if (btnCreateRoom) {
 }
 
 populateRooms();
+
+const btnDMs = document.getElementById('btnDMs');
+const btnRooms = document.getElementById('btnRooms');
+const roomList = document.getElementById('roomList');
+
+// Function to show DMs in sidebar
+function showDMListSidebar() {
+    roomList.innerHTML = '';
+    roomList.style.display = 'block'; // Ensure visibility
+    Object.keys(privateChats).forEach(username => {
+        const li = document.createElement('li');
+        li.textContent = username;
+        li.onclick = function() {
+            openDmOverlay(username);
+        };
+        roomList.appendChild(li);
+    });
+}
+
+// Restore room list
+function showRoomListSidebar() {
+    roomList.innerHTML = '';
+    rooms.forEach(roomName => {
+        const li = document.createElement('li');
+        li.textContent = roomName;
+        li.onclick = () => openChat(roomName);
+        roomList.appendChild(li);
+    });
+}
+
+// Attach button handlers
+if (btnDMs) {
+    btnDMs.onclick = showDMListSidebar;
+}
+if (btnRooms) {
+    btnRooms.onclick = showRoomListSidebar;
+}
+
 // --- Socket Listeners ---
 socket.on('loadMessages', function(msgs) {
     messages.innerHTML = '';
