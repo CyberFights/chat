@@ -1339,7 +1339,7 @@ window.addEventListener('DOMContentLoaded', function() {
       <!-- Move form below the messages and members -->
       <form id="form" style="margin-top:10px; display:flex; gap:10px;" onSubmit="return false;">
         <input id="m" autocomplete="off" placeholder="Type your message..." style="flex-grow:1; padding:8px; border-radius:4px; border:none;" />
-        <button style="padding:8px 12px; border-radius:4px; background:limegreen; color:white; border:none;">Send</button>
+        <button id="sendBtn" style="padding:8px 12px; border-radius:4px; background:limegreen; color:white; border:none;">Send</button>
       </form>
     </div>
   </div>
@@ -2098,24 +2098,26 @@ function closeChat() {
 window.closeChat = closeChat;
 
     
-if (form) {
-    form.addEventListener('submit', function(e) {
-        e.preventDefault();
-        const now = new Date();
-        const hours = now.getHours();
-        const minutes = now.getMinutes();
-        const timestamp = `${hours}:${minutes}`;
-        if (currentRoom && input.value.trim() && isLoggedIn) {
-            socket.emit('chat message', {
-                room: currentRoom,
-                username: currentUsername,
-                message: input.value,
-                timestamp: timestamp
-            });
-            input.value = '';
-        }
-    });
+const sendBtn = document.getElementById('sendBtn');
+if (sendBtn) {
+  sendBtn.addEventListener('click', function () {
+    const now = new Date();
+    const hours = now.getHours().toString().padStart(2,'0');
+    const minutes = now.getMinutes().toString().padStart(2,'0');
+    const timestamp = `${hours}:${minutes}`;
+
+    if (currentRoom && input.value.trim() && isLoggedIn) {
+      socket.emit('chat message', {
+        room: currentRoom,
+        username: currentUsername,
+        message: input.value,
+        timestamp: timestamp
+      });
+      input.value = '';
+    }
+  });
 }
+
 function scrollToBottom() {
     messages.scrollTop = messages.scrollHeight;
 }
