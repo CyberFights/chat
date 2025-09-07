@@ -1770,7 +1770,7 @@ document.addEventListener('DOMContentLoaded', function() {
       var supportForm =  document.getElementById('supportForm');
     if(supportForm) {
         supportForm.addEventListener('submit', function(e) {
-    event.preventDefault();
+    e.preventDefault();
     var submittedBy = document.getElementById('submittedBy').value;
     var reportedPerson = document.getElementById('reportedPerson').value;
     var topic = document.getElementById('topic').value;
@@ -1907,7 +1907,7 @@ document.addEventListener('DOMContentLoaded', function() {
     var settingsForm = document.getElementById('settingsForm');
     if (settingsForm) {
         settingsForm.addEventListener('submit', function(event) {
-            event.preventDefault();
+            e.preventDefault();
             var unameElem = document.getElementById('username');
             currentUsername = (unameElem && unameElem.value) ? unameElem.value : 'User';
             var profilePicElem = document.getElementById('imagePreview');
