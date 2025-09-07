@@ -2256,7 +2256,7 @@ if (btnRooms) {
 }
 
 // --- Socket Listeners ---
-socket.on('loadMessages', (msgs) => {
+socket.on('loadMessages', function(msgs) {
   // Optional: sort to ensure order by timestamp
   msgs.sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
 
