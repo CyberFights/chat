@@ -2256,15 +2256,19 @@ if (btnRooms) {
 }
 
 // --- Socket Listeners ---
-socket.on('loadMessages', function(msgs) {
-    messages.innerHTML = '';
-    for (var i = 0; i < msgs.length; i++) {
-        var item = document.createElement('li');
-        item.textContent = msgs[i];
-        messages.appendChild(item);
-    }
-    scrollToBottom();
+socket.on('loadMessages', (msgs) => {
+  // Optional: sort to ensure order by timestamp
+  msgs.sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
+
+  messages.innerHTML = '';
+  msgs.forEach((msg) => {
+    const li = document.createElement('li');
+    li.textContent = `[${msg.timestamp}] ${msg.username}: ${msg.message}`;
+    messages.appendChild(li);
+  });
+  scrollToBottom();
 });
+
 socket.on('chat message', function(data) {
     var item = document.createElement('li');
     item.style.textAlign = 'left';
