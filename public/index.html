@@ -1886,12 +1886,12 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         };
     }
-
+let isLoggedIn = sessionStorage.getItem('isLoggedIn');
     // --- Chat room images click ---
     if (images) {
         for (var i = 0; i < images.length; i++) {
             images[i].addEventListener('click', function() {
-                if (!sessionStorage.getItem('isLoggedIn') {
+                if (!isLoggedIn) {
                     alert('Please log in before entering any chat room!');
                     openPopup('popup0');
                     return;
@@ -2131,7 +2131,7 @@ if (sendBtn) {
     const minutes = now.getMinutes().toString().padStart(2,'0');
     const timestamp = `${hours}:${minutes}`;
 
-    if (currentRoom && input.value.trim() && sessionStorage.getItem('isLoggedIn') {
+    if (currentRoom && input.value.trim() && isLoggedIn) {
       socket.emit('chat message', {
         room: currentRoom,
         username: currentUsername,
