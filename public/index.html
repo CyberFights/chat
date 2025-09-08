@@ -2372,7 +2372,7 @@ socket.on('discord message', function(data) {
             memberItem.className = 'member-item';
             // FIX: Ensure template literal is closed and does not span broken/missing backticks
             memberItem.innerHTML =
-                `<img src="${sessionStorage.getItem('profileImageURL') || ''}" alt="${member.username}">
+                `<img src="${member.profileImageURL || ''}" alt="${member.username}">
                 <span class="profile-link" style="cursor:pointer;">${member.username}</span>`;
 
             memberItem.querySelector('.profile-link').addEventListener('click', function(e) {
@@ -2411,7 +2411,13 @@ socket.on('private message', function(obj) {
         // Optionally play a sound for notification here
     }
 });
-
+socket.on('create-dm',  function addPrivateChat(from) {
+        var listItem = document.createElement('li');
+        listItem.textContent = from;
+        listItem.addEventListener('click', function() { openDmOverlay(from); });
+        if (privateChatsList) privateChatsList.appendChild(listItem);
+    }
+});
 
 </script>
 </body>
