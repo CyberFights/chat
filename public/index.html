@@ -1214,7 +1214,7 @@ body:hover { cursor:url('cursor-image.png'), auto; }
 <script src="/socket.io/socket.io.js"></script>
 <script>
 let isAgeVerified = false;
-let isLoggedIn = false;
+sessionStorage.setItem('isLoggedIn', 'false');
 
 window.addEventListener('DOMContentLoaded', function() {
     function launchApp() {
@@ -1659,7 +1659,7 @@ function openProfile(username) {
     fetch('/user/' + username)
         .then(function(response) { return response.json(); })
         .then(function(data) {
-            localStorage.setItem('receiver', data.username);
+            sessionStorage.setItem('receiver', data.username);
             var img = data.imagePath;
             var infoElem = document.getElementById('profile-info');
             var statsElem = document.getElementById('profile-stats');
@@ -1701,13 +1701,13 @@ function toggleOpen() {
 }
 window.toggleOpen = toggleOpen;
 
-// --- LocalStorage Logic ---
+// --- sessionStorage Logic ---
 function loadProfileFromStorage() {
-    var savedUsername = localStorage.getItem('username');
-    var savedImage = localStorage.getItem('profileImage');
+    var savedUsername = sessionStorage.getItem('username');
+    var savedImage = sessionStorage.getItem('profileImage');
     if (savedUsername) {
         currentUsername = savedUsername;
-        isLoggedIn = true;
+        sessionStorage.setItem('isLoggedIn', 'true');
         var profileHtml = '<p>Welcome back, ' + currentUsername + '</p>';
         if (savedImage) {
             var imgUrl = savedImage.indexOf('http') === 0 ? savedImage : window.location.origin + '/' + savedImage;
@@ -1762,13 +1762,13 @@ document.addEventListener('DOMContentLoaded', function() {
             .then(function(res) { return res.json(); })
             .then(function(data) {
                 if (data.success && data.user) {
-                    localStorage.setItem('username', data.user.username || '');
-                    localStorage.setItem('profileImage', data.user.imagePath || '');
-                    localStorage.setItem('color', data.user.color || 'white');
-                    localStorage.setItem('stats', data.user.stats || '');
-                    localStorage.setItem('info', data.user.info || '');
+                    sessionStorage.setItem('username', data.user.username || '');
+                    sessionStorage.setItem('profileImage', data.user.imagePath || '');
+                    sessionStorage.setItem('color', data.user.color || 'white');
+                    sessionStorage.setItem('stats', data.user.stats || '');
+                    sessionStorage.setItem('info', data.user.info || '');
                     currentUsername = data.user.username;
-                    isLoggedIn = true;
+                    sessionStorage.setItem('isLoggedIn', 'true');
                     alert('Login successful! Welcome, ' + currentUsername);
                     var profileElem = document.getElementById('profile');
                     if (data.user.imagePath && profileElem) {
@@ -1777,9 +1777,9 @@ document.addEventListener('DOMContentLoaded', function() {
                             : window.location.origin + data.user.imagePath;
                         profileElem.innerHTML =
                             '<p>Welcome, ' + currentUsername + '</p>' +
-                            '<p>' + localStorage.getItem('info') + '</p>' + 
+                            '<p>' + sessionStorage.getItem('info') + '</p>' + 
                             '<img src="' + profilePicUrl + '" alt="Profile Picture" style="max-width:100px; border-radius:50%;">';
-                        localStorage.setItem('profileImageURL', profilePicUrl || '');
+                        sessionStorage.setItem('profileImageURL', profilePicUrl || '');
                     }
                     closePopup(null, 'popup0');
                 } else {
@@ -1891,7 +1891,7 @@ document.addEventListener('DOMContentLoaded', function() {
     if (images) {
         for (var i = 0; i < images.length; i++) {
             images[i].addEventListener('click', function() {
-                if (!isLoggedIn) {
+                if (!sessionStorage.getItem('isLoggedIn') {
                     alert('Please log in before entering any chat room!');
                     openPopup('popup0');
                     return;
@@ -2131,7 +2131,7 @@ if (sendBtn) {
     const minutes = now.getMinutes().toString().padStart(2,'0');
     const timestamp = `${hours}:${minutes}`;
 
-    if (currentRoom && input.value.trim() && isLoggedIn) {
+    if (currentRoom && input.value.trim() && sessionStorage.getItem('isLoggedIn') {
       socket.emit('chat message', {
         room: currentRoom,
         username: currentUsername,
@@ -2301,7 +2301,7 @@ socket.on('chat message', function(data) {
 
     var username = document.createElement('strong');
     username.textContent = data.username;
-    var userColor = localStorage.getItem('color') || '#007bff';
+    var userColor = sessionStorage.getItem('color') || '#007bff';
     username.style.color = userColor;
     username.style.marginLeft = '5px';
 
@@ -2322,7 +2322,7 @@ socket.on('chat message', function(data) {
         body: JSON.stringify({
             username: data.username,
             message: data.message,
-            avatarUrl: localStorage.getItem('profileImageURL') || ''
+            avatarUrl: sessionStorage.getItem('profileImageURL') || ''
         })
     }).catch(err => console.error('Failed to send chat message to backend:', err));
 });
@@ -2338,7 +2338,7 @@ socket.on('discord message', function(data) {
 
     var username = document.createElement('strong');
     username.textContent = data.username;
-    var userColor = localStorage.getItem('color') || '#007bff';
+    var userColor = sessionStorage.getItem('color') || '#007bff';
     username.style.color = userColor;
     username.style.marginLeft = '5px';
 
@@ -2364,7 +2364,7 @@ socket.on('discord message', function(data) {
             memberItem.className = 'member-item';
             // FIX: Ensure template literal is closed and does not span broken/missing backticks
             memberItem.innerHTML =
-                `<img src="${localStorage.getItem('profileImageURL') || ''}" alt="${member.username}">
+                `<img src="${sessionStorage.getItem('profileImageURL') || ''}" alt="${member.username}">
                 <span class="profile-link" style="cursor:pointer;">${member.username}</span>`;
 
             memberItem.querySelector('.profile-link').addEventListener('click', function(e) {
