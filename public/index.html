@@ -1409,7 +1409,8 @@ window.addEventListener('DOMContentLoaded', function() {
 <div id="popup5" class="popup-overlay" style="display:none;" onclick="closePopup(event, 'popup5')">
   <div class="popup-box" onclick="event.stopPropagation();">
     <button class="close-btn" onclick="closePopup(event, 'popup5')">&times;</button>
-    <h3>Register</h3>
+      <div class="holo-container">
+          <h3 class="holo-text">Register</h3>
 <form id="registerForm" enctype="multipart/form-data">
   <input type="text" name="username" placeholder="Username" required /> <br>
   <input type="password" name="password" placeholder="Password" required /> <br>
@@ -1436,6 +1437,7 @@ window.addEventListener('DOMContentLoaded', function() {
   <button type="submit" style="background:green;color:white;width:100%;border-radius:8px;font-size:18px;">Register</button>
 </form>
 </div>
+  </div>
 </div>
 
 <!-- Profile Popup Component (fixed size, profile always under search and close, does not resize on search) -->
