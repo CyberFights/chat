@@ -1015,6 +1015,27 @@
     }
 /* Optional: custom cursor */
 body:hover { cursor:url('cursor-image.png'), auto; }
+
+#popup5 .popup-box form#registerForm > * {
+    margin-top: 15px;
+    margin-bottom: 0;
+    width: 100%;
+    box-sizing: border-box;
+    display: block;
+}
+#popup5 .popup-box form#registerForm label {
+    margin-top: 10px;
+    margin-bottom: 0;
+    font-weight: bold;
+}
+#registerImagePreviewContainer {
+    margin-top: 15px !important;
+    margin-bottom: 15px !important;
+}
+#popup5 .popup-box form#registerForm button[type="submit"] {
+    margin-top: 20px;
+}
+
     /* --- Mobile Responsive Styles --- */
     @media (max-width: 640px) {
         html, body {
@@ -1364,13 +1385,17 @@ window.addEventListener('DOMContentLoaded', function() {
 <div id="popup0" class="popup-overlay" style="display:none;" onclick="closePopup(event, 'popup0')">
   <div class="popup-box" onclick="event.stopPropagation();">
     <button class="close-btn" onclick="closePopup(event, 'popup0')">&times;</button>
-    <h3>Login</h3>
+ <p class="holo-text">Login</p>
     <form id="loginForm" onSubmit="return false;">
+      <p class="holo-text">Username:</p>
       <input type="text" id="loginUsername" placeholder="Username" required />
+      <p class="holo-text">Password:</p>
       <input type="password" id="loginPassword" placeholder="Password" required /> <br>
+<br>
       <button type="submit">Login</button>
     </form>
-    <br>
+  
+    <p class="holo-text">Or</p>
     <button id="showRegisterBtn" type="button" style="margin-top:15px; width:100%; background: #0077ff; color: #fff; border-radius:8px; font-size:16px;" onclick="openPopup('popup5')">Register</button>
   </div>
 </div>
