@@ -2363,24 +2363,48 @@ socket.on('discord message', function(data) {
     scrollToBottom();
 });
 
- socket.on('updateMembers', function(members) {
-        membersList.innerHTML = '';
-        for (var i = 0; i < members.length; i++) {
-            var member = members[i];
-            var memberItem = document.createElement('li');
-            memberItem.style.backgroundColor = 'grey';
-            memberItem.className = 'member-item';
-            // FIX: Ensure template literal is closed and does not span broken/missing backticks
-            memberItem.innerHTML =
-                `<img src="${member.profileImageURL || ''}" alt="${member.username}">
-                <span class="profile-link" style="cursor:pointer;">${member.username}</span>`;
+ socket.on('updateMembers', async function(members) {
+  const membersList = document.getElementById('members-list');
+  membersList.innerHTML = '';
 
-            memberItem.querySelector('.profile-link').addEventListener('click', function(e) {
-                e.stopPropagation();
-                openProfile(member.username);
-            });
+  // Fetch user info for each member in parallel
+  const membersInfo = await Promise.all(members.map(async (member) => {
+    try {
+      const response = await fetch(`/user/${member.username}`);
+      if (!response.ok) throw new Error('Fetch error');
+      const userInfo = await response.json();
+      return {
+        username: member.username,
+        profilePic: userInfo.imagePath || 'default-profile.png' // fallback image
+      };
+    } catch (e) {
+      // Return member with fallback image on error
+      return {
+        username: member.username,
+        profilePic: 'default-profile.png'
+      };
+    }
+  }));
 
-            let dmBtn = document.createElement('button');
+  // Render updated members list with fetched info
+  membersInfo.forEach(member => {
+    const memberItem = document.createElement('li');
+    memberItem.className = 'member-item';
+
+    const img = document.createElement('img');
+    img.src = member.profilePic;
+    img.alt = member.username;
+    img.style.width = '30px';
+    img.style.height = '30px';
+    img.style.borderRadius = '50%';
+    img.style.marginRight = '10px';
+
+    const nameSpan = document.createElement('span');
+    nameSpan.textContent = member.username;
+
+    memberItem.appendChild(img);
+    memberItem.appendChild(nameSpan);
+let dmBtn = document.createElement('button');
             dmBtn.textContent = 'Msg';
             dmBtn.onclick = function(e) {
                 e.stopPropagation();
@@ -2396,10 +2420,12 @@ socket.on('discord message', function(data) {
             memberItem.appendChild(br);
             memberItem.appendChild(dmBtn);
             memberItem.appendChild(blkBtn);
+    membersList.appendChild(memberItem);
+  });
+});
 
-            membersList.appendChild(memberItem);
-        }
-    });
+
+            
 socket.on('private message', function(obj) {
     var from = obj.from;
     var message = obj.message;
