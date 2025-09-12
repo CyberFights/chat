@@ -2411,12 +2411,45 @@ socket.on('private message', function(obj) {
         // Optionally play a sound for notification here
     }
 });
-socket.on('create-dm',  function addPrivateChat(from) {
-        var listItem = document.createElement('li');
-        listItem.textContent = from;
-        listItem.addEventListener('click', function() { openDmOverlay(from); });
-        if (privateChatsList) privateChatsList.appendChild(listItem);
-    });
+
+function renderPrivateChatsList() {
+  const privateChatsList = document.getElementById('private-chats');
+  privateChatsList.innerHTML = '';
+  Object.keys(privateChats).forEach(username => {
+    const chatObj = privateChats[username];
+    const listItem = document.createElement('li');
+    listItem.className = 'private-chat-item';
+    listItem.textContent = username;
+
+    // DM button
+    const msgBtn = document.createElement('button');
+    msgBtn.textContent = 'Msg';
+    msgBtn.style.marginLeft = '12px';
+    msgBtn.onclick = function(e) {
+      e.stopPropagation();
+      openDmOverlay(username); // Or your function to open DM
+    };
+
+    listItem.appendChild(msgBtn);
+
+    // Clicking username (optional: open DM overlay too)
+    listItem.onclick = function() {
+      openDmOverlay(username);
+    };
+
+    privateChatsList.appendChild(listItem);
+  });
+}
+
+socket.on('create-dm', function({ from, room }) {
+  // Ensure chat exists in privateChats
+  if (!privateChats[from]) {
+    privateChats[from] = { username: from, dmRoom: room, messages: [] };
+    renderPrivateChatsList();
+  }
+  openDmOverlay(from); // Optionally auto-open DM overlay
+});
+
 
 </script>
 </body>
