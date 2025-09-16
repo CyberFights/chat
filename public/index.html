@@ -1257,7 +1257,7 @@ body:hover { cursor:url('cursor-image.png'), auto; }
 <div class="container" id="landingPage">
   <div class="content">
     <button id="enterBtn" style="color:black; background-color:skyblue;">
-      Click anywhere to enter the ring!
+      Click here to enter the ring!
     </button>
   </div>
 </div>
@@ -1583,7 +1583,10 @@ let dmAttachedFile = null;
 let unseenPrivateMessages = 0;
 let privateChats = {};
 let isAgeVerified = false;
-
+const enterBtn = document.getElementById('enterBtn');
+    const landingPage = document.getElementById('landingPage');
+    const hiddenPage = document.getElementById('hiddenPage');
+    
 // DOM cache
 let images, overlay, closeBtn, messages, form, input, roomTitle, membersList,
     dmSidebar, dmList, dmBox, dmUserTitle, dmMessages, dmForm, dmInput,
@@ -1648,6 +1651,24 @@ function cacheDOM() {
 
 // --- Alert helper ---
 function showError(msg) { alert(msg); }
+
+    if (enterBtn && landingPage && hiddenPage) {
+        enter.Btn.addEventListener('click', function() {
+            if (!isAgeVerified) {
+                const userConfirmed = confirm("Are you 18 years or older?");
+                if (userConfirmed) {
+                    isAgeVerified = true;
+                landingPage.classList.add("fade-out");
+                setTimeout(() => {
+                    landingPage.style.display = "none";
+                    document.getElementById("hiddenPage").style.display = "block";
+                }, 2000);
+  } else {
+ alert("You must be at least 18 years old to proceed.");
+ }
+   }
+    });
+    }
 
 // --- DM List/Logic ---
 function renderDmList() {
