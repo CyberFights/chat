@@ -1653,7 +1653,7 @@ function cacheDOM() {
 function showError(msg) { alert(msg); }
 
     if (enterBtn && landingPage && hiddenPage) {
-        enter.Btn.addEventListener('click', function() {
+        enterBtn.addEventListener('click', function() {
             if (!isAgeVerified) {
                 const userConfirmed = confirm("Are you 18 years or older?");
                 if (userConfirmed) {
