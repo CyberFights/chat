@@ -2212,20 +2212,6 @@ socket.on('updateMembers', async function(members) {
 
 document.addEventListener('DOMContentLoaded', cacheDOM);
 
-privateChatsList.appendChild(listItem);
-  });
-}
-
-socket.on('create-dm', function({ from, room }) {
-  // Ensure chat exists in privateChats
-  if (!privateChats[from]) {
-    privateChats[from] = { username: from, dmRoom: room, messages: [] };
-    renderPrivateChatsList();
-  }
-  openDmOverlay(from); // Optionally auto-open DM overlay
-});
-
-
 </script>
 </body>
 </html>
