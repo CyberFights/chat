@@ -1588,64 +1588,55 @@ const enterBtn = document.getElementById('enterBtn');
     const hiddenPage = document.getElementById('hiddenPage');
     const loginForm = document.getElementById('loginForm');
     const images = document.querySelectorAll('.image-grid img');
-// DOM cache
-let overlay, closeBtn, messages, form, input, roomTitle, membersList,
-    dmSidebar, dmList, dmBox, dmUserTitle, dmMessages, dmForm, dmInput,
-    dmFileInput, dmAttachBtn, dmImagePreview, privateChatBadge, openPrivateChatsBtn, showRegisterBtn, registerForm, image, registerImagePreview, profile,
-    imageUpload, imagePreview, settingsForm, profilepic1, popup0, popup5,
-    roomList, btnDMs, btnRooms, btnCreateRoom, privateChatsList, supportForm,
-    searchBar, usernameElem, profileImg, ageElem, statsElem, langElem, infoElem, errorMsg,
-    dmOverlay, dmCloseBtn, dmTitle;
 
-function cacheDOM() {
-    overlay = document.getElementById('chatOverlay');
-    closeBtn = document.getElementById('closeBtn');
-    messages = document.getElementById('messages');
-    form = document.getElementById('form');
-    input = document.getElementById('m');
-    roomTitle = document.getElementById('roomTitle');
-    membersList = document.getElementById('members-list');
-    dmSidebar = document.getElementById('dmSidebar');
-    dmList = document.getElementById('dmList');
-    dmBox = document.getElementById('dmBox');
-    dmUserTitle = document.getElementById('dmUserTitle');
-    dmMessages = document.getElementById('dmMessages');
-    dmForm = document.getElementById('dmForm');
-    dmInput = document.getElementById('dmInput');
-    dmFileInput = document.getElementById('dmFileInput');
-    dmAttachBtn = document.getElementById('dmAttachBtn');
-    dmImagePreview = document.getElementById('dmImagePreview');
-    privateChatBadge = document.getElementById('privateChatBadge');
-    openPrivateChatsBtn = document.getElementById('openPrivateChatsBtn');
-    showRegisterBtn = document.getElementById('showRegisterBtn');
-    registerForm = document.getElementById('registerForm');
-    image = document.getElementById('image');
-    registerImagePreview = document.getElementById('registerImagePreview');
-    profile = document.getElementById('profile');
-    imageUpload = document.getElementById('imageUpload');
-    imagePreview = document.getElementById('imagePreview');
-    settingsForm = document.getElementById('settingsForm');
-    profilepic1 = document.getElementById('profilepic1');
-    popup0 = document.getElementById('popup0');
-    popup5 = document.getElementById('popup5');
-    roomList = document.getElementById('roomList');
-    btnDMs = document.getElementById('btnDMs');
-    btnRooms = document.getElementById('btnRooms');
-    btnCreateRoom = document.getElementById('btnCreateRoom');
-    privateChatsList = document.getElementById('private-chats');
-    supportForm = document.getElementById('supportForm');
-    searchBar = document.getElementById('searchBar');
-    usernameElem = document.getElementById('username');
-    profileImg = document.getElementById('profile-img');
-    ageElem = document.getElementById('age');
-    statsElem = document.getElementById('stats');
-    langElem = document.getElementById('lang');
-    infoElem = document.getElementById('info');
-    errorMsg = document.getElementById('errorMsg');
-    dmOverlay = document.getElementById('dmOverlay');
-    dmCloseBtn = document.getElementById('dmCloseBtn');
-    dmTitle = document.getElementById('dmTitle');
-}
+const overlay = document.getElementById('chatOverlay');
+    const closeBtn = document.getElementById('closeBtn');
+   const  messages = document.getElementById('messages');
+    const form = document.getElementById('form');
+    const input = document.getElementById('m');
+   const roomTitle = document.getElementById('roomTitle');
+   const membersList = document.getElementById('members-list');
+   const dmSidebar = document.getElementById('dmSidebar');
+   const dmList = document.getElementById('dmList');
+   const dmBox = document.getElementById('dmBox');
+   const dmUserTitle = document.getElementById('dmUserTitle');
+   const dmMessages = document.getElementById('dmMessages');
+   const dmForm = document.getElementById('dmForm');
+   const dmInput = document.getElementById('dmInput');
+   const dmFileInput = document.getElementById('dmFileInput');
+   const dmAttachBtn = document.getElementById('dmAttachBtn');
+   const dmImagePreview = document.getElementById('dmImagePreview');
+   const privateChatBadge = document.getElementById('privateChatBadge');
+   const openPrivateChatsBtn = document.getElementById('openPrivateChatsBtn');
+   const showRegisterBtn = document.getElementById('showRegisterBtn');
+   const registerForm = document.getElementById('registerForm');
+   const image = document.getElementById('image');
+   const registerImagePreview = document.getElementById('registerImagePreview');
+   const profile = document.getElementById('profile');
+   const imageUpload = document.getElementById('imageUpload');
+   const imagePreview = document.getElementById('imagePreview');
+   const settingsForm = document.getElementById('settingsForm');
+   const profilepic1 = document.getElementById('profilepic1');
+   const popup0 = document.getElementById('popup0');
+   const popup5 = document.getElementById('popup5');
+   const roomList = document.getElementById('roomList');
+   const btnDMs = document.getElementById('btnDMs');
+   const btnRooms = document.getElementById('btnRooms');
+   const btnCreateRoom = document.getElementById('btnCreateRoom');
+   const privateChatsList = document.getElementById('private-chats');
+   const supportForm = document.getElementById('supportForm');
+   const searchBar = document.getElementById('searchBar');
+   const usernameElem = document.getElementById('username');
+   const profileImg = document.getElementById('profile-img');
+   const ageElem = document.getElementById('age');
+   const statsElem = document.getElementById('stats');
+   const langElem = document.getElementById('lang');
+   const infoElem = document.getElementById('info');
+   const errorMsg = document.getElementById('errorMsg');
+   const dmOverlay = document.getElementById('dmOverlay');
+   const dmCloseBtn = document.getElementById('dmCloseBtn');
+   const dmTitle = document.getElementById('dmTitle');
+
 
 // --- Alert helper ---
 function showError(msg) { alert(msg); }
