@@ -7,7 +7,6 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
 <style>
     @import url('https://fonts.googleapis.com/css?family=Lato');
-
     body {
         font-family: 'Lato', Arial, sans-serif;
         margin: 40px;
@@ -332,7 +331,7 @@
         object-fit: cover;
     }
 
-    .overlay {
+.overlay {
         position: fixed;
         top: 0;
         left: 0;
@@ -351,14 +350,63 @@
         border-radius: 10px;
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
         width: 90%;
-        max-width: 900px;
+        max-width: 1200px;
         position: relative;
         border: 8px solid grey;
-        display: grid;
-        grid-template-columns: 4fr 1fr;
-        grid-template-rows: 1fr auto;
-        gap: 0 0;
+        display: flex;
+        gap: 0px;
         color: white;
+        min-height: 500px;
+    }
+    /* ---- DM sidebar ---- */
+    #dmSidebar {
+        width: 220px;
+        min-width: 160px;
+        background: #191944;
+        color: white;
+        display: flex;
+        flex-direction: column;
+        border-right: 2px solid #333;
+        box-sizing: border-box;
+        height: 100%;
+    }
+    #dmList li {
+        cursor: pointer;
+        padding: 6px 8px;
+        border-radius: 4px;
+        background: #232366;
+        margin-bottom: 4px;
+        transition: background 0.2s;
+    }
+    #dmList li:hover {
+        background: #003090;
+    }
+    #dmBox {
+        flex: 1 1 auto;
+        display: none;
+        flex-direction: column;
+        padding:8px;
+    }
+    #dmUserTitle {
+        margin-bottom:10px;
+    }
+    #dmMessages {
+        list-style:none;
+        padding:0;
+        max-height:100px;
+        overflow-y:auto;
+        background:#eee;
+        border-radius:8px;
+        margin-bottom:12px;
+        color:#222;
+    }
+    #dmMessages li.me {
+        background: #c6e1fc; text-align:right;
+    }
+    #dmImagePreview img {
+        max-height: 60px;
+        border-radius: 8px;
+        margin-right: 8px;
     }
 
     #messages-column {
@@ -789,23 +837,6 @@
         position: relative;
         box-shadow: inset -6px -6px 6px rgba(10,10,15,0.5), inset 6px -6px 6px rgba(200, 200, 205, 0.4), inset 2px 2px 2px rgba(200,200,205,0.2);
         z-index:2;
-    }
-
-    #dmMessages li {
-        margin-bottom: 6px;
-        padding: 6px 8px;
-        background: #ddd;
-        border-radius: 6px;
-        font-size: 0.96em;
-    }
-    #dmMessages li.me {
-        background: #c6e1fc;
-        text-align: right;
-    }
-    #dmImagePreview img {
-        max-height: 100px;
-        border-radius: 8px;
-        margin-right: 8px;
     }
 
     #privateChatBadge {
@@ -1338,39 +1369,56 @@ window.addEventListener('DOMContentLoaded', function() {
 
     
   <div class="overlay" id="chatOverlay" style="display:none;">
-  <div class="overlay-content" style="display: flex;">
-    <!-- Sidebar container -->
-    <div id="chatSidebar" style="width:170px; background-color:#111; color:white; display:flex; flex-direction:column; padding:10px; box-sizing:border-box; border-right:1px solid #333;">
-      <div style="display:flex; justify-content:space-between; margin-bottom:12px;">
-        <button id="btnDMs" style="flex:1; margin-right:8px; padding:8px; background-color:#222; border:none; color:white; cursor:pointer;">DMs</button>
-        <button id="btnRooms" style="flex:1; padding:8px; background-color:#222; border:none; color:white; cursor:pointer;">Rooms</button>
+    <div class="overlay-content">
+      <!-- ----- NEW DM SIDEBAR COLUMN ----- -->
+      <div id="dmSidebar">
+        <h3 style="margin:12px 0 10px 12px;">DMs</h3>
+        <ul id="dmList" style="list-style:none; padding:0 7px; margin:0 9px 0 0; max-height:150px; overflow-y:auto;">
+          <!-- DM users will appear here dynamically -->
+        </ul>
+        <div id="dmBox" style="flex:1 1 auto; display:none; flex-direction:column;">
+          <h4 id="dmUserTitle"></h4>
+          <ul id="dmMessages"></ul>
+          <form id="dmForm" style="display:flex; gap:8px; align-items:center;" onsubmit="return false;">
+            <input id="dmInput" autocomplete="off" placeholder="Type your private message..." style="flex:1; padding:7px; border-radius:5px; border:1px solid #ccc;" />
+            <input type="file" id="dmFileInput" accept="image/*" style="display:none;" />
+            <button type="button" id="dmAttachBtn" title="Attach" style="background:none; border:none; cursor:pointer; font-size:18px;">📎</button>
+            <button type="submit" style="padding:8px 14px; border-radius:6px; background:#1700fb; color:#fff; border:none;">Send</button>
+          </form>
+          <div id="dmImagePreview" style="margin-top:8px; max-height:60px;"></div>
+        </div>
       </div>
-      <button id="btnCreateRoom" style="margin-bottom:12px; padding:8px; background-color:#3700ff; border:none; color:white; cursor:pointer; border-radius:6px;">Create New Room</button>
-      <ul id="roomList" style="list-style:none; padding:0; margin:0; overflow-y:auto; flex-grow:1;">
-        <!-- Rooms inserted dynamically -->
-      </ul>
-    </div>
+      <!-- ----- ROOM LIST SIDEBAR COLUMN ----- -->
+      <div id="chatSidebar" style="width:170px; background-color:#111; color:white; display:flex; flex-direction:column; padding:10px; box-sizing:border-box; border-right:1px solid #333;">
+        <div style="display:flex; justify-content:space-between; margin-bottom:12px;">
+          <button id="btnDMs" style="flex:1; margin-right:8px; padding:8px; background-color:#222; border:none; color:white; cursor:pointer;">DMs</button>
+          <button id="btnRooms" style="flex:1; padding:8px; background-color:#222; border:none; color:white; cursor:pointer;">Rooms</button>
+        </div>
+        <button id="btnCreateRoom" style="margin-bottom:12px; padding:8px; background-color:#3700ff; border:none; color:white; cursor:pointer; border-radius:6px;">Create New Room</button>
+        <ul id="roomList" style="list-style:none; padding:0; margin:0; overflow-y:auto; flex-grow:1;">
+          <!-- Rooms inserted dynamically -->
+        </ul>
+      </div>
 
-    <!-- Main chat area including messages, members, and input form -->
-    <div id="main-chat-content" style="flex-grow:1; display:flex; flex-direction:column; border-left:1px solid #444; padding-left:10px;">
-      <div style="display:flex; flex-direction:row; flex-grow:1;">
-        <div id="messages-column" style="flex-grow:2; display:flex; flex-direction:column;">
-          <div id="roomTitle"></div>
-          <ul id="messages" style="flex-grow:1; overflow-y:auto;"></ul>
+      <!-- ----- MAIN CHAT / ONLINE MEMBERS ----- -->
+      <div id="main-chat-content" style="flex-grow:1; display:flex; flex-direction:column; border-left:1px solid #444; padding-left:10px;">
+        <div style="display:flex; flex-direction:row; flex-grow:1;">
+          <div id="messages-column" style="flex-grow:2; display:flex; flex-direction:column;">
+            <div id="roomTitle"></div>
+            <ul id="messages" style="flex-grow:1; overflow-y:auto;"></ul>
+          </div>
+          <div id="online-members" style="color:white; width:30%; padding-left:10px;">
+            <b>Online:</b>
+            <ul id="members-list"></ul>
+          </div>
         </div>
-        <div id="online-members" style="color:white; width:30%; padding-left:10px;">
-          <b>Online:</b>
-          <ul id="members-list"></ul>
-        </div>
+        <form id="form" style="margin-top:10px; display:flex; gap:10px;" onSubmit="return false;">
+          <input id="m" autocomplete="off" placeholder="Type your message..." style="flex-grow:1; padding:8px; border-radius:4px; border:none;" />
+          <button id="sendBtn" style="padding:8px 12px; border-radius:4px; background:limegreen; color:white; border:none;">Send</button>
+        </form>
       </div>
-      <!-- Move form below the messages and members -->
-      <form id="form" style="margin-top:10px; display:flex; gap:10px;" onSubmit="return false;">
-        <input id="m" autocomplete="off" placeholder="Type your message..." style="flex-grow:1; padding:8px; border-radius:4px; border:none;" />
-        <button id="sendBtn" style="padding:8px 12px; border-radius:4px; background:limegreen; color:white; border:none;">Send</button>
-      </form>
     </div>
   </div>
-</div>
 
     <!-- Profile and Updates -->
     <div class="profile-section">
@@ -1550,22 +1598,9 @@ window.addEventListener('DOMContentLoaded', function() {
         <div onclick="toggleOpen()" class="bottom"></div>
     </div>
 </div>    
-<!-- DM Overlay -->
-<div id="dmOverlay" style="display:none; position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,0.6);justify-content:center;align-items:center;z-index:2000;">
-  <div style="background:#fff; color:#222;padding:24px; border-radius:12px; max-width:350px; position:relative;">
-    <span id="dmCloseBtn" style="font-size:2em;position:absolute;top:14px;right:20px;cursor:pointer;">&times;</span>
-    <h3 id="dmTitle" style="margin-bottom:10px;"></h3>
-    <ul id="dmMessages" style="list-style:none; padding:0; max-height:200px; overflow-y:auto; background:#eee; border-radius:8px; margin-bottom:12px;"></ul>
-    <form id="dmForm" style="display:flex; gap:8px; align-items:center;" onSubmit="return false;">
-      <input id="dmInput" autocomplete="off" placeholder="Type your private message..." style="flex:1; padding:8px; border-radius:5px; border:1px solid #ccc;" />
-      <input type="file" id="dmFileInput" accept="image/*" style="display:none;" />
-      <button type="button" id="dmAttachBtn" title="Attach Image" style="background:none; border:none; cursor:pointer; font-size:20px;">ð</button>
-      <button type="submit" style="padding:8px 14px; border-radius:6px; background:#1700fb; color:#fff; border:none;">Send</button>
-    </form>
-    <div id="dmImagePreview" style="margin-top:8px; max-height:120px;"></div>
-  </div>
-</div>
+
 <script>
+// -- app state and DOM cache --
 const socket = io();
 
 let currentUsername = '';
@@ -1574,11 +1609,17 @@ let dmTarget = null;
 let dmAttachedFile = null;
 let unseenPrivateMessages = 0;
 let privateChats = {};
-let currentUser = null;
+let isAgeVerified = false;
 
-
-// DOM elements (cache references)
-var images, overlay, closeBtn, messages, form, input, roomTitle, membersList, dmOverlay, dmTitle, dmMessages, dmForm, dmInput, dmFileInput, dmAttachBtn, dmImagePreview, dmCloseBtn, privateChatsList, openPrivateChatsBtn, privateChatBadge, sideTab;
+// DOM cache
+let images, overlay, closeBtn, messages, form, input, roomTitle, membersList,
+    dmSidebar, dmList, dmBox, dmUserTitle, dmMessages, dmForm, dmInput,
+    dmFileInput, dmAttachBtn, dmImagePreview, privateChatBadge, openPrivateChatsBtn,
+    loginForm, showRegisterBtn, registerForm, image, registerImagePreview, profile,
+    imageUpload, imagePreview, settingsForm, profilepic1, popup0, popup5,
+    roomList, btnDMs, btnRooms, btnCreateRoom, privateChatsList, supportForm,
+    searchBar, usernameElem, profileImg, ageElem, statsElem, langElem, infoElem, errorMsg,
+    dmOverlay, dmCloseBtn, dmTitle;
 
 function cacheDOM() {
     images = document.querySelectorAll('.image-grid img');
@@ -1589,154 +1630,210 @@ function cacheDOM() {
     input = document.getElementById('m');
     roomTitle = document.getElementById('roomTitle');
     membersList = document.getElementById('members-list');
-    dmOverlay = document.getElementById('dmOverlay');
-    dmTitle = document.getElementById('dmTitle');
+    dmSidebar = document.getElementById('dmSidebar');
+    dmList = document.getElementById('dmList');
+    dmBox = document.getElementById('dmBox');
+    dmUserTitle = document.getElementById('dmUserTitle');
     dmMessages = document.getElementById('dmMessages');
     dmForm = document.getElementById('dmForm');
     dmInput = document.getElementById('dmInput');
     dmFileInput = document.getElementById('dmFileInput');
     dmAttachBtn = document.getElementById('dmAttachBtn');
     dmImagePreview = document.getElementById('dmImagePreview');
-    dmCloseBtn = document.getElementById('dmCloseBtn');
-    privateChatsList = document.getElementById('private-chats');
-    openPrivateChatsBtn = document.getElementById('openPrivateChats');
     privateChatBadge = document.getElementById('privateChatBadge');
-    sideTab = document.getElementById('mySideTab');
+    openPrivateChatsBtn = document.getElementById('openPrivateChatsBtn');
+    loginForm = document.getElementById('loginForm');
+    showRegisterBtn = document.getElementById('showRegisterBtn');
+    registerForm = document.getElementById('registerForm');
+    image = document.getElementById('image');
+    registerImagePreview = document.getElementById('registerImagePreview');
+    profile = document.getElementById('profile');
+    imageUpload = document.getElementById('imageUpload');
+    imagePreview = document.getElementById('imagePreview');
+    settingsForm = document.getElementById('settingsForm');
+    profilepic1 = document.getElementById('profilepic1');
+    popup0 = document.getElementById('popup0');
+    popup5 = document.getElementById('popup5');
+    roomList = document.getElementById('roomList');
+    btnDMs = document.getElementById('btnDMs');
+    btnRooms = document.getElementById('btnRooms');
+    btnCreateRoom = document.getElementById('btnCreateRoom');
+    privateChatsList = document.getElementById('private-chats');
+    supportForm = document.getElementById('supportForm');
+    searchBar = document.getElementById('searchBar');
+    usernameElem = document.getElementById('username');
+    profileImg = document.getElementById('profile-img');
+    ageElem = document.getElementById('age');
+    statsElem = document.getElementById('stats');
+    langElem = document.getElementById('lang');
+    infoElem = document.getElementById('info');
+    errorMsg = document.getElementById('errorMsg');
+    dmOverlay = document.getElementById('dmOverlay');
+    dmCloseBtn = document.getElementById('dmCloseBtn');
+    dmTitle = document.getElementById('dmTitle');
 }
 
-// --- Age Verification and App Launch ---
-window.addEventListener('DOMContentLoaded', function() {
-    cacheDOM();
+// --- Alert helper ---
+function showError(msg) { alert(msg); }
 
-    document.getElementById("enterBtn")?.addEventListener('click', function() {
-        if (!isAgeVerified) {
-            const userConfirmed = confirm("Are you 18 years or older?");
-            if (userConfirmed) {
-                isAgeVerified = true;
-                const landingPage = document.getElementById("landingPage");
-                landingPage.classList.add("fade-out");
-                setTimeout(() => {
-                    landingPage.style.display = "none";
-                    document.getElementById("hiddenPage").style.display = "block";
-                    // Show private chats button and tab after verification
-                    const privateChatsBtn = document.getElementById("privateChatsBtn");
-                    const mySideTab = document.getElementById("mySideTab");
-                    if (privateChatsBtn) privateChatsBtn.style.display = "flex";
-                    if (mySideTab) mySideTab.style.display = "block";
-                }, 2000);
-            } else {
-                alert("You must be at least 18 years old to proceed.");
+// --- DM List/Logic ---
+function renderDmList() {
+    if (!dmList) return;
+    dmList.innerHTML = '';
+    Object.keys(privateChats).forEach(username => {
+        const li = document.createElement('li');
+        li.textContent = username;
+        li.onclick = function() { showDmBox(username); };
+        dmList.appendChild(li);
+    });
+}
+function showDmBox(username) {
+    const chatObj = privateChats[username];
+    if (!chatObj) return showError('Chat not found.');
+    dmTarget = username;
+    dmBox.style.display = 'flex';
+    dmUserTitle.textContent = 'Chat with ' + username;
+    fetch('/dm-messages/' + encodeURIComponent(chatObj.dmRoom))
+        .then(res => res.json())
+        .then(messagesArr => {
+            dmMessages.innerHTML = '';
+            messagesArr.forEach(msg => {
+                addDmMessage(msg.from_user, msg.message);
+            });
+            dmMessages.scrollTop = dmMessages.scrollHeight;
+        });
+}
+function addDmMessage(from, message) {
+    var li = document.createElement('li');
+    li.textContent = from + ': ' + message;
+    if (from === currentUsername) li.className += ' me';
+    dmMessages.appendChild(li);
+    dmMessages.scrollTop = dmMessages.scrollHeight;
+}
+
+function resetDmForm() {
+    if (dmInput) dmInput.value = '';
+    if (dmImagePreview) dmImagePreview.innerHTML = '';
+    if (dmFileInput) dmFileInput.value = '';
+    dmAttachedFile = null;
+}
+
+// DM Send
+if (dmForm) {
+    dmForm.onsubmit = function(e) {
+        e.preventDefault();
+        var text = dmInput.value.trim();
+        const chatObj = privateChats[dmTarget];
+        if (!chatObj || (!text && !dmAttachedFile)) return;
+        if (dmAttachedFile) {
+            var formData = new FormData();
+            formData.append('from_user', currentUsername);
+            formData.append('to_user', dmTarget);
+            formData.append('message', text);
+            formData.append('image', dmAttachedFile);
+            fetch('/private/messages', { method: 'POST', body: formData })
+                .then(function(res) {
+                    if (res.ok) {
+                        addDmMessage(currentUsername, text || '[Image]');
+                        resetDmForm();
+                    } else { showError('Failed to send message.'); }
+                })
+                .catch(function(err) { showError('Error sending message: ' + err.message); });
+        } else {
+            fetch('/dm-messages/' + encodeURIComponent(chatObj.dmRoom), {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ from_user: currentUsername, message: text })
+            })
+            .then(res => {
+                if (res.ok) {
+                    addDmMessage(currentUsername, text);
+                    resetDmForm();
+                } else { showError('Failed to send message.'); }
+            })
+            .catch(function(err) { showError('Error sending message: ' + err.message); });
+        }
+    };
+}
+
+// DM Attach/Preview
+if (dmAttachBtn) {
+    dmAttachBtn.onclick = function() { if (dmFileInput) dmFileInput.click(); };
+}
+if (dmFileInput) {
+    dmFileInput.onchange = function() {
+        var file = dmFileInput.files;
+        dmImagePreview.innerHTML = '';
+        dmAttachedFile = null;
+        if (file && file.type.indexOf('image/') === 0) {
+            var img = document.createElement('img');
+            img.src = URL.createObjectURL(file);
+            dmImagePreview.appendChild(img);
+            dmAttachedFile = file;
+        }
+    };
+}
+
+// DM Overlay Logic
+function openDmOverlay(username) {
+    if (username === currentUsername) {
+        showError("You can't DM yourself.");
+        return;
+    }
+    const chatObj = privateChats[username];
+    if (!chatObj) return;
+    dmTarget = username;
+    dmOverlay.style.display = 'flex';
+    dmTitle.textContent = 'Chat with ' + username;
+    dmMessages.innerHTML = '<li>Loading...</li>';
+    fetch('/dm-messages/' + encodeURIComponent(chatObj.dmRoom))
+      .then(res => res.json())
+      .then(messagesArr => {
+        dmMessages.innerHTML = '';
+        messagesArr.forEach(msg => addDmMessage(msg.from_user, msg.message));
+        dmMessages.scrollTop = dmMessages.scrollHeight;
+      });
+    clearPrivateChatBadge();
+}
+window.openDmOverlay = openDmOverlay;
+
+if (dmCloseBtn) {
+    dmCloseBtn.onclick = function() {
+        dmOverlay.style.display = 'none';
+        dmTarget = null;
+        resetDmForm();
+        if (dmMessages) dmMessages.innerHTML = '';
+    };
+}
+
+// DM Room Creation
+function startPrivateChat(username) {
+    if (username === currentUsername) { showError("You can't DM yourself."); return; }
+    fetch('/dm-room', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({ userA: currentUsername, userB: username })
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.success && data.room) {
+            const dmRoomName = data.room;
+            if (!privateChats[username]) {
+                privateChats[username] = { username, dmRoom: dmRoomName, messages: [] };
+                renderDmList();
+                socket.emit('request-create-dm', { from: currentUsername, to: username, room: dmRoomName });
             }
+            showDmBox(username);
         }
     });
-});
+}
+window.startPrivateChat = startPrivateChat;
 
-// --- Carousel Logic ---
-let currentGrid = 0;
-const track = document.querySelector('.grid-track');
-const totalGrids = document.querySelectorAll('.image-grid.grid').length;
-function updateSlide() {
-    if (track) track.style.transform = `translateX(-${currentGrid * 100}%)`;
-}
-function showNextGrid() {
-    currentGrid = (currentGrid + 1) % totalGrids;
-    updateSlide();
-}
-function showPrevGrid() {
-    currentGrid = (currentGrid - 1 + totalGrids) % totalGrids;
-    updateSlide();
-}
-window.showNextGrid = showNextGrid;
-window.showPrevGrid = showPrevGrid;
-
-// --- Popup Logic ---
-function openPopup(id) {
-    var popup = document.getElementById(id);
-    if (popup) popup.style.display = 'flex';
-}
-function closePopup(event, id) {
-    if (event) event.stopPropagation();
-    var popup = document.getElementById(id);
-    if (popup) popup.style.display = 'none';
-}
-window.openPopup = openPopup;
-window.closePopup = closePopup;
-
-// --- Profile Modal Logic ---
-function openProfile(username) {
-    fetch('/user/' + username)
-        .then(function(response) { return response.json(); })
-        .then(function(data) {
-            sessionStorage.setItem('receiver', data.username);
-            var img = data.imagePath;
-            var infoElem = document.getElementById('profile-info');
-            var statsElem = document.getElementById('profile-stats');
-            var ageElem = document.getElementById('profile-age');
-            var nameElem = document.getElementById('profile-name');
-            var imgElem = document.getElementById('profile-img');
-            if (infoElem) infoElem.innerHTML = 'Info: ' + data.info;
-            if (statsElem) statsElem.innerHTML = 'Stats: ' + data.stats;
-            if (ageElem) ageElem.innerHTML = 'Age: ' + data.age;
-            if (nameElem) nameElem.innerHTML = data.username;
-            if (imgElem) imgElem.src = img;
-        })
-        .catch(function(error) {
-            console.error('Error:', error);
-        });
-    var naviElem = document.getElementById('myNavi2');
-    if (naviElem) naviElem.style.display = 'flex';
-    var middleDiv = document.querySelector('#myNavi2 .middle');
-    if (middleDiv) {
-        middleDiv.classList.remove('closed');
-        middleDiv.classList.add('open');
-    }
-}
-window.openProfile = openProfile;
-
-function toggleOpen() {
-    var el = document.getElementsByClassName('middle')[0];
-    var naviElem = document.getElementById('myNavi2');
-    if (!el) return;
-    if (el.className.indexOf('open') !== -1) {
-        el.className = 'middle closed';
-    } else if (el.className.indexOf('closed') !== -1) {
-        if (naviElem) naviElem.style.display = 'none';
-        el.className = 'middle open';
-    } else {
-        el.className = 'middle open';
-        if (naviElem) naviElem.style.display = 'flex';
-    }
-}
-window.toggleOpen = toggleOpen;
-
-// --- sessionStorage Logic ---
-function loadProfileFromStorage() {
-    var savedUsername = sessionStorage.getItem('username');
-    var savedImage = sessionStorage.getItem('profileImage');
-    if (savedUsername) {
-        currentUsername = savedUsername;
-        sessionStorage.setItem('isLoggedIn', 'true');
-        var profileHtml = '<p>Welcome back, ' + currentUsername + '</p>';
-        if (savedImage) {
-            var imgUrl = savedImage.indexOf('http') === 0 ? savedImage : window.location.origin + '/' + savedImage;
-            profileHtml += '<img src="' + imgUrl + '" alt="Profile Picture" style="max-width:100px; border-radius:50%;">';
-        }
-        var profileElem = document.getElementById('profile');
-        if (profileElem) {
-            profileElem.innerHTML = profileHtml;
-        }
-    }
-}
-
-// --- Notification Badge ---
+// --- Notification badge ---
 function updatePrivateChatBadge() {
     if (privateChatBadge) {
-        if (unseenPrivateMessages > 0) {
-            privateChatBadge.textContent = unseenPrivateMessages;
-            privateChatBadge.style.display = 'inline-block';
-        } else {
-            privateChatBadge.style.display = 'none';
-        }
+        privateChatBadge.textContent = unseenPrivateMessages;
+        privateChatBadge.style.display = unseenPrivateMessages > 0 ? 'inline-block' : 'none';
     }
 }
 function incrementPrivateMessageBadge() {
@@ -1750,366 +1847,58 @@ function clearPrivateChatBadge() {
 if (openPrivateChatsBtn) {
     openPrivateChatsBtn.addEventListener('click', clearPrivateChatBadge);
 }
-    
-document.addEventListener('DOMContentLoaded', function() {
-    cacheDOM();
-    loadProfileFromStorage();
 
-    // --- Login Handler ---
-    var loginForm = document.getElementById('loginForm');
-    if (loginForm) {
-        loginForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-            var username = document.getElementById('loginUsername').value;
-            var password = document.getElementById('loginPassword').value;
-            fetch('/login', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ username: username, password: password })
-            })
-            .then(function(res) { return res.json(); })
-            .then(function(data) {
-                if (data.success && data.user) {
-                    sessionStorage.setItem('username', data.user.username || '');
-                    sessionStorage.setItem('profileImage', data.user.imagePath || '');
-                    sessionStorage.setItem('color', data.user.color || 'white');
-                    sessionStorage.setItem('stats', data.user.stats || '');
-                    sessionStorage.setItem('info', data.user.info || '');
-                    currentUsername = data.user.username;
-                    sessionStorage.setItem('isLoggedIn', 'true');
-                    alert('Login successful! Welcome, ' + currentUsername);
-                    var profileElem = document.getElementById('profile');
-                    if (data.user.imagePath && profileElem) {
-                        var profilePicUrl = data.user.imagePath.indexOf('http') === 0
-                            ? data.user.imagePath
-                            : window.location.origin + data.user.imagePath;
-                        profileElem.innerHTML =
-                            '<p>Welcome, ' + currentUsername + '</p>' +
-                            '<p>' + sessionStorage.getItem('info') + '</p>' + 
-                            '<img src="' + profilePicUrl + '" alt="Profile Picture" style="max-width:100px; border-radius:50%;">';
-                        sessionStorage.setItem('profileImageURL', profilePicUrl || '');
-                    }
-                    closePopup(null, 'popup0');
-                } else {
-                    alert('Login failed: ' + (data.error || 'Check your credentials and try again.'));
-                }
-            })
-            .catch(function(err) {
-                alert('Login error: ' + err.message);
-            });
-        });
-    }
-
-      var supportForm =  document.getElementById('supportForm');
-    if(supportForm) {
-        supportForm.addEventListener('submit', function(e) {
-    e.preventDefault();
-    var submittedBy = document.getElementById('submittedBy').value;
-    var reportedPerson = document.getElementById('reportedPerson').value;
-    var topic = document.getElementById('topic').value;
-    var incidentDate = document.getElementById('incidentDate').value;
-    var description = document.getElementById('description').value;
-
-    fetch('/submit-support', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-            submittedBy, reportedPerson, topic, incidentDate, description
-        })
-    })
-    .then(response => {
-        if (!response.ok) throw new Error('Network response was not ok');
-        alert('Report Submitted');
-        if (typeof closePopup === 'function') closePopup(event, 'popup3');
-    })
-    .catch(error => {
-        alert('There was an error submitting report, please try again');
-        if (typeof closePopup === 'function') closePopup(event, 'popup3');
-    });
-});
-    }
-    
-
-    // --- Register popup button ---
-    var showRegisterBtn = document.getElementById('showRegisterBtn');
-    if (showRegisterBtn) {
-        showRegisterBtn.onclick = function(e) {
-            e.stopPropagation();
-            closePopup(null, 'popup0');
-            setTimeout(function() { openPopup('popup5'); }, 200);
-        };
-    }
-
-    // --- Image upload preview during registration ---
-    var image = document.getElementById('image');
-    if (image) {
-        image.onchange = function(evt) {
-            var file = evt.target.files[0];
-            if (file) {
-                var preview = document.getElementById('registerImagePreview');
-                if (preview) {
-                    preview.src = URL.createObjectURL(file);
-                    preview.style.display = 'block';
-                }
-            }
-        };
-    }
-
-    // --- Registration form ---
-    var registerForm = document.getElementById('registerForm');
-    if (registerForm) {
-        registerForm.onsubmit = function(e) {
-            e.preventDefault();
-            var btn = this.querySelector('button[type="submit"]');
-            btn.disabled = true;
-            btn.textContent = 'Registering...';
-            var formData = new FormData(e.target);
-
-            fetch('/register', {
-                method: 'POST',
-                body: formData
-            })
-            .then(function(response) {
-                if (response.ok) {
-                    alert('Registration successful! Please log in.');
-                    closePopup(null, 'popup5');
-                    openPopup('popup0');
-                } else {
-                    response.json()
-                        .then(function(error) {
-                            alert('Registration failed: ' + (error.message || response.statusText));
-                            document.getElementById('registerForm').innerText = JSON.stringify(error);
-                        })
-                        .catch(function() {
-                            alert('Registration failed: ' + response.statusText);
-                        });
-                }
-            })
-            .catch(function(err) {
-                alert('Error: ' + err.message);
-            })
-            .finally(function() {
-                btn.disabled = false;
-                btn.textContent = 'Register';
-            });
-        };
-    }
-let isLoggedIn = sessionStorage.getItem('isLoggedIn');
-    // --- Chat room images click ---
-    if (images) {
-        for (var i = 0; i < images.length; i++) {
-            images[i].addEventListener('click', function() {
-                if (!isLoggedIn) {
-                    alert('Please log in before entering any chat room!');
-                    openPopup('popup0');
-                    return;
-                }
-                var roomName = this.dataset.room;
-                openChat(roomName);
-            });
-        }
-    }
-
-    // --- Chat overlay close ---
-    if (closeBtn) closeBtn.addEventListener('click', closeChat);
-    window.addEventListener('click', function(event) {
-        if (event.target === overlay) closeChat();
-    });
-
-    // --- Settings image preview ---
-    var imageUpload = document.getElementById('imageUpload');
-    if (imageUpload) {
-        imageUpload.addEventListener('change', function(event) {
-            var file = event.target.files[0];
-            var preview = document.getElementById('imagePreview');
-            if (file && preview) {
-                var reader = new FileReader();
-                reader.onload = function(e) {
-                    preview.src = e.target.result;
-                    preview.style.display = 'block';
-                };
-                reader.readAsDataURL(file);
-            } else if (preview) {
-                preview.src = '';
-                preview.style.display = 'none';
-            }
-        });
-    }
-
-    // --- Settings form submit ---
-    var settingsForm = document.getElementById('settingsForm');
-    if (settingsForm) {
-        settingsForm.addEventListener('submit', function(event) {
-            e.preventDefault();
-            var unameElem = document.getElementById('username');
-            currentUsername = (unameElem && unameElem.value) ? unameElem.value : 'User';
-            var profilePicElem = document.getElementById('imagePreview');
-            var profilePic = profilePicElem ? profilePicElem.src : '';
-            var profilePic1Elem = document.getElementById('profilepic1');
-            if (profilePic && profilePic1Elem) {
-                profilePic1Elem.src = profilePic;
-            }
-            closePopup(event, 'popup4');
-            alert('Settings updated! Username is now: ' + currentUsername);
-        });
-    }
-
-    // --- DM Overlay ---
-    function openDmOverlay(username) {
-    if (username === currentUsername) {
-        alert("You can't DM yourself.");
-        return;
-    }
-    const chatObj = privateChats[username];
-    if (!chatObj) return;
-    dmTarget = username;
-    dmOverlay.style.display = 'flex';
-    dmTitle.textContent = 'Chat with ' + username;
-    dmMessages.innerHTML = '<li>Loading...</li>';
-    fetch('/dm-messages/' + encodeURIComponent(chatObj.dmRoom))
-      .then(res => res.json())
-      .then(messagesArr => {
-        dmMessages.innerHTML = '';
-        messagesArr.forEach(msg => {
-            var li = document.createElement('li');
-            li.textContent = msg.from_user + ': ' + msg.message;
-            if (msg.from_user === currentUsername) li.className += ' me';
-            dmMessages.appendChild(li);
-        });
-        dmMessages.scrollTop = dmMessages.scrollHeight;
-      });
-    clearPrivateChatBadge();
+// --- Room/Sidebar Logic ---
+const rooms = [
+  "Main_Chat", "Lobby", "Public_Ring", "Weight_Room", "Locker_Room",
+  "Public_Pool", "Mat_Room", "Field", "Urban_Brawl"
+];
+function populateRooms() {
+  if (!roomList) return;
+  roomList.innerHTML = '';
+  rooms.forEach(roomName => {
+    const li = document.createElement('li');
+    li.textContent = roomName;
+    li.onclick = () => openChat(roomName);
+    roomList.appendChild(li);
+  });
 }
-window.openDmOverlay = openDmOverlay;
-   // Close DM overlay
-    if (dmCloseBtn) {
-        dmCloseBtn.onclick = function() {
-            dmOverlay.style.display = 'none';
-            dmTarget = null;
-            dmInput.value = '';
-            dmMessages.innerHTML = '';
-            dmImagePreview.innerHTML = '';
-            dmFileInput.value = '';
-            dmAttachedFile = null;
+populateRooms();
+
+function showDMListSidebar() {
+    roomList.innerHTML = '';
+    roomList.style.display = 'block';
+    Object.keys(privateChats).forEach(username => {
+        const li = document.createElement('li');
+        li.textContent = username;
+        li.onclick = function() {
+            openDmOverlay(username);
         };
-    }
-    // DM Attach Image
-    if (dmAttachBtn) {
-        dmAttachBtn.onclick = function() {
-            if (dmFileInput) dmFileInput.click();
-        };
-    }
-    if (dmFileInput) {
-        dmFileInput.onchange = function() {
-            var file = dmFileInput.files[0];
-            dmImagePreview.innerHTML = '';
-            dmAttachedFile = null;
-            if (file && file.type.indexOf('image/') === 0) {
-                var img = document.createElement('img');
-                img.src = URL.createObjectURL(file);
-                dmImagePreview.appendChild(img);
-                dmAttachedFile = file;
-            }
-        };
-    }
-    // Add DM message to overlay
-function addDmMessage(from, message) {
-    var li = document.createElement('li');
-    li.textContent = from + ': ' + message;
-    if (from === currentUsername) li.className += ' me';
-    dmMessages.appendChild(li);
-    dmMessages.scrollTop = dmMessages.scrollHeight;
+        roomList.appendChild(li);
+    });
 }
-
-// Send DM message (text or with image)
-if (dmForm) {
-    dmForm.onsubmit = function(e) {
-        e.preventDefault();
-        var text = dmInput.value.trim();
-        if (!text && !dmAttachedFile) return;
-        const chatObj = privateChats[dmTarget];
-        if (!chatObj) return;
-
-        // For image sending, you would extend this logic with FormData and proper multipart handling
-        if (dmAttachedFile) {
-            var formData = new FormData();
-            formData.append('from_user', currentUsername);
-            formData.append('to_user', dmTarget);
-            formData.append('message', text);
-            formData.append('image', dmAttachedFile);
-
-            fetch('/private/messages', { method: 'POST', body: formData })
-                .then(function(res) {
-                    if (res.ok) {
-                        addDmMessage(currentUsername, text || '[Image]');
-                        dmInput.value = '';
-                        dmImagePreview.innerHTML = '';
-                        dmFileInput.value = '';
-                        dmAttachedFile = null;
-                    } else {
-                        alert('Failed to send message.');
-                    }
-                })
-                .catch(function(err) {
-                    alert('Error sending message: ' + err.message);
-                });
-        } else {
-            // Save message to DM room via REST API
-            fetch('/dm-messages/' + encodeURIComponent(chatObj.dmRoom), {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ from_user: currentUsername, message: text })
-            })
-            .then(res => {
-                if (res.ok) {
-                    addDmMessage(currentUsername, text);
-                    dmInput.value = '';
-                    dmImagePreview.innerHTML = '';
-                    dmFileInput.value = '';
-                    dmAttachedFile = null;
-                } else {
-                    alert('Failed to send message.');
-                }
-            })
-            .catch(function(err) {
-                alert('Error sending message: ' + err.message);
-            });
+function showRoomListSidebar() {
+    roomList.innerHTML = '';
+    rooms.forEach(roomName => {
+        const li = document.createElement('li');
+        li.textContent = roomName;
+        li.onclick = () => openChat(roomName);
+        roomList.appendChild(li);
+    });
+}
+if (btnDMs) btnDMs.onclick = showDMListSidebar;
+if (btnRooms) btnRooms.onclick = showRoomListSidebar;
+if (btnCreateRoom) {
+    btnCreateRoom.onclick = () => {
+        const newRoom = prompt("Enter the new room name:");
+        if (newRoom && newRoom.trim()) {
+            rooms.push(newRoom.trim());
+            populateRooms();
         }
     };
 }
 
-    function startPrivateChat(username) {
-    if (username === currentUsername) { alert("You can't DM yourself."); return; }
-    // Always request or create room from backend
-    fetch('/dm-room', {
-        method: 'POST',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({ userA: currentUsername, userB: username })
-    })
-    .then(res => res.json())
-    .then(data => {
-        if (data.success && data.room) {
-            const dmRoomName = data.room;
-            if (!privateChats[username]) {
-                privateChats[username] = { username, dmRoom: dmRoomName, messages: [] };
-                addPrivateChat(username);
-                socket.emit('request-create-dm', { from: currentUsername, to: username, room: dmRoomName });
-            }
-            openDmOverlay(username);
-        }
-    });
-}
-window.startPrivateChat = startPrivateChat;
-
-    function addPrivateChat(username) {
-        var listItem = document.createElement('li');
-        listItem.textContent = username;
-        listItem.addEventListener('click', function() { openDmOverlay(username); });
-        if (privateChatsList) privateChatsList.appendChild(listItem);
-    }
-});
-
-// --- Room Handling ---
+// --- Chat/Overlay Logic ---
 function openChat(roomName) {
     overlay.style.display = 'flex';
     roomTitle.textContent = roomName;
@@ -2130,7 +1919,7 @@ function closeChat() {
 }
 window.closeChat = closeChat;
 
-    
+// --- Send Public Chat Message ---
 const sendBtn = document.getElementById('sendBtn');
 if (sendBtn) {
   sendBtn.addEventListener('click', function () {
@@ -2138,8 +1927,7 @@ if (sendBtn) {
     const hours = now.getHours().toString().padStart(2,'0');
     const minutes = now.getMinutes().toString().padStart(2,'0');
     const timestamp = `${hours}:${minutes}`;
-
-    if (currentRoom && input.value.trim() && isLoggedIn) {
+    if (currentRoom && input.value.trim() && sessionStorage.getItem('isLoggedIn')) {
       socket.emit('chat message', {
         room: currentRoom,
         username: currentUsername,
@@ -2151,177 +1939,199 @@ if (sendBtn) {
   });
 }
 
+// --- Scroll messages ---
 function scrollToBottom() {
     messages.scrollTop = messages.scrollHeight;
 }
-// --- Sidebar Room List and Button Handling ---
-const rooms = [
-  "Main_Chat", "Lobby", "Public_Ring", "Weight_Room", "Locker_Room",
-  "Public_Pool", "Mat_Room", "Field", "Urban_Brawl"
-];
-    
 
-  // Profile Search Logic (stays fixed, no resize on search)
-const searchBar = document.getElementById('searchBar');
-const usernameElem = document.getElementById('username');
-const profileImg = document.getElementById('profile-img');
-const ageElem = document.getElementById('age');
-const statsElem = document.getElementById('stats');
-const langElem = document.getElementById('lang');
-const infoElem = document.getElementById('info');
-const errorMsg = document.getElementById('errorMsg');
-
-searchBar.addEventListener('keydown', function(event) {
-  if (event.key === 'Enter') {
-    const username = searchBar.value.trim();
-    if (!username) {
-      return;
-    }
-    errorMsg.textContent = '';
-    usernameElem.textContent = 'Loading...';
-    profileImg.src = 'https://via.placeholder.com/200?text=Loading...';
-    ageElem.textContent = '-';
-    statsElem.textContent = '-';
-    langElem.textContent = '-';
-    infoElem.textContent = '-';
-
-    fetch('/user/' + encodeURIComponent(username))
-      .then(response => {
-        if (!response.ok) {
-          throw new Error('User not found');
+// --- Image upload preview ---
+if (imageUpload) {
+    imageUpload.addEventListener('change', function(event) {
+        var file = event.target.files;
+        var preview = imagePreview;
+        if (file && preview) {
+            var reader = new FileReader();
+            reader.onload = function(e) {
+                preview.src = e.target.result;
+                preview.style.display = 'block';
+            };
+            reader.readAsDataURL(file);
+        } else if (preview) {
+            preview.src = '';
+            preview.style.display = 'none';
         }
-        return response.json();
-      })
-      .then(user => {
-        usernameElem.textContent = user.username || 'Unknown';
-        profileImg.src = user.imagePath || 'https://via.placeholder.com/200?text=No+Image';
-        ageElem.textContent = user.age || 'N/A';
-        statsElem.textContent = user.stats || 'N/A';
-        langElem.textContent = user.language || 'N/A';
-        infoElem.textContent = user.info || 'N/A';
-        errorMsg.textContent = '';
-      })
-      .catch(error => {
-        usernameElem.textContent = 'Search for a user';
-        profileImg.src = 'https://via.placeholder.com/200?text=No+Image';
-        ageElem.textContent = '-';
-        statsElem.textContent = '-';
-        langElem.textContent = '-';
-        infoElem.textContent = '-';
-        errorMsg.textContent = error.message;
-      });
-  }
-});
-const roomList = document.getElementById('roomList');
-const btnDMs = document.getElementById('btnDMs');
-const btnRooms = document.getElementById('btnRooms');
-const btnCreateRoom = document.getElementById('btnCreateRoom');
-
-function populateRooms() {
-  if (!roomList) return;
-  roomList.innerHTML = '';
-  rooms.forEach(roomName => {
-    const li = document.createElement('li');
-    li.textContent = roomName;
-    li.onclick = () => {
-        openChat(roomName);
-    };
-    roomList.appendChild(li);
-  });
-}
-
-if (btnDMs) {
-    btnDMs.onclick = () => {
-      alert("DMs view toggle - implement your UI logic here.");
-    };
-}
-if (btnRooms) {
-    btnRooms.onclick = () => {
-      alert("Rooms view toggle - implement your UI logic here.");
-    };
-}
-if (btnCreateRoom) {
-    btnCreateRoom.onclick = () => {
-      const newRoom = prompt("Enter the new room name:");
-      if (newRoom && newRoom.trim()) {
-        rooms.push(newRoom.trim());
-        populateRooms();
-        if (typeof openChatroomName === 'function') {
-          openChatroomName(newRoom.trim());
-        }
-      }
-    };
-}
-
-populateRooms();
-
-// Function to show DMs in sidebar
-function showDMListSidebar() {
-    roomList.innerHTML = '';
-    roomList.style.display = 'block'; // Ensure visibility
-    Object.keys(privateChats).forEach(username => {
-        const li = document.createElement('li');
-        li.textContent = username;
-        li.onclick = function() {
-            openDmOverlay(username);
-        };
-        roomList.appendChild(li);
     });
 }
 
-// Restore room list
-function showRoomListSidebar() {
-    roomList.innerHTML = '';
-    rooms.forEach(roomName => {
-        const li = document.createElement('li');
-        li.textContent = roomName;
-        li.onclick = () => openChat(roomName);
-        roomList.appendChild(li);
+// --- Registration Image Preview ---
+if (image) {
+    image.onchange = function(evt) {
+        var file = evt.target.files;
+        if (file) {
+            registerImagePreview.src = URL.createObjectURL(file);
+            registerImagePreview.style.display = 'block';
+        }
+    };
+}
+
+// --- Popups ---
+function openPopup(id) {
+    var popup = document.getElementById(id);
+    if (popup) popup.style.display = 'flex';
+}
+function closePopup(event, id) {
+    if (event) event.stopPropagation();
+    var popup = document.getElementById(id);
+    if (popup) popup.style.display = 'none';
+}
+window.openPopup = openPopup;
+window.closePopup = closePopup;
+
+// --- Carousel Logic ---
+let currentGrid = 0;
+const track = document.querySelector('.grid-track');
+const totalGrids = document.querySelectorAll('.image-grid.grid').length;
+function updateSlide() {
+    if (track) track.style.transform = `translateX(-${currentGrid * 100}%)`;
+}
+function showNextGrid() {
+    currentGrid = (currentGrid + 1) % totalGrids;
+    updateSlide();
+}
+function showPrevGrid() {
+    currentGrid = (currentGrid - 1 + totalGrids) % totalGrids;
+    updateSlide();
+}
+window.showNextGrid = showNextGrid;
+window.showPrevGrid = showPrevGrid;
+
+// --- Login Handler ---
+if (loginForm) {
+    loginForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        var username = document.getElementById('loginUsername').value;
+        var password = document.getElementById('loginPassword').value;
+        fetch('/login', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ username: username, password: password })
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.success && data.user) {
+                sessionStorage.setItem('username', data.user.username || '');
+                sessionStorage.setItem('profileImage', data.user.imagePath || '');
+                sessionStorage.setItem('color', data.user.color || 'white');
+                sessionStorage.setItem('stats', data.user.stats || '');
+                sessionStorage.setItem('info', data.user.info || '');
+                currentUsername = data.user.username;
+                sessionStorage.setItem('isLoggedIn', 'true');
+                alert('Login successful! Welcome, ' + currentUsername);
+                var profileElem = profile;
+                if (data.user.imagePath && profileElem) {
+                    var profilePicUrl = data.user.imagePath.indexOf('http') === 0
+                        ? data.user.imagePath
+                        : window.location.origin + data.user.imagePath;
+                    profileElem.innerHTML =
+                        '<p>Welcome, ' + currentUsername + '</p>' +
+                        '<p>' + sessionStorage.getItem('info') + '</p>' +
+                        '<img src="' + profilePicUrl + '" alt="Profile Picture" style="max-width:100px; border-radius:50%;">';
+                    sessionStorage.setItem('profileImageURL', profilePicUrl || '');
+                }
+                closePopup(null, 'popup0');
+            } else {
+                showError('Login failed: ' + (data.error || 'Check your credentials and try again.'));
+            }
+        })
+        .catch(function(err) {
+            showError('Login error: ' + err.message);
+        });
     });
 }
 
-// Attach button handlers
-if (btnDMs) {
-    btnDMs.onclick = showDMListSidebar;
+// --- Registration Handler ---
+if (registerForm) {
+    registerForm.onsubmit = function(e) {
+        e.preventDefault();
+        var btn = this.querySelector('button[type="submit"]');
+        btn.disabled = true;
+        btn.textContent = 'Registering...';
+        var formData = new FormData(e.target);
+        fetch('/register', {
+            method: 'POST',
+            body: formData
+        })
+        .then(function(response) {
+            if (response.ok) {
+                alert('Registration successful! Please log in.');
+                closePopup(null, 'popup5');
+                openPopup('popup0');
+            } else {
+                response.json()
+                    .then(function(error) {
+                        showError('Registration failed: ' + (error.message || response.statusText));
+                        registerForm.innerText = JSON.stringify(error);
+                    })
+                    .catch(function() {
+                        showError('Registration failed: ' + response.statusText);
+                    });
+            }
+        })
+        .catch(function(err) { showError('Error: ' + err.message); })
+        .finally(function() {
+            btn.disabled = false;
+            btn.textContent = 'Register';
+        });
+    };
 }
-if (btnRooms) {
-    btnRooms.onclick = showRoomListSidebar;
+
+// --- Support Form ---
+if (supportForm) {
+    supportForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        var submittedBy = document.getElementById('submittedBy').value;
+        var reportedPerson = document.getElementById('reportedPerson').value;
+        var topic = document.getElementById('topic').value;
+        var incidentDate = document.getElementById('incidentDate').value;
+        var description = document.getElementById('description').value;
+
+        fetch('/submit-support', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ submittedBy, reportedPerson, topic, incidentDate, description })
+        })
+        .then(response => {
+            if (!response.ok) throw new Error('Network response was not ok');
+            alert('Report Submitted');
+            closePopup(e, 'popup3');
+        })
+        .catch(() => {
+            showError('Error submitting report.');
+            closePopup(e, 'popup3');
+        });
+    });
 }
 
 // --- Socket Listeners ---
-socket.on('loadMessages', function(msgs) {
-    messages.innerHTML = '';
-    for (var i = 0; i < msgs.length; i++) {
-        var item = document.createElement('li');
-        item.textContent = msgs[i];
-        messages.appendChild(item);
-    }
-    scrollToBottom();
-});
 socket.on('chat message', function(data) {
     var item = document.createElement('li');
     item.style.textAlign = 'left';
-
     var timestamp = document.createElement('span');
     timestamp.textContent = `[${data.timestamp}] `;
     timestamp.style.fontSize = '0.8em';
     timestamp.style.color = '#999';
-
     var username = document.createElement('strong');
     username.textContent = data.username;
     var userColor = sessionStorage.getItem('color') || '#007bff';
     username.style.color = userColor;
     username.style.marginLeft = '5px';
-
     var br = document.createElement('br');
     var msg = document.createElement('span');
     msg.textContent = data.message;
-
     item.appendChild(username);
     item.appendChild(timestamp);
     item.appendChild(br);
     item.appendChild(msg);
-
     messages.appendChild(item);
     scrollToBottom();
     fetch('/api/sendChatMessage', {
@@ -2334,136 +2144,75 @@ socket.on('chat message', function(data) {
         })
     }).catch(err => console.error('Failed to send chat message to backend:', err));
 });
-
-socket.on('discord message', function(data) {
-    var item = document.createElement('li');
-    item.style.textAlign = 'left';
-
-    var timestamp = document.createElement('span');
-    timestamp.textContent = `[${data.timestamp}] `;
-    timestamp.style.fontSize = '0.8em';
-    timestamp.style.color = '#999';
-
-    var username = document.createElement('strong');
-    username.textContent = data.username;
-    var userColor = sessionStorage.getItem('color') || '#007bff';
-    username.style.color = userColor;
-    username.style.marginLeft = '5px';
-
-    var br = document.createElement('br');
-    var msg = document.createElement('span');
-    msg.textContent = data.message;
-
-    item.appendChild(username);
-    item.appendChild(timestamp);
-    item.appendChild(br);
-    item.appendChild(msg);
-
-    messages.appendChild(item);
-    scrollToBottom();
-});
-
- socket.on('updateMembers', async function(members) {
-  const membersList = document.getElementById('members-list');
-  membersList.innerHTML = '';
-
-  // Fetch user info for each member in parallel
-  const membersInfo = await Promise.all(members.map(async (member) => {
-    try {
-      const response = await fetch(`/user/${member.username}`);
-      if (!response.ok) throw new Error('Fetch error');
-      const userInfo = await response.json();
-      return {
-        username: member.username,
-        profilePic: userInfo.imagePath || 'default-profile.png' // fallback image
-      };
-    } catch (e) {
-      // Return member with fallback image on error
-      return {
-        username: member.username,
-        profilePic: 'default-profile.png'
-      };
-    }
-  }));
-
-  // Render updated members list with fetched info
-  membersInfo.forEach(member => {
-    const memberItem = document.createElement('li');
-    memberItem.className = 'member-item';
-
-    const img = document.createElement('img');
-    img.src = member.profilePic;
-    img.alt = member.username;
-    img.style.width = '30px';
-    img.style.height = '30px';
-    img.style.borderRadius = '50%';
-    img.style.marginRight = '10px';
-
-    const nameSpan = document.createElement('span');
-    nameSpan.textContent = member.username;
-
-    memberItem.appendChild(img);
-    memberItem.appendChild(nameSpan);
-let dmBtn = document.createElement('button');
-            dmBtn.textContent = 'Msg';
-            dmBtn.onclick = function(e) {
-                e.stopPropagation();
-                startPrivateChat(member.username);
-            };
-            let blkBtn = document.createElement('button');
-            blkBtn.textContent = 'Block';
-            blkBtn.onclick = function(e) {
-                e.stopPropagation();
-                blockMember(member.username);
-            };
-            var br = document.createElement('br');
-            memberItem.appendChild(br);
-            memberItem.appendChild(dmBtn);
-            memberItem.appendChild(blkBtn);
-    membersList.appendChild(memberItem);
-  });
-});
-
-
-            
 socket.on('private message', function(obj) {
     var from = obj.from;
     var message = obj.message;
-    var currentlyChatting = (dmOverlay.style.display === 'flex' && dmTarget === from);
+    var currentlyChatting = (dmOverlay && dmOverlay.style.display === 'flex' && dmTarget === from);
     if (currentlyChatting) {
         addDmMessage(from, message);
     } else {
         incrementPrivateMessageBadge();
-        // Optionally play a sound for notification here
     }
 });
+socket.on('create-dm', function({ from, room }) {
+    if (!privateChats[from]) {
+        privateChats[from] = { username: from, dmRoom: room, messages: [] };
+        renderDmList();
+    }
+    showDmBox(from);
+});
+socket.on('updateMembers', async function(members) {
+    membersList.innerHTML = '';
+    const membersInfo = await Promise.all(members.map(async (member) => {
+        try {
+            const response = await fetch(`/user/${member.username}`);
+            if (!response.ok) throw new Error('Fetch error');
+            const userInfo = await response.json();
+            return {
+                username: member.username,
+                profilePic: userInfo.imagePath || 'default-profile.png'
+            };
+        } catch (e) {
+            return { username: member.username, profilePic: 'default-profile.png' };
+        }
+    }));
+    membersInfo.forEach(member => {
+        const memberItem = document.createElement('li');
+        memberItem.className = 'member-item';
+        const img = document.createElement('img');
+        img.src = member.profilePic;
+        img.alt = member.username;
+        img.style.width = '30px';
+        img.style.height = '30px';
+        img.style.borderRadius = '50%';
+        img.style.marginRight = '10px';
+        const nameSpan = document.createElement('span');
+        nameSpan.textContent = member.username;
+        memberItem.appendChild(img);
+        memberItem.appendChild(nameSpan);
 
-function renderPrivateChatsList() {
-  const privateChatsList = document.getElementById('private-chats');
-  privateChatsList.innerHTML = '';
-  Object.keys(privateChats).forEach(username => {
-    const chatObj = privateChats[username];
-    const listItem = document.createElement('li');
-    listItem.className = 'private-chat-item';
-    listItem.textContent = username;
+        let dmBtn = document.createElement('button');
+        dmBtn.textContent = 'Msg';
+        dmBtn.onclick = function(e) {
+            e.stopPropagation();
+            startPrivateChat(member.username);
+        };
+        let blkBtn = document.createElement('button');
+        blkBtn.textContent = 'Block';
+        blkBtn.onclick = function(e) {
+            e.stopPropagation();
+            // Implement block logic if desired
+        };
+        memberItem.appendChild(document.createElement('br'));
+        memberItem.appendChild(dmBtn);
+        memberItem.appendChild(blkBtn);
+        membersList.appendChild(memberItem);
+    });
+});
 
-    // DM button
-    const msgBtn = document.createElement('button');
-    msgBtn.textContent = 'Msg';
-    msgBtn.style.marginLeft = '12px';
-    msgBtn.onclick = function(e) {
-      e.stopPropagation();
-      openDmOverlay(username); // Or your function to open DM
-    };
+document.addEventListener('DOMContentLoaded', cacheDOM);
 
-    listItem.appendChild(msgBtn);
-
-    // Clicking username (optional: open DM overlay too)
-    listItem.onclick = function() {
-      openDmOverlay(username);
-    };
-
-    privateChatsList.appendChild(listItem);
+privateChatsList.appendChild(listItem);
   });
 }
 
