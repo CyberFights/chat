@@ -1587,9 +1587,9 @@ const enterBtn = document.getElementById('enterBtn');
     const landingPage = document.getElementById('landingPage');
     const hiddenPage = document.getElementById('hiddenPage');
     const loginForm = document.getElementById('loginForm');
-    
+    const images = images = document.querySelectorAll('.image-grid img');
 // DOM cache
-let images, overlay, closeBtn, messages, form, input, roomTitle, membersList,
+let overlay, closeBtn, messages, form, input, roomTitle, membersList,
     dmSidebar, dmList, dmBox, dmUserTitle, dmMessages, dmForm, dmInput,
     dmFileInput, dmAttachBtn, dmImagePreview, privateChatBadge, openPrivateChatsBtn, showRegisterBtn, registerForm, image, registerImagePreview, profile,
     imageUpload, imagePreview, settingsForm, profilepic1, popup0, popup5,
@@ -1598,7 +1598,6 @@ let images, overlay, closeBtn, messages, form, input, roomTitle, membersList,
     dmOverlay, dmCloseBtn, dmTitle;
 
 function cacheDOM() {
-    images = document.querySelectorAll('.image-grid img');
     overlay = document.getElementById('chatOverlay');
     closeBtn = document.getElementById('closeBtn');
     messages = document.getElementById('messages');
