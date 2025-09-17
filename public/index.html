@@ -1576,546 +1576,226 @@ body:hover { cursor:url('cursor-image.png'), auto; }
 <script>
 // -- app state and DOM cache --
 const socket = io();
-
-let currentUsername = '';
+let currentUsername;
 let currentRoom = null;
 let dmTarget = null;
 let dmAttachedFile = null;
 let unseenPrivateMessages = 0;
 let privateChats = {};
+let currentUser = null;
+
+// DOM elements - Cache references
+var images, overlay, closeBtn, messages, form, input, roomTitle, membersList, dmOverlay, dmTitle, dmMessages, dmForm, dmInput, dmFileInput, dmAttachBtn, dmImagePreview, dmCloseBtn, privateChatsList, openPrivateChatsBtn, privateChatBadge, sideTab;
+
+function cacheDOM() {
+  images = document.querySelectorAll(".image-grid img");
+  overlay = document.getElementById("chatOverlay");
+  closeBtn = document.getElementById("closeBtn");
+  messages = document.getElementById("messages");
+  form = document.getElementById("form");
+  input = document.getElementById("m");
+  roomTitle = document.getElementById("roomTitle");
+  membersList = document.getElementById("members-list");
+  dmOverlay = document.getElementById("dmOverlay");
+  dmTitle = document.getElementById("dmTitle");
+  dmMessages = document.getElementById("dmMessages");
+  dmForm = document.getElementById("dmForm");
+  dmInput = document.getElementById("dmInput");
+  dmFileInput = document.getElementById("dmFileInput");
+  dmAttachBtn = document.getElementById("dmAttachBtn");
+  dmImagePreview = document.getElementById("dmImagePreview");
+  dmCloseBtn = document.getElementById("dmCloseBtn");
+  privateChatsList = document.getElementById("private-chats");
+  openPrivateChatsBtn = document.getElementById("openPrivateChats");
+  privateChatBadge = document.getElementById("privateChatBadge");
+  sideTab = document.getElementById("mySideTab");
+}
+
+window.addEventListener("DOMContentLoaded", function () {
+  cacheDOM();
+  // Further initialization...
+});
+
+// --- Age Verification and App Launch ---
 let isAgeVerified = false;
-const enterBtn = document.getElementById('enterBtn');
-    const landingPage = document.getElementById('landingPage');
-    const hiddenPage = document.getElementById('hiddenPage');
-    const loginForm = document.getElementById('loginForm');
-    const images = document.querySelectorAll('.image-grid img');
+window.addEventListener("DOMContentLoaded", () => {
+  const enterBtn = document.getElementById("enterBtn");
+  if (enterBtn) {
+    enterBtn.addEventListener("click", () => {
+      if (!isAgeVerified) {
+        const userConfirmed = confirm("Are you 18 years or older?");
+        if (userConfirmed) {
+          isAgeVerified = true;
+          const landingPage = document.getElementById("landingPage");
+          const hiddenPage = document.getElementById("hiddenPage");
+          landingPage.classList.add("fade-out");
+          setTimeout(() => {
+            landingPage.style.display = "none";
+            hiddenPage.style.display = "block";
 
-const overlay = document.getElementById('chatOverlay');
-    const closeBtn = document.getElementById('closeBtn');
-   const  messages = document.getElementById('messages');
-    const form = document.getElementById('form');
-    const input = document.getElementById('m');
-   const roomTitle = document.getElementById('roomTitle');
-   const membersList = document.getElementById('members-list');
-   const dmSidebar = document.getElementById('dmSidebar');
-   const dmList = document.getElementById('dmList');
-   const dmBox = document.getElementById('dmBox');
-   const dmUserTitle = document.getElementById('dmUserTitle');
-   const dmMessages = document.getElementById('dmMessages');
-   const dmForm = document.getElementById('dmForm');
-   const dmInput = document.getElementById('dmInput');
-   const dmFileInput = document.getElementById('dmFileInput');
-   const dmAttachBtn = document.getElementById('dmAttachBtn');
-   const dmImagePreview = document.getElementById('dmImagePreview');
-   const privateChatBadge = document.getElementById('privateChatBadge');
-   const openPrivateChatsBtn = document.getElementById('openPrivateChatsBtn');
-   const showRegisterBtn = document.getElementById('showRegisterBtn');
-   const registerForm = document.getElementById('registerForm');
-   const image = document.getElementById('image');
-   const registerImagePreview = document.getElementById('registerImagePreview');
-   const profile = document.getElementById('profile');
-   const imageUpload = document.getElementById('imageUpload');
-   const imagePreview = document.getElementById('imagePreview');
-   const settingsForm = document.getElementById('settingsForm');
-   const profilepic1 = document.getElementById('profilepic1');
-   const popup0 = document.getElementById('popup0');
-   const popup5 = document.getElementById('popup5');
-   const roomList = document.getElementById('roomList');
-   const btnDMs = document.getElementById('btnDMs');
-   const btnRooms = document.getElementById('btnRooms');
-   const btnCreateRoom = document.getElementById('btnCreateRoom');
-   const privateChatsList = document.getElementById('private-chats');
-   const supportForm = document.getElementById('supportForm');
-   const searchBar = document.getElementById('searchBar');
-   const usernameElem = document.getElementById('username');
-   const profileImg = document.getElementById('profile-img');
-   const ageElem = document.getElementById('age');
-   const statsElem = document.getElementById('stats');
-   const langElem = document.getElementById('lang');
-   const infoElem = document.getElementById('info');
-   const errorMsg = document.getElementById('errorMsg');
-   const dmOverlay = document.getElementById('dmOverlay');
-   const dmCloseBtn = document.getElementById('dmCloseBtn');
-   const dmTitle = document.getElementById('dmTitle');
-
-
-// --- Alert helper ---
-function showError(msg) { alert(msg); }
-
-    if (enterBtn && landingPage && hiddenPage) {
-        enterBtn.addEventListener('click', function() {
-            if (!isAgeVerified) {
-                const userConfirmed = confirm("Are you 18 years or older?");
-                if (userConfirmed) {
-                    isAgeVerified = true;
-                landingPage.classList.add("fade-out");
-                setTimeout(() => {
-                    landingPage.style.display = "none";
-                    document.getElementById("hiddenPage").style.display = "block";
-                }, 2000);
-  } else {
- alert("You must be at least 18 years old to proceed.");
- }
-   }
-    });
-    }
-
-// --- DM List/Logic ---
-function renderDmList() {
-    if (!dmList) return;
-    dmList.innerHTML = '';
-    Object.keys(privateChats).forEach(username => {
-        const li = document.createElement('li');
-        li.textContent = username;
-        li.onclick = function() { showDmBox(username); };
-        dmList.appendChild(li);
-    });
-}
-function showDmBox(username) {
-    const chatObj = privateChats[username];
-    if (!chatObj) return showError('Chat not found.');
-    dmTarget = username;
-    dmBox.style.display = 'flex';
-    dmUserTitle.textContent = 'Chat with ' + username;
-    fetch('/dm-messages/' + encodeURIComponent(chatObj.dmRoom))
-        .then(res => res.json())
-        .then(messagesArr => {
-            dmMessages.innerHTML = '';
-            messagesArr.forEach(msg => {
-                addDmMessage(msg.from_user, msg.message);
-            });
-            dmMessages.scrollTop = dmMessages.scrollHeight;
-        });
-}
-function addDmMessage(from, message) {
-    var li = document.createElement('li');
-    li.textContent = from + ': ' + message;
-    if (from === currentUsername) li.className += ' me';
-    dmMessages.appendChild(li);
-    dmMessages.scrollTop = dmMessages.scrollHeight;
-}
-
-function resetDmForm() {
-    if (dmInput) dmInput.value = '';
-    if (dmImagePreview) dmImagePreview.innerHTML = '';
-    if (dmFileInput) dmFileInput.value = '';
-    dmAttachedFile = null;
-}
-
-// DM Send
-if (dmForm) {
-    dmForm.onsubmit = function(e) {
-        e.preventDefault();
-        var text = dmInput.value.trim();
-        const chatObj = privateChats[dmTarget];
-        if (!chatObj || (!text && !dmAttachedFile)) return;
-        if (dmAttachedFile) {
-            var formData = new FormData();
-            formData.append('from_user', currentUsername);
-            formData.append('to_user', dmTarget);
-            formData.append('message', text);
-            formData.append('image', dmAttachedFile);
-            fetch('/private/messages', { method: 'POST', body: formData })
-                .then(function(res) {
-                    if (res.ok) {
-                        addDmMessage(currentUsername, text || '[Image]');
-                        resetDmForm();
-                    } else { showError('Failed to send message.'); }
-                })
-                .catch(function(err) { showError('Error sending message: ' + err.message); });
+            // Show private chats button and tab after verification
+            const privateChatsBtn = document.getElementById("privateChatsBtn");
+            const mySideTab = document.getElementById("mySideTab");
+            if (privateChatsBtn) privateChatsBtn.style.display = "flex";
+            if (mySideTab) mySideTab.style.display = "block";
+          }, 2000);
         } else {
-            fetch('/dm-messages/' + encodeURIComponent(chatObj.dmRoom), {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ from_user: currentUsername, message: text })
-            })
-            .then(res => {
-                if (res.ok) {
-                    addDmMessage(currentUsername, text);
-                    resetDmForm();
-                } else { showError('Failed to send message.'); }
-            })
-            .catch(function(err) { showError('Error sending message: ' + err.message); });
+          alert("You must be at least 18 years old to proceed.");
         }
-    };
-}
-
-// DM Attach/Preview
-if (dmAttachBtn) {
-    dmAttachBtn.onclick = function() { if (dmFileInput) dmFileInput.click(); };
-}
-if (dmFileInput) {
-    dmFileInput.onchange = function() {
-        var file = dmFileInput.files;
-        dmImagePreview.innerHTML = '';
-        dmAttachedFile = null;
-        if (file && file.type.indexOf('image/') === 0) {
-            var img = document.createElement('img');
-            img.src = URL.createObjectURL(file);
-            dmImagePreview.appendChild(img);
-            dmAttachedFile = file;
-        }
-    };
-}
-
-// DM Overlay Logic
-function openDmOverlay(username) {
-    if (username === currentUsername) {
-        showError("You can't DM yourself.");
-        return;
-    }
-    const chatObj = privateChats[username];
-    if (!chatObj) return;
-    dmTarget = username;
-    dmOverlay.style.display = 'flex';
-    dmTitle.textContent = 'Chat with ' + username;
-    dmMessages.innerHTML = '<li>Loading...</li>';
-    fetch('/dm-messages/' + encodeURIComponent(chatObj.dmRoom))
-      .then(res => res.json())
-      .then(messagesArr => {
-        dmMessages.innerHTML = '';
-        messagesArr.forEach(msg => addDmMessage(msg.from_user, msg.message));
-        dmMessages.scrollTop = dmMessages.scrollHeight;
-      });
-    clearPrivateChatBadge();
-}
-window.openDmOverlay = openDmOverlay;
-
-if (dmCloseBtn) {
-    dmCloseBtn.onclick = function() {
-        dmOverlay.style.display = 'none';
-        dmTarget = null;
-        resetDmForm();
-        if (dmMessages) dmMessages.innerHTML = '';
-    };
-}
-
-// DM Room Creation
-function startPrivateChat(username) {
-    if (username === currentUsername) { showError("You can't DM yourself."); return; }
-    fetch('/dm-room', {
-        method: 'POST',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({ userA: currentUsername, userB: username })
-    })
-    .then(res => res.json())
-    .then(data => {
-        if (data.success && data.room) {
-            const dmRoomName = data.room;
-            if (!privateChats[username]) {
-                privateChats[username] = { username, dmRoom: dmRoomName, messages: [] };
-                renderDmList();
-                socket.emit('request-create-dm', { from: currentUsername, to: username, room: dmRoomName });
-            }
-            showDmBox(username);
-        }
+      }
     });
-}
-window.startPrivateChat = startPrivateChat;
-
-// --- Notification badge ---
-function updatePrivateChatBadge() {
-    if (privateChatBadge) {
-        privateChatBadge.textContent = unseenPrivateMessages;
-        privateChatBadge.style.display = unseenPrivateMessages > 0 ? 'inline-block' : 'none';
-    }
-}
-function incrementPrivateMessageBadge() {
-    unseenPrivateMessages++;
-    updatePrivateChatBadge();
-}
-function clearPrivateChatBadge() {
-    unseenPrivateMessages = 0;
-    updatePrivateChatBadge();
-}
-if (openPrivateChatsBtn) {
-    openPrivateChatsBtn.addEventListener('click', clearPrivateChatBadge);
-}
-
-// --- Room/Sidebar Logic ---
-const rooms = [
-  "Main_Chat", "Lobby", "Public_Ring", "Weight_Room", "Locker_Room",
-  "Public_Pool", "Mat_Room", "Field", "Urban_Brawl"
-];
-function populateRooms() {
-  if (!roomList) return;
-  roomList.innerHTML = '';
-  rooms.forEach(roomName => {
-    const li = document.createElement('li');
-    li.textContent = roomName;
-    li.onclick = () => openChat(roomName);
-    roomList.appendChild(li);
-  });
-}
-populateRooms();
-
-function showDMListSidebar() {
-    roomList.innerHTML = '';
-    roomList.style.display = 'block';
-    Object.keys(privateChats).forEach(username => {
-        const li = document.createElement('li');
-        li.textContent = username;
-        li.onclick = function() {
-            openDmOverlay(username);
-        };
-        roomList.appendChild(li);
-    });
-}
-function showRoomListSidebar() {
-    roomList.innerHTML = '';
-    rooms.forEach(roomName => {
-        const li = document.createElement('li');
-        li.textContent = roomName;
-        li.onclick = () => openChat(roomName);
-        roomList.appendChild(li);
-    });
-}
-if (btnDMs) btnDMs.onclick = showDMListSidebar;
-if (btnRooms) btnRooms.onclick = showRoomListSidebar;
-if (btnCreateRoom) {
-    btnCreateRoom.onclick = () => {
-        const newRoom = prompt("Enter the new room name:");
-        if (newRoom && newRoom.trim()) {
-            rooms.push(newRoom.trim());
-            populateRooms();
-        }
-    };
-}
-
-// --- Chat/Overlay Logic ---
-function openChat(roomName) {
-    overlay.style.display = 'flex';
-    roomTitle.textContent = roomName;
-    if (currentRoom) {
-        socket.emit('leaveRoom', { room: currentRoom, username: currentUsername });
-    }
-    currentRoom = roomName;
-    socket.emit('joinRoom', { room: roomName, username: currentUsername });
-}
-window.openChat = openChat;
-
-function closeChat() {
-    overlay.style.display = 'none';
-    if (socket && currentRoom) {
-        socket.emit('leaveRoom', { room: currentRoom, username: currentUsername });
-        currentRoom = null;
-    }
-}
-window.closeChat = closeChat;
-
-// --- Send Public Chat Message ---
-const sendBtn = document.getElementById('sendBtn');
-if (sendBtn) {
-  sendBtn.addEventListener('click', function () {
-    const now = new Date();
-    const hours = now.getHours().toString().padStart(2,'0');
-    const minutes = now.getMinutes().toString().padStart(2,'0');
-    const timestamp = `${hours}:${minutes}`;
-    if (currentRoom && input.value.trim() && sessionStorage.getItem('isLoggedIn')) {
-      socket.emit('chat message', {
-        room: currentRoom,
-        username: currentUsername,
-        message: input.value,
-        timestamp: timestamp
-      });
-      input.value = '';
-    }
-  });
-}
-
-// --- Scroll messages ---
-function scrollToBottom() {
-    messages.scrollTop = messages.scrollHeight;
-}
-
-// --- Image upload preview ---
-if (imageUpload) {
-    imageUpload.addEventListener('change', function(event) {
-        var file = event.target.files;
-        var preview = imagePreview;
-        if (file && preview) {
-            var reader = new FileReader();
-            reader.onload = function(e) {
-                preview.src = e.target.result;
-                preview.style.display = 'block';
-            };
-            reader.readAsDataURL(file);
-        } else if (preview) {
-            preview.src = '';
-            preview.style.display = 'none';
-        }
-    });
-}
-
-// --- Registration Image Preview ---
-if (image) {
-    image.onchange = function(evt) {
-        var file = evt.target.files;
-        if (file) {
-            registerImagePreview.src = URL.createObjectURL(file);
-            registerImagePreview.style.display = 'block';
-        }
-    };
-}
-
-// --- Popups ---
-function openPopup(id) {
-    var popup = document.getElementById(id);
-    if (popup) popup.style.display = 'flex';
-}
-function closePopup(event, id) {
-    if (event) event.stopPropagation();
-    var popup = document.getElementById(id);
-    if (popup) popup.style.display = 'none';
-}
-window.openPopup = openPopup;
-window.closePopup = closePopup;
+  }
+});
 
 // --- Carousel Logic ---
 let currentGrid = 0;
-const track = document.querySelector('.grid-track');
-const totalGrids = document.querySelectorAll('.image-grid.grid').length;
+const track = document.querySelector(".grid-track");
+const totalGrids = document.querySelectorAll(".image-grid.grid").length;
+
 function updateSlide() {
-    if (track) track.style.transform = `translateX(-${currentGrid * 100}%)`;
+  if (track) track.style.transform = `translateX(-${currentGrid * 100}%)`;
 }
+
 function showNextGrid() {
-    currentGrid = (currentGrid + 1) % totalGrids;
-    updateSlide();
+  currentGrid = (currentGrid + 1) % totalGrids;
+  updateSlide();
 }
+
 function showPrevGrid() {
-    currentGrid = (currentGrid - 1 + totalGrids) % totalGrids;
-    updateSlide();
+  currentGrid = (currentGrid - 1 + totalGrids) % totalGrids;
+  updateSlide();
 }
+
 window.showNextGrid = showNextGrid;
 window.showPrevGrid = showPrevGrid;
 
-// --- Login Handler ---
-if (loginForm) {
-    loginForm.addEventListener('submit', function(e) {
-        e.preventDefault();
-        var username = document.getElementById('loginUsername').value;
-        var password = document.getElementById('loginPassword').value;
-        fetch('/login', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ username: username, password: password })
-        })
-        .then(res => res.json())
-        .then(data => {
-            if (data.success && data.user) {
-                sessionStorage.setItem('username', data.user.username || '');
-                sessionStorage.setItem('profileImage', data.user.imagePath || '');
-                sessionStorage.setItem('color', data.user.color || 'white');
-                sessionStorage.setItem('stats', data.user.stats || '');
-                sessionStorage.setItem('info', data.user.info || '');
-                currentUsername = data.user.username;
-                sessionStorage.setItem('isLoggedIn', 'true');
-                alert('Login successful! Welcome, ' + currentUsername);
-                var profileElem = profile;
-                if (data.user.imagePath && profileElem) {
-                    var profilePicUrl = data.user.imagePath.indexOf('http') === 0
-                        ? data.user.imagePath
-                        : window.location.origin + data.user.imagePath;
-                    profileElem.innerHTML =
-                        '<p>Welcome, ' + currentUsername + '</p>' +
-                        '<p>' + sessionStorage.getItem('info') + '</p>' +
-                        '<img src="' + profilePicUrl + '" alt="Profile Picture" style="max-width:100px; border-radius:50%;">';
-                    sessionStorage.setItem('profileImageURL', profilePicUrl || '');
-                }
-                closePopup(null, 'popup0');
-            } else {
-                showError('Login failed: ' + (data.error || 'Check your credentials and try again.'));
-            }
-        })
-        .catch(function(err) {
-            showError('Login error: ' + err.message);
-        });
-    });
+// --- Popup Logic ---
+function openPopup(id) {
+  const popup = document.getElementById(id);
+  if (popup) popup.style.display = "flex";
 }
 
-// --- Registration Handler ---
-if (registerForm) {
-    registerForm.onsubmit = function(e) {
-        e.preventDefault();
-        var btn = this.querySelector('button[type="submit"]');
-        btn.disabled = true;
-        btn.textContent = 'Registering...';
-        var formData = new FormData(e.target);
-        fetch('/register', {
-            method: 'POST',
-            body: formData
-        })
-        .then(function(response) {
-            if (response.ok) {
-                alert('Registration successful! Please log in.');
-                closePopup(null, 'popup5');
-                openPopup('popup0');
-            } else {
-                response.json()
-                    .then(function(error) {
-                        showError('Registration failed: ' + (error.message || response.statusText));
-                        registerForm.innerText = JSON.stringify(error);
-                    })
-                    .catch(function() {
-                        showError('Registration failed: ' + response.statusText);
-                    });
-            }
-        })
-        .catch(function(err) { showError('Error: ' + err.message); })
-        .finally(function() {
-            btn.disabled = false;
-            btn.textContent = 'Register';
-        });
-    };
+function closePopup(event, id) {
+  if (event) event.stopPropagation();
+  const popup = document.getElementById(id);
+  if (popup) popup.style.display = "none";
 }
 
-// --- Support Form ---
-if (supportForm) {
-    supportForm.addEventListener('submit', function(e) {
-        e.preventDefault();
-        var submittedBy = document.getElementById('submittedBy').value;
-        var reportedPerson = document.getElementById('reportedPerson').value;
-        var topic = document.getElementById('topic').value;
-        var incidentDate = document.getElementById('incidentDate').value;
-        var description = document.getElementById('description').value;
+window.openPopup = openPopup;
+window.closePopup = closePopup;
 
-        fetch('/submit-support', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ submittedBy, reportedPerson, topic, incidentDate, description })
-        })
-        .then(response => {
-            if (!response.ok) throw new Error('Network response was not ok');
-            alert('Report Submitted');
-            closePopup(e, 'popup3');
-        })
-        .catch(() => {
-            showError('Error submitting report.');
-            closePopup(e, 'popup3');
-        });
-    });
+// --- Profile Modal Logic ---
+function openProfile(username) {
+  fetch(`/user/${username}`)
+    .then((response) => response.json())
+    .then((data) => {
+      sessionStorage.setItem("receiver", data.username);
+      var img = data.imagePath;
+
+      var infoElem = document.getElementById("profile-info");
+      var statsElem = document.getElementById("profile-stats");
+      var ageElem = document.getElementById("profile-age");
+      var nameElem = document.getElementById("profile-name");
+      var imgElem = document.getElementById("profile-img");
+
+      if (infoElem) infoElem.innerHTML = `Info: ${data.info}`;
+      if (statsElem) statsElem.innerHTML = `Stats: ${data.stats}`;
+      if (ageElem) ageElem.innerHTML = `Age: ${data.age}`;
+      if (nameElem) nameElem.innerHTML = data.username;
+      if (imgElem) imgElem.src = img;
+    })
+    .catch((error) => console.error("Error:", error));
+  const naviElem = document.getElementById("myNavi2");
+  if (naviElem) {
+    naviElem.style.display = "flex";
+    const middleDiv = document.querySelector("#myNavi2 .middle");
+    if (middleDiv) {
+      middleDiv.classList.remove("closed");
+      middleDiv.classList.add("open");
+    }
+  }
 }
 
-// --- Socket Listeners ---
+window.openProfile = openProfile;
+
+// --- toggleOpen ---
+function toggleOpen() {
+  var el = document.getElementsByClassName("middle0")[0];
+  var naviElem = document.getElementById("myNavi2");
+  if (!el) return;
+  if (el.className.indexOf("open") !== -1) el.className = "middle closed";
+  else if (el.className.indexOf("closed") !== -1) {
+    if (naviElem) naviElem.style.display = "none";
+    el.className = "middle open";
+  } else {
+    el.className = "middle open";
+    if (naviElem) naviElem.style.display = "flex";
+  }
+}
+window.toggleOpen = toggleOpen;
+
+// --- sessionStorage load for profile ---
+function loadProfileFromStorage() {
+  var savedUsername = sessionStorage.getItem("username");
+  var savedImage = sessionStorage.getItem("profileImage");
+  if (savedUsername) currentUsername = savedUsername;
+  if (savedUsername) sessionStorage.setItem("isLoggedIn", true);
+  var profileHtml = `<p>Welcome back, ${currentUsername}</p>`;
+  if (savedImage) {
+    var imgUrl =
+      savedImage.indexOf("http") === 0 ? savedImage : window.location.origin + savedImage;
+    profileHtml += `<img src="${imgUrl}" alt="Profile Picture" style="max-width: 100px; border-radius: 50%;">`;
+  }
+  var profileElem = document.getElementById("profile");
+  if (profileElem) profileElem.innerHTML = profileHtml;
+}
+window.loadProfileFromStorage = loadProfileFromStorage;
+
+document.addEventListener("DOMContentLoaded", () => {
+  loadProfileFromStorage();
+});
+// --- Socket.IOListeners setup ---
+
+socket.on("connect", () => {
+  console.log("Connected to server");
+  if (currentUsername && currentRoom) {
+    socket.emit("joinRoom", { room: currentRoom, username: currentUsername });
+  }
+});
+socket.on('loadMessages', function(msgs) {
+    messages.innerHTML = '';
+    for (var i = 0; i < msgs.length; i++) {
+        var item = document.createElement('li');
+        item.textContent = msgs[i];
+        messages.appendChild(item);
+    }
+    scrollToBottom();
+});
+// Listening for public chat messages from the server
 socket.on('chat message', function(data) {
     var item = document.createElement('li');
     item.style.textAlign = 'left';
+
     var timestamp = document.createElement('span');
     timestamp.textContent = `[${data.timestamp}] `;
     timestamp.style.fontSize = '0.8em';
     timestamp.style.color = '#999';
+
     var username = document.createElement('strong');
     username.textContent = data.username;
     var userColor = sessionStorage.getItem('color') || '#007bff';
     username.style.color = userColor;
     username.style.marginLeft = '5px';
+
     var br = document.createElement('br');
     var msg = document.createElement('span');
     msg.textContent = data.message;
+
     item.appendChild(username);
     item.appendChild(timestamp);
     item.appendChild(br);
     item.appendChild(msg);
+
     messages.appendChild(item);
     scrollToBottom();
     fetch('/api/sendChatMessage', {
@@ -2128,73 +1808,645 @@ socket.on('chat message', function(data) {
         })
     }).catch(err => console.error('Failed to send chat message to backend:', err));
 });
+
+socket.on('discord message', function(data) {
+    var item = document.createElement('li');
+    item.style.textAlign = 'left';
+
+    var timestamp = document.createElement('span');
+    timestamp.textContent = `[${data.timestamp}] `;
+    timestamp.style.fontSize = '0.8em';
+    timestamp.style.color = '#999';
+
+    var username = document.createElement('strong');
+    username.textContent = data.username;
+    var userColor = sessionStorage.getItem('color') || '#007bff';
+    username.style.color = userColor;
+    username.style.marginLeft = '5px';
+
+    var br = document.createElement('br');
+    var msg = document.createElement('span');
+    msg.textContent = data.message;
+
+    item.appendChild(username);
+    item.appendChild(timestamp);
+    item.appendChild(br);
+    item.appendChild(msg);
+
+    messages.appendChild(item);
+    scrollToBottom();
+});
+
+ socket.on('updateMembers', async function(members) {
+  const membersList = document.getElementById('members-list');
+  membersList.innerHTML = '';
+
+  // Fetch user info for each member in parallel
+  const membersInfo = await Promise.all(members.map(async (member) => {
+    try {
+      const response = await fetch(`/user/${member.username}`);
+      if (!response.ok) throw new Error('Fetch error');
+      const userInfo = await response.json();
+      return {
+        username: member.username,
+        profilePic: userInfo.imagePath || 'default-profile.png' // fallback image
+      };
+    } catch (e) {
+      // Return member with fallback image on error
+      return {
+        username: member.username,
+        profilePic: 'default-profile.png'
+      };
+    }
+  }));
+
+  // Render updated members list with fetched info
+  membersInfo.forEach(member => {
+    const memberItem = document.createElement('li');
+    memberItem.className = 'member-item';
+
+    const img = document.createElement('img');
+    img.src = member.profilePic;
+    img.alt = member.username;
+    img.style.width = '30px';
+    img.style.height = '30px';
+    img.style.borderRadius = '50%';
+    img.style.marginRight = '10px';
+
+    const nameSpan = document.createElement('span');
+    nameSpan.textContent = member.username;
+
+    memberItem.appendChild(img);
+    memberItem.appendChild(nameSpan);
+let dmBtn = document.createElement('button');
+            dmBtn.textContent = 'Msg';
+            dmBtn.onclick = function(e) {
+                e.stopPropagation();
+                startPrivateChat(member.username);
+            };
+            let blkBtn = document.createElement('button');
+            blkBtn.textContent = 'Block';
+            blkBtn.onclick = function(e) {
+                e.stopPropagation();
+                blockMember(member.username);
+            };
+            var br = document.createElement('br');
+            memberItem.appendChild(br);
+            memberItem.appendChild(dmBtn);
+            memberItem.appendChild(blkBtn);
+    membersList.appendChild(memberItem);
+  });
+});
+
+
+            
 socket.on('private message', function(obj) {
     var from = obj.from;
     var message = obj.message;
-    var currentlyChatting = (dmOverlay && dmOverlay.style.display === 'flex' && dmTarget === from);
+    var currentlyChatting = (dmOverlay.style.display === 'flex' && dmTarget === from);
     if (currentlyChatting) {
         addDmMessage(from, message);
     } else {
         incrementPrivateMessageBadge();
+        // Optionally play a sound for notification here
     }
 });
+
+function renderPrivateChatsList() {
+  const privateChatsList = document.getElementById('private-chats');
+  privateChatsList.innerHTML = '';
+  Object.keys(privateChats).forEach(username => {
+    const chatObj = privateChats[username];
+    const listItem = document.createElement('li');
+    listItem.className = 'private-chat-item';
+    listItem.textContent = username;
+
+    // DM button
+    const msgBtn = document.createElement('button');
+    msgBtn.textContent = 'Msg';
+    msgBtn.style.marginLeft = '12px';
+    msgBtn.onclick = function(e) {
+      e.stopPropagation();
+      openDmOverlay(username); // Or your function to open DM
+    };
+
+    listItem.appendChild(msgBtn);
+
+    // Clicking username (optional: open DM overlay too)
+    listItem.onclick = function() {
+      openDmOverlay(username);
+    };
+
+    privateChatsList.appendChild(listItem);
+  });
+}
+
 socket.on('create-dm', function({ from, room }) {
-    if (!privateChats[from]) {
-        privateChats[from] = { username: from, dmRoom: room, messages: [] };
-        renderDmList();
-    }
-    showDmBox(from);
+  // Ensure chat exists in privateChats
+  if (!privateChats[from]) {
+    privateChats[from] = { username: from, dmRoom: room, messages: [] };
+    renderPrivateChatsList();
+  }
+  openDmOverlay(from); // Optionally auto-open DM overlay
 });
-socket.on('updateMembers', async function(members) {
-    membersList.innerHTML = '';
-    const membersInfo = await Promise.all(members.map(async (member) => {
-        try {
-            const response = await fetch(`/user/${member.username}`);
-            if (!response.ok) throw new Error('Fetch error');
-            const userInfo = await response.json();
-            return {
-                username: member.username,
-                profilePic: userInfo.imagePath || 'default-profile.png'
-            };
-        } catch (e) {
-            return { username: member.username, profilePic: 'default-profile.png' };
-        }
-    }));
-    membersInfo.forEach(member => {
-        const memberItem = document.createElement('li');
-        memberItem.className = 'member-item';
-        const img = document.createElement('img');
-        img.src = member.profilePic;
-        img.alt = member.username;
-        img.style.width = '30px';
-        img.style.height = '30px';
-        img.style.borderRadius = '50%';
-        img.style.marginRight = '10px';
-        const nameSpan = document.createElement('span');
-        nameSpan.textContent = member.username;
-        memberItem.appendChild(img);
-        memberItem.appendChild(nameSpan);
 
-        let dmBtn = document.createElement('button');
-        dmBtn.textContent = 'Msg';
-        dmBtn.onclick = function(e) {
-            e.stopPropagation();
-            startPrivateChat(member.username);
-        };
-        let blkBtn = document.createElement('button');
-        blkBtn.textContent = 'Block';
-        blkBtn.onclick = function(e) {
-            e.stopPropagation();
-            // Implement block logic if desired
-        };
-        memberItem.appendChild(document.createElement('br'));
-        memberItem.appendChild(dmBtn);
-        memberItem.appendChild(blkBtn);
-        membersList.appendChild(memberItem);
+// --- Sending messages ---
+if (form) {
+  form.addEventListener("submit", (e) => {
+    e.preventDefault();
+    if (!input.value.trim()) return;
+    if (!currentRoom) return alert("Join a room first.");
+    if (!currentUsername) return alert("You must be logged in to send messages.");
+
+    const now = new Date();
+    const timestamp = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+    socket.emit("chat message", {
+      room: currentRoom,
+      username: currentUsername,
+      message: input.value.trim(),
+      timestamp,
     });
+    input.value = "";
+  });
+}
+
+// --- Open chat overlay and join/leave room ---
+
+function openChatroomName(roomName) {
+  if (!overlay || !roomTitle) return;
+
+  overlay.style.display = "flex";
+  roomTitle.textContent = roomName;
+
+  if (currentRoom) {
+    socket.emit("leaveRoom", { room: currentRoom, username: currentUsername });
+  }
+  currentRoom = roomName;
+  socket.emit("joinRoom", { room: roomName, username: currentUsername });
+}
+
+closeBtn.addEventListener("click", () => {
+  if (!overlay) return;
+  overlay.style.display = "none";
+  if (currentRoom) {
+    socket.emit("leaveRoom", { room: currentRoom, username: currentUsername });
+    currentRoom = null;
+  }
 });
 
-document.addEventListener('DOMContentLoaded', cacheDOM);
+// --- Private Chat & DM Logic ---
+
+// Populate Private Chats List functionality
+function populatePrivateChats() {
+  if (!privateChatsList) return;
+  privateChatsList.innerHTML = "";
+  Object.keys(privateChats).forEach((username) => {
+    const chat = privateChats[username];
+    const li = document.createElement("li");
+    li.textContent = username;
+    li.className = chat.unseen ? "unseen" : "";
+    li.addEventListener("click", () => {
+      openDmOverlay(username);
+    });
+    privateChatsList.appendChild(li);
+  });
+}
+
+// Open DM overlay and fetch DM messages
+function openDmOverlay(username) {
+  if (username === currentUsername) {
+    alert("You can't DM yourself.");
+    return;
+  }
+  const chatObj = privateChats[username];
+  if (!chatObj) return;
+
+  dmTarget = username;
+  if (!dmOverlay) return;
+  dmOverlay.style.display = "flex";
+
+  if (dmTitle) dmTitle.textContent = `Chat with ${username}`;
+  dmMessages.innerHTML = "<li>Loading...</li>";
+
+  fetch(`/dm-messages/${encodeURIComponent(chatObj.dmRoom)}`)
+    .then((res) => res.json())
+    .then((data) => {
+      dmMessages.innerHTML = "";
+      data.forEach((msg) => {
+        addDmMessage(msg.fromuser, msg.message);
+      });
+      dmMessages.scrollTop = dmMessages.scrollHeight;
+    });
+  clearPrivateChatBadge();
+}
+
+// Add private message to DM message list
+function addDmMessage(fromUser, message) {
+  const li = document.createElement("li");
+  li.textContent = `${fromUser}: ${message}`;
+  if (fromUser === currentUsername) li.className = "me";
+  if (dmMessages) {
+    dmMessages.appendChild(li);
+    dmMessages.scrollTop = dmMessages.scrollHeight;
+  }
+}
+
+function clearPrivateChatBadge() {
+  unseenPrivateMessages = 0;
+  if (privateChatBadge) privateChatBadge.style.display = "none";
+}
+
+function incrementPrivateMessageBadge() {
+  unseenPrivateMessages++;
+  if (privateChatBadge) {
+    privateChatBadge.style.display = "inline-block";
+    privateChatBadge.textContent = unseenPrivateMessages;
+  }
+}
+
+// DM form submission
+if (dmForm) {
+  dmForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const text = dmInput.value.trim();
+    if (!text && !dmAttachedFile) return;
+
+    const chatObj = privateChats[dmTarget];
+    if (!chatObj) return;
+
+    if (dmAttachedFile) {
+      const formData = new FormData();
+      formData.append("fromuser", currentUsername);
+      formData.append("touser", dmTarget);
+      formData.append("message", text);
+      formData.append("image", dmAttachedFile);
+      fetch("/private-messages", {
+        method: "POST",
+        body: formData,
+      })
+        .then((res) => {
+          if (res.ok) {
+            addDmMessage(currentUsername, text + " [Image]");
+            dmInput.value = "";
+            dmImagePreview.innerHTML = "";
+            dmFileInput.value = "";
+            dmAttachedFile = null;
+          } else {
+            alert("Failed to send message.");
+          }
+        })
+        .catch((err) => alert("Error sending message: " + err.message));
+    } else {
+      fetch(`/dm-messages/${encodeURIComponent(chatObj.dmRoom)}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ fromuser: currentUsername, message: text }),
+      })
+        .then((res) => {
+          if (res.ok) {
+            addDmMessage(currentUsername, text);
+            dmInput.value = "";
+            dmImagePreview.innerHTML = "";
+            dmFileInput.value = "";
+            dmAttachedFile = null;
+          } else {
+            alert("Failed to send message.");
+          }
+        })
+        .catch((err) => alert("Error sending message: " + err.message));
+    }
+  });
+}
+
+// DM overlay close handler
+if (dmCloseBtn) {
+  dmCloseBtn.addEventListener("click", () => {
+    if (dmOverlay) dmOverlay.style.display = "none";
+    dmTarget = null;
+    dmInput.value = "";
+    dmImagePreview.innerHTML = "";
+    dmFileInput.value = "";
+    dmAttachedFile = null;
+  });
+}
+// --- Room Sidebar and List Handling ---
+
+const rooms = [
+  "Main_Chat",
+  "Lobby",
+  "Public_Ring",
+  "Weight_Room",
+  "Locker_Room",
+  "Public_Pool",
+  "Mat_Room",
+  "Field",
+  "Urban_Brawl",
+];
+
+function populateRooms() {
+  if (!roomList) return;
+  roomList.innerHTML = "";
+  rooms.forEach((roomName) => {
+    const li = document.createElement("li");
+    li.textContent = roomName;
+    li.onclick = () => openChatroomName(roomName);
+    roomList.appendChild(li);
+  });
+}
+
+if (btnCreateRoom) {
+  btnCreateRoom.onclick = () => {
+    const newRoom = prompt("Enter the new room name");
+    if (newRoom && newRoom.trim()) {
+      rooms.push(newRoom.trim());
+      populateRooms();
+    }
+  };
+}
+
+// --- Sidebar buttons for toggling DM and Room list views ---
+
+function showDMListSidebar() {
+  if (!roomList) return;
+  roomList.innerHTML = "";
+  roomList.style.display = "block";
+  Object.keys(privateChats).forEach((username) => {
+    const li = document.createElement("li");
+    li.textContent = username;
+    li.onclick = () => openDmOverlay(username);
+    roomList.appendChild(li);
+  });
+}
+
+function showRoomListSidebar() {
+  if (!roomList) return;
+  roomList.innerHTML = "";
+  rooms.forEach((roomName) => {
+    const li = document.createElement("li");
+    li.textContent = roomName;
+    li.onclick = () => openChatroomName(roomName);
+    roomList.appendChild(li);
+  });
+}
+
+if (btnDMs) btnDMs.onclick = showDMListSidebar;
+if (btnRooms) btnRooms.onclick = showRoomListSidebar;
+
+// --- Notification Badge for Private Messages ---
+
+function updatePrivateChatBadge() {
+  if (!privateChatBadge) return;
+  if (unseenPrivateMessages > 0) {
+    privateChatBadge.textContent = unseenPrivateMessages;
+    privateChatBadge.style.display = "inline-block";
+  } else {
+    privateChatBadge.style.display = "none";
+  }
+}
+
+function incrementPrivateMessageBadge() {
+  unseenPrivateMessages++;
+  updatePrivateChatBadge();
+}
+
+function clearPrivateChatBadge() {
+  unseenPrivateMessages = 0;
+  updatePrivateChatBadge();
+}
+
+if (openPrivateChatsBtn) {
+  openPrivateChatsBtn.addEventListener("click", clearPrivateChatBadge);
+}
+
+// --- Registration Form and Image Preview ---
+
+const registerForm = document.getElementById("registerForm");
+const image = document.getElementById("image");
+const registerImagePreview = document.getElementById("registerImagePreview");
+
+if (image) {
+  image.addEventListener("change", (evt) => {
+    const file = evt.target.files[0];
+    if (file) {
+      if (registerImagePreview) {
+        registerImagePreview.src = URL.createObjectURL(file);
+        registerImagePreview.style.display = "block";
+      }
+    }
+  });
+}
+
+if (registerForm) {
+  registerForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const btn = registerForm.querySelector("button[type=submit]");
+    if (btn) {
+      btn.disabled = true;
+      btn.textContent = "Registering...";
+    }
+
+    const formData = new FormData(registerForm);
+
+    fetch("/register", {
+      method: "POST",
+      body: formData,
+    })
+      .then((response) => {
+        if (response.ok) {
+          alert("Registration successful! Please log in.");
+          closePopup(null, "popup5");
+          openPopup("popup0");
+        } else {
+          response.json().then((error) => {
+            alert("Registration failed: " + error.message);
+          });
+        }
+      })
+      .catch((err) => alert("Error: " + err.message))
+      .finally(() => {
+        if (btn) {
+          btn.disabled = false;
+          btn.textContent = "Register";
+        }
+      });
+  });
+}
+  // Profile Search Logic (stays fixed, no resize on search)
+const searchBar = document.getElementById('searchBar');
+const usernameElem = document.getElementById('username');
+const profileImg = document.getElementById('profile-img');
+const ageElem = document.getElementById('age');
+const statsElem = document.getElementById('stats');
+const langElem = document.getElementById('lang');
+const infoElem = document.getElementById('info');
+const errorMsg = document.getElementById('errorMsg');
+
+searchBar.addEventListener('keydown', function(event) {
+  if (event.key === 'Enter') {
+    const username = searchBar.value.trim();
+    if (!username) {
+      return;
+    }
+    errorMsg.textContent = '';
+    usernameElem.textContent = 'Loading...';
+    profileImg.src = 'https://via.placeholder.com/200?text=Loading...';
+    ageElem.textContent = '-';
+    statsElem.textContent = '-';
+    langElem.textContent = '-';
+    infoElem.textContent = '-';
+
+    fetch('/user/' + encodeURIComponent(username))
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('User not found');
+        }
+        return response.json();
+      })
+      .then(user => {
+        usernameElem.textContent = user.username || 'Unknown';
+        profileImg.src = user.imagePath || 'https://via.placeholder.com/200?text=No+Image';
+        ageElem.textContent = user.age || 'N/A';
+        statsElem.textContent = user.stats || 'N/A';
+        langElem.textContent = user.language || 'N/A';
+        infoElem.textContent = user.info || 'N/A';
+        errorMsg.textContent = '';
+      })
+      .catch(error => {
+        usernameElem.textContent = 'Search for a user';
+        profileImg.src = 'https://via.placeholder.com/200?text=No+Image';
+        ageElem.textContent = '-';
+        statsElem.textContent = '-';
+        langElem.textContent = '-';
+        infoElem.textContent = '-';
+        errorMsg.textContent = error.message;
+      });
+  }
+});
+// --- Support Form Handler ---
+
+const supportForm = document.getElementById("supportForm");
+
+if (supportForm) {
+  supportForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const submittedBy = document.getElementById("submittedBy").value;
+    const reportedPerson = document.getElementById("reportedPerson").value;
+    const topic = document.getElementById("topic").value;
+    const incidentDate = document.getElementById("incidentDate").value;
+    const description = document.getElementById("description").value;
+
+    fetch("/submit-support", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        submittedBy,
+        reportedPerson,
+        topic,
+        incidentDate,
+        description,
+      }),
+    })
+      .then((response) => {
+        if (!response.ok) throw new Error("Network response was not ok");
+        alert("Report Submitted");
+        closePopup(e, "popup3");
+      })
+      .catch(() => {
+        alert("There was an error submitting the report, please try again");
+        closePopup(e, "popup3");
+      });
+  });
+});
+
+// --- Image Upload Preview during Settings ---
+
+const imageUpload = document.getElementById("imageUpload");
+const imagePreview = document.getElementById("imagePreview");
+
+if (imageUpload) {
+  imageUpload.addEventListener("change", (event) => {
+    const file = event.target.files[0];
+    if (file && imagePreview) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        imagePreview.src = e.target.result;
+        imagePreview.style.display = "block";
+      };
+      reader.readAsDataURL(file);
+    } else if (imagePreview) {
+      imagePreview.src = "";
+      imagePreview.style.display = "none";
+    }
+  });
+}
+
+// --- Settings Form Submission ---
+
+const settingsForm = document.getElementById("settingsForm");
+
+if (settingsForm) {
+  settingsForm.addEventListener("submit", (event) => {
+    event.preventDefault();
+    const unameElem = document.getElementById("username");
+    let currentUsernameLocal = currentUsername;
+    if (unameElem && unameElem.value) currentUsernameLocal = unameElem.value;
+
+    const profilePicElem = document.getElementById("imagePreview");
+    let profilePic = profilePicElem ? profilePicElem.src : null;
+
+    // Additional submission handling...
+
+    alert(`Settings updated! Username is now ${currentUsernameLocal}`);
+  });
+}
+// --- Block member placeholder function ---
+function blockMember(username) {
+  alert(`Block functionality for ${username} is not implemented yet.`);
+}
+
+// --- Initialization on DOMContentLoaded ---
+document.addEventListener('DOMContentLoaded', () => {
+  cacheDOM();
+  loadProfileFromStorage();
+  populateRooms();
+
+  // Attach click handlers for images to join rooms
+  if (images) {
+    images.forEach(img => {
+      img.addEventListener('click', () => {
+        if (!sessionStorage.getItem('isLoggedIn')) {
+          alert('Please log in before entering any chat room!');
+          openPopup('popup0');
+          return;
+        }
+        const roomName = img.dataset.room;
+        openChat(roomName);
+      });
+    });
+  }
+
+  if (closeBtn) {
+    closeBtn.addEventListener('click', closeChat);
+  }
+
+  // Close chat when clicking outside messages
+  window.addEventListener('click', event => {
+    if (event.target === overlay) closeChat();
+  });
+});
+
+// Export important functions if needed
+window.openDmOverlay = openDmOverlay;
+window.startPrivateChat = startPrivateChat;
+window.openChat = openChat;
+window.closeChat = closeChat;
+window.showDMListSidebar = showDMListSidebar;
+window.showRoomListSidebar = showRoomListSidebar;
+window.toggleOpen = toggleOpen;
+window.openProfile = openProfile;
+window.openPopup = openPopup;
+window.closePopup = closePopup;
 
 </script>
 </body>
