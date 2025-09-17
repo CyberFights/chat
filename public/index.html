@@ -1903,7 +1903,7 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         };
     }
-let isLoggedIn = sessionStorage.getItem('isLoggedIn');
+const isLoggedIn = sessionStorage.getItem('isLoggedIn');
     // --- Chat room images click ---
     if (images) {
         for (var i = 0; i < images.length; i++) {
@@ -2147,7 +2147,7 @@ if (sendBtn) {
     const hours = now.getHours().toString().padStart(2,'0');
     const minutes = now.getMinutes().toString().padStart(2,'0');
     const timestamp = `${hours}:${minutes}`;
-
+    
     if (currentRoom && input.value.trim() && isLoggedIn) {
       socket.emit('chat message', {
         room: currentRoom,
