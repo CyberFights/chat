@@ -1583,7 +1583,8 @@ let dmAttachedFile = null;
 let unseenPrivateMessages = 0;
 let privateChats = {};
 let currentUser = null;
-
+let isAgeVerified = false;
+sessionStorage.setItem('isLoggedIn', 'false');
 
 // DOM elements (cache references)
 var images, overlay, closeBtn, messages, form, input, roomTitle, membersList, dmOverlay, dmTitle, dmMessages, dmForm, dmInput, dmFileInput, dmAttachBtn, dmImagePreview, dmCloseBtn, privateChatsList, openPrivateChatsBtn, privateChatBadge, sideTab;
