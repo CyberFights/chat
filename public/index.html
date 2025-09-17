@@ -2148,7 +2148,7 @@ if (sendBtn) {
     const minutes = now.getMinutes().toString().padStart(2,'0');
     const timestamp = `${hours}:${minutes}`;
     
-    if (currentRoom && input.value.trim() && isLoggedIn) {
+    if (currentRoom && input.value.trim() ) {
       socket.emit('chat message', {
         room: currentRoom,
         username: currentUsername,
