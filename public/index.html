@@ -1609,6 +1609,7 @@ function cacheDOM() {
   openPrivateChatsBtn = document.getElementById("openPrivateChats");
   privateChatBadge = document.getElementById("privateChatBadge");
   sideTab = document.getElementById("mySideTab");
+    closeBtn = document.getElementById("closeBtn");
 }
 
 window.addEventListener("DOMContentLoaded", function () {
@@ -1973,7 +1974,7 @@ if (form) {
 
 // --- Open chat overlay and join/leave room ---
 
-function openChatroomName(roomName) {
+function openChat(roomName) {
   if (!overlay || !roomTitle) return;
 
   overlay.style.display = "flex";
@@ -2150,7 +2151,7 @@ function populateRooms() {
   rooms.forEach((roomName) => {
     const li = document.createElement("li");
     li.textContent = roomName;
-    li.onclick = () => openChatroomName(roomName);
+    li.onclick = () => openChat(roomName);
     roomList.appendChild(li);
   });
 }
@@ -2185,7 +2186,7 @@ function showRoomListSidebar() {
   rooms.forEach((roomName) => {
     const li = document.createElement("li");
     li.textContent = roomName;
-    li.onclick = () => openChatroomName(roomName);
+    li.onclick = () => openChat(roomName);
     roomList.appendChild(li);
   });
 }
