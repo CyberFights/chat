@@ -1583,9 +1583,9 @@ let dmAttachedFile = null;
 let unseenPrivateMessages = 0;
 let privateChats = {};
 let currentUser = null;
-
+let closeBtn = document.getElementById("closeBtn");
 // DOM elements - Cache references
-var images, overlay, closeBtn, messages, form, input, roomTitle, membersList, dmOverlay, dmTitle, dmMessages, dmForm, dmInput, dmFileInput, dmAttachBtn, dmImagePreview, dmCloseBtn, privateChatsList, openPrivateChatsBtn, privateChatBadge, sideTab;
+var images, overlay, messages, form, input, roomTitle, membersList, dmOverlay, dmTitle, dmMessages, dmForm, dmInput, dmFileInput, dmAttachBtn, dmImagePreview, dmCloseBtn, privateChatsList, openPrivateChatsBtn, privateChatBadge, sideTab;
 
 function cacheDOM() {
   images = document.querySelectorAll(".image-grid img");
@@ -1609,7 +1609,6 @@ function cacheDOM() {
   openPrivateChatsBtn = document.getElementById("openPrivateChats");
   privateChatBadge = document.getElementById("privateChatBadge");
   sideTab = document.getElementById("mySideTab");
-    closeBtn = document.getElementById("closeBtn");
 }
 
 window.addEventListener("DOMContentLoaded", function () {
