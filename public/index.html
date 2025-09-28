@@ -444,7 +444,6 @@
         padding: 10px;
         margin: 0;
         overflow-y: auto;
-        flex-grow: 1;
         max-height: 420px;
     }
 
@@ -527,7 +526,6 @@
     }
 
     #m {
-        flex-grow: 1;
         border: none;
         padding: 10px;
         font-size: 1em;
@@ -1401,7 +1399,7 @@ body:hover { cursor:url('cursor-image.png'), auto; }
           <button id="btnRooms" style="flex:1; padding:8px; background-color:#222; border:none; color:white; cursor:pointer;">Rooms</button>
         </div>
         <button id="btnCreateRoom" style="margin-bottom:12px; padding:8px; background-color:#3700ff; border:none; color:white; cursor:pointer; border-radius:6px;">Create New Room</button>
-        <ul id="roomList" style="list-style:none; padding:0; margin:0; overflow-y:auto; flex-grow:1;">
+        <ul id="roomList" style="list-style:none; padding:0; margin:0; overflow-y:auto;">
           <!-- Rooms inserted dynamically -->
         </ul>
       </div>
@@ -1419,7 +1417,7 @@ body:hover { cursor:url('cursor-image.png'), auto; }
           </div>
         </div>
         <form id="form" style="margin-top:10px; display:flex; gap:10px;" onSubmit="return false;">
-          <input id="m" autocomplete="off" placeholder="Type your message..." style="flex-grow:1; padding:8px; border-radius:4px; border:none;" />
+          <input id="m" autocomplete="off" placeholder="Type your message..." style="padding:8px; border-radius:4px; border:none;" />
           <button id="sendBtn" style="padding:8px 12px; border-radius:4px; background:limegreen; color:white; border:none;">Send</button>
         </form>
       </div>
