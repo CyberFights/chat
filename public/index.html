@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
 <style>
-    @import url('https://fonts.googleapis.com/css?family=Lato');
+       @import url('https://fonts.googleapis.com/css?family=Lato');
     body {
         font-family: 'Lato', Arial, sans-serif;
         margin: 40px;
@@ -17,8 +17,6 @@
         overflow-x: hidden;
         color: white;
     }
-
-    /* Landing Page */
     .container {
         display: flex;
         justify-content: center;
@@ -30,11 +28,9 @@
         background-size: cover;
         background-position: center;
     }
-
     .content {
         animation: fadeIn 2s ease-in-out;
     }
-
     h1 {
         font-size: 2.5rem;
         text-transform: uppercase;
@@ -50,7 +46,6 @@
             0 0 15px #1700fb;
         margin-bottom: 20px;
     }
-
     #p {
         font-size: 2.5rem;
         margin-top: 40%;
@@ -64,41 +59,26 @@
             0 0 12px #1700fb,
             0 0 15px #1700fb;
     }
-
     .fade-out {
         animation: fadeOut 2s forwards;
     }
-
     @keyframes fadeIn {
-        from {
-            opacity: 0;
-            transform: scale(0.9);
-        }
-        to {
-            opacity: 1;
-            transform: scale(1);
-        }
+        from { opacity: 0; transform: scale(0.9);}
+        to   { opacity: 1; transform: scale(1);}
     }
-
     @keyframes fadeOut {
-        to {
-            opacity: 0;
-            visibility: hidden;
-        }
+        to { opacity: 0; visibility: hidden; }
     }
-
     .hidden-page {
         display: none;
         color: white;
     }
-
     .button-row {
         display: flex;
         justify-content: center;
         gap: 15px;
         margin-bottom: 30px;
     }
-
     .button-row button {
         padding: 10px 20px;
         font-size: 16px;
@@ -109,12 +89,43 @@
         color: white;
         transition: background-color 0.3s ease;
     }
-
-    .button-row button:hover {
-        background-color: #cc0000;
+    .button-row button:hover { background-color: #cc0000; }
+    .main-layout {
+      display: flex;
+      flex-direction: row;
+      align-items: flex-start;
+      gap: 40px;
+      width: 96%;
+      margin: 0 auto 30px auto;
+      justify-content: flex-start;
     }
-
-    /* Carousel */
+    .profile-section {
+      min-width: 260px;
+      max-width: 340px;
+      background: #222;
+      color: white;
+      border-radius: 12px;
+      padding: 32px 24px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.3);
+      text-align: center;
+      margin-bottom: 0;
+      margin-right: 0;
+    }
+    .updates-section {
+      margin-top: 24px;
+      background: #232366;
+      padding: 16px;
+      border-radius: 10px;
+      color: #f3f3f3;
+    }
+    .blank-profile, .user-profile {
+        text-align: center;
+        padding: 20px;
+        border: 1px solid #444;
+        border-radius: 10px;
+        background-color: #111;
+        color: white;
+    }
     .grid-wrapper {
         position: relative;
         max-width: 60%;
@@ -123,14 +134,14 @@
         background: rgba(22,22,70,0.08);
         border-radius: 16px;
         box-shadow: 0 2px 12px rgba(0,0,0,0.3);
+        flex: 1 1 0;
+        min-width: 0;
     }
-
     .grid-track {
         display: flex;
         transition: transform 0.6s cubic-bezier(0.6,0,0.25,1);
         width: 100%;
     }
-
     .grid {
         flex: 0 0 100%;
         box-sizing: border-box;
@@ -141,7 +152,6 @@
         min-height: 340px;
         background: rgba(10, 10, 44, 0.17);
     }
-
     .image-item {
         position: relative;
         display: flex;
@@ -177,8 +187,7 @@
         text-shadow: 0 1px 8px #000;
         z-index: 2;
     }
-
-      .arrow {
+    .arrow {
         font-size: 3rem;
         padding: 5px 10px;
         color: white;
@@ -187,10 +196,10 @@
         background: rgba(0,0,0,0.4);
         user-select: none;
         transition: background 0.3s;
-      }
-      .arrow:hover {
+    }
+    .arrow:hover {
         background: rgba(0,0,0,0.85);
-      }
+    }
     /* Popups */
     .popup-overlay {
         display: none;
@@ -1074,6 +1083,22 @@ body:hover { cursor:url('cursor-image.png'), auto; }
 }
 
     /* --- Mobile Responsive Styles --- */
+    @media (max-width: 900px) {
+      .main-layout {
+        flex-direction: column;
+        gap: 18px;
+        width: 99vw;
+      }
+      .profile-section {
+        max-width: 98vw;
+        margin-bottom: 16px;
+        padding: 16px 4vw;
+      }
+      .grid-wrapper {
+        width: 100%;
+        margin: 0 auto 20px auto;
+      }
+    }
     @media (max-width: 640px) {
         html, body {
             margin: 0;
@@ -1143,6 +1168,7 @@ body:hover { cursor:url('cursor-image.png'), auto; }
             padding: 8px;
             margin: 0 2vw 10px 2vw;
         }
+    }
         .palak {
             max-width: 98vw;
             padding: 8px;
@@ -1234,7 +1260,7 @@ body:hover { cursor:url('cursor-image.png'), auto; }
     }
 
     /* Responsive */
-    @media (max-width: 800px) {
+  @media (max-width: 800px) {
         .grid {
             grid-template-columns: 1fr 1fr;
             padding: 6px;
@@ -1243,7 +1269,6 @@ body:hover { cursor:url('cursor-image.png'), auto; }
         .arrow {
             font-size: 2.2rem;
             left: -24px;
-            /* add right property for .arrow.right if needed */
             right: -24px;
         }
     }
@@ -1269,78 +1294,85 @@ body:hover { cursor:url('cursor-image.png'), auto; }
   <div class="button-row">
     <button style="background-color: limegreen;" onclick="openPopup('popup0')">Login</button>
     <button style="background-color: skyblue;" onclick="openPopup('popup1')">Users</button>
-          <button style="background-color: blue;" onclick="openChat('Main_Chat')">Chat</button>
     <button style="background-color: blue;" onclick="openPopup('popup2')">Rules</button>
     <button style="background-color: orange;" onclick="openPopup('popup3')">Contact</button>
     <button style="background-color: grey;" onclick="openPopup('popup4')">Settings</button>
     <button style="background-color: red;" onclick="openPopup('logout')">Logout</button>
   </div>
 
-  <!-- Room selector (grid slider) -->
- <div class="grid-wrapper">
-  <div class="grid-arrow-row">
-    <button class="arrow left" onclick="showPrevGrid()">&#10094;</button>
-    <button class="arrow right" onclick="showNextGrid()">&#10095;</button>
-  </div>
-    <div class="grid-track">
-      <!-- Grid 1 -->
-      <div class="image-grid grid">
-        <div class="image-item">
-          <img src="https://raw.githubusercontent.com/CyberFights/chat/refs/heads/main/public/assets/images/maindesk.jpg" alt="Main Chat" data-room="Main_Chat" />
-          <div class="room-label">Main Desk</div>
-        </div>
-        <div class="image-item">
-          <img src="https://raw.githubusercontent.com/CyberFights/chat/refs/heads/main/public/assets/images/lobby.jpg" alt="Lobby" data-room="Lobby" />
-          <div class="room-label">Lobby</div>
-        </div>
-        <div class="image-item">
-          <img src="https://raw.githubusercontent.com/CyberFights/chat/refs/heads/main/public/assets/images/wrestlingring.jpg" alt="Public Ring" data-room="Public_Ring" />
-          <div class="room-label">Wrestling Ring</div>
-        </div>
-        <div class="image-item">
-          <img src="https://raw.githubusercontent.com/CyberFights/chat/refs/heads/main/public/assets/images/weightroom.jpg" alt="Weight Room" data-room="Weight_Room" />
-          <div class="room-label">Weight Room</div>
-        </div>
-        <div class="image-item">
-          <img src="https://raw.githubusercontent.com/CyberFights/chat/refs/heads/main/public/assets/images/lockerroom.jpg" alt="Locker Room" data-room="Locker_Room" />
-          <div class="room-label">Locker Room</div>
-        </div>
-        <div class="image-item">
-          <img src="https://raw.githubusercontent.com/CyberFights/chat/refs/heads/main/public/assets/images/pool.jpg" alt="Public Pool" data-room="Public_Pool" />
-          <div class="room-label">Pool</div>
-        </div>
+  <div class="main-layout">
+    <div class="profile-section">
+      <h2>User Profile</h2>
+      <div id="profile" class="blank-profile">
+        <p>Please log in to see your profile.</p>
       </div>
-
-      <!-- Grid 2 -->
-      <div class="image-grid grid">
-        <div class="image-item">
-          <img src="https://raw.githubusercontent.com/CyberFights/chat/refs/heads/main/public/assets/images/imagen3_feed8ba2-7532-4a56-9414-488273926d58_0.png" alt="Mat Room" data-room="Mat_Room" />
-          <div class="room-label">Mat Room</div>
+      <div class="updates-section">
+        <h2>Website Updates</h2>
+        <ul id="updates-list">
+          <li>No updates available.</li>
+        </ul>
+      </div>
+    </div>
+    <div class="grid-wrapper">
+      <div class="grid-arrow-row">
+        <button class="arrow left" onclick="showPrevGrid()">&#10094;</button>
+        <button class="arrow right" onclick="showNextGrid()">&#10095;</button>
+      </div>
+      <div class="grid-track">
+        <div class="image-grid grid">
+          <div class="image-item">
+            <img src="https://raw.githubusercontent.com/CyberFights/chat/refs/heads/main/public/assets/images/maindesk.jpg" alt="Main Chat" data-room="Main_Chat" />
+            <div class="room-label">Main Desk</div>
+          </div>
+          <div class="image-item">
+            <img src="https://raw.githubusercontent.com/CyberFights/chat/refs/heads/main/public/assets/images/lobby.jpg" alt="Lobby" data-room="Lobby" />
+            <div class="room-label">Lobby</div>
+          </div>
+          <div class="image-item">
+            <img src="https://raw.githubusercontent.com/CyberFights/chat/refs/heads/main/public/assets/images/wrestlingring.jpg" alt="Public Ring" data-room="Public_Ring" />
+            <div class="room-label">Wrestling Ring</div>
+          </div>
+          <div class="image-item">
+            <img src="https://raw.githubusercontent.com/CyberFights/chat/refs/heads/main/public/assets/images/weightroom.jpg" alt="Weight Room" data-room="Weight_Room" />
+            <div class="room-label">Weight Room</div>
+          </div>
+          <div class="image-item">
+            <img src="https://raw.githubusercontent.com/CyberFights/chat/refs/heads/main/public/assets/images/lockerroom.jpg" alt="Locker Room" data-room="Locker_Room" />
+            <div class="room-label">Locker Room</div>
+          </div>
+          <div class="image-item">
+            <img src="https://raw.githubusercontent.com/CyberFights/chat/refs/heads/main/public/assets/images/pool.jpg" alt="Public Pool" data-room="Public_Pool" />
+            <div class="room-label">Pool</div>
+          </div>
         </div>
-        <div class="image-item">
-          <img src="https://raw.githubusercontent.com/CyberFights/chat/refs/heads/main/public/assets/images/gras.png" alt="Field" data-room="Field" />
-          <div class="room-label">Field</div>
-        </div>
-        <div class="image-item">
-          <img src="https://raw.githubusercontent.com/CyberFights/chat/refs/heads/main/public/assets/images/urban.png" alt="Urban Brawl" data-room="Urban_Brawl" />
-          <div class="room-label">Urban Brawl</div>
-        </div>
-      <div class="image-item">
-    <img src="https://via.placeholder.com/280x180.png?text=Showroom" alt="W.I.P." data-room="W.I.P." />
-    <div class="room-label" style="cursor:pointer;" onclick="openProfileWindow()">User Search</div>
-</div>
-        <div class="image-item">
-          <img src="https://via.placeholder.com/280x180.png?text=Gym" alt="W.I.P." data-room="W.I.P." />
-          <div class="room-label">W.I.P.</div>
-        </div>
-        <div class="image-item">
-          <img src="https://via.placeholder.com/280x180.png?text=VIP+Pool" alt="VW.I.P." data-room="W.I.P." />
-          <div class="room-label">W.I.P.</div>
+        <div class="image-grid grid">
+          <div class="image-item">
+            <img src="https://raw.githubusercontent.com/CyberFights/chat/refs/heads/main/public/assets/images/imagen3_feed8ba2-7532-4a56-9414-488273926d58_0.png" alt="Mat Room" data-room="Mat_Room" />
+            <div class="room-label">Mat Room</div>
+          </div>
+          <div class="image-item">
+            <img src="https://raw.githubusercontent.com/CyberFights/chat/refs/heads/main/public/assets/images/gras.png" alt="Field" data-room="Field" />
+            <div class="room-label">Field</div>
+          </div>
+          <div class="image-item">
+            <img src="https://raw.githubusercontent.com/CyberFights/chat/refs/heads/main/public/assets/images/urban.png" alt="Urban Brawl" data-room="Urban_Brawl" />
+            <div class="room-label">Urban Brawl</div>
+          </div>
+          <div class="image-item">
+            <img src="https://via.placeholder.com/280x180.png?text=Showroom" alt="W.I.P." data-room="W.I.P." />
+            <div class="room-label" style="cursor:pointer;" onclick="openProfileWindow()">User Search</div>
+          </div>
+          <div class="image-item">
+            <img src="https://via.placeholder.com/280x180.png?text=Gym" alt="W.I.P." data-room="W.I.P." />
+            <div class="room-label">W.I.P.</div>
+          </div>
+          <div class="image-item">
+            <img src="https://via.placeholder.com/280x180.png?text=VIP+Pool" alt="VW.I.P." data-room="W.I.P." />
+            <div class="room-label">W.I.P.</div>
+          </div>
         </div>
       </div>
     </div>
-  </div>
-
     
   <div class="overlay" id="chatOverlay" style="display:none;">
     <div class="overlay-content">
@@ -1393,20 +1425,6 @@ body:hover { cursor:url('cursor-image.png'), auto; }
       </div>
     </div>
   </div>
-
-    <!-- Profile and Updates -->
-    <div class="profile-section">
-        <h2>User Profile</h2>
-        <div id="profile" class="blank-profile">
-            <p>Please log in to see your profile.</p>
-        </div>
-    </div>
-    <div class="updates-section">
-        <h2>Website Updates</h2>
-        <ul id="updates-list">
-            <li>No updates available.</li>
-        </ul>
-    </div>
 </div>
 
 <!-- Popups -->
@@ -1575,7 +1593,6 @@ body:hover { cursor:url('cursor-image.png'), auto; }
 
 <script>
 const socket = io();
-
 let currentUsername = '';
 let currentRoom = null;
 let dmTarget = null;
@@ -1598,15 +1615,14 @@ function cacheDOM() {
     input = document.getElementById('m');
     roomTitle = document.getElementById('roomTitle');
     membersList = document.getElementById('members-list');
-    dmOverlay = document.getElementById('dmOverlay');
-    dmTitle = document.getElementById('dmTitle');
+    dmOverlay = document.getElementById('dmSidebar');
+    dmTitle = document.getElementById('dmUserTitle');
     dmMessages = document.getElementById('dmMessages');
     dmForm = document.getElementById('dmForm');
     dmInput = document.getElementById('dmInput');
     dmFileInput = document.getElementById('dmFileInput');
     dmAttachBtn = document.getElementById('dmAttachBtn');
     dmImagePreview = document.getElementById('dmImagePreview');
-    dmCloseBtn = document.getElementById('dmCloseBtn');
     privateChatsList = document.getElementById('private-chats');
     openPrivateChatsBtn = document.getElementById('openPrivateChats');
     privateChatBadge = document.getElementById('privateChatBadge');
@@ -1948,7 +1964,7 @@ const isLoggedIn = sessionStorage.getItem('isLoggedIn');
     // --- Settings form submit ---
     var settingsForm = document.getElementById('settingsForm');
     if (settingsForm) {
-        settingsForm.addEventListener('submit', function(event) {
+        settingsForm.addEventListener('submit', function(e) {
             e.preventDefault();
             var unameElem = document.getElementById('username');
             currentUsername = (unameElem && unameElem.value) ? unameElem.value : 'User';
@@ -1964,19 +1980,28 @@ const isLoggedIn = sessionStorage.getItem('isLoggedIn');
     }
 
     // --- DM Overlay ---
-    function openDmOverlay(username) {
-    if (username === currentUsername) {
+
+function getDmRoomName(userA, userB) {
+  return 'dm_' + [userA, userB].sort().join('_');
+}
+
+function openDmOverlay(username) {
+  if (username === currentUsername) {
         alert("You can't DM yourself.");
         return;
     }
+ dmTarget = username;
+  const dmRoom = getDmRoomName(currentUsername, username);
+  socket.emit('joinDmRoom', { dmRoom, username: currentUsername });
+  
     const chatObj = privateChats[username];
     if (!chatObj) return;
-    dmTarget = username;
     dmOverlay.style.display = 'flex';
     dmTitle.textContent = 'Chat with ' + username;
     dmMessages.innerHTML = '<li>Loading...</li>';
     fetch('/dm-messages/' + encodeURIComponent(chatObj.dmRoom))
-      .then(res => res.json())
+      .then(res => res.json
+())
       .then(messagesArr => {
         dmMessages.innerHTML = '';
         messagesArr.forEach(msg => {
@@ -1989,19 +2014,22 @@ const isLoggedIn = sessionStorage.getItem('isLoggedIn');
       });
     clearPrivateChatBadge();
 }
+
 window.openDmOverlay = openDmOverlay;
-   // Close DM overlay
-    if (dmCloseBtn) {
-        dmCloseBtn.onclick = function() {
-            dmOverlay.style.display = 'none';
-            dmTarget = null;
+
+function closeDmOverlay() {
+  dmOverlay.style.display = 'none';
+  const dmRoom = getDmRoomName(currentUsername, dmTarget);
+  socket.emit('leaveDmRoom', { dmRoom, username: currentUsername });
+  dmTarget = null;
             dmInput.value = '';
             dmMessages.innerHTML = '';
             dmImagePreview.innerHTML = '';
             dmFileInput.value = '';
             dmAttachedFile = null;
-        };
-    }
+}
+window.closeDmOverlay = closeDmOverlay;
+    
     // DM Attach Image
     if (dmAttachBtn) {
         dmAttachBtn.onclick = function() {
@@ -2031,61 +2059,20 @@ function addDmMessage(from, message) {
 }
 
 // Send DM message (text or with image)
-if (dmForm) {
-    dmForm.onsubmit = function(e) {
-        e.preventDefault();
-        var text = dmInput.value.trim();
-        if (!text && !dmAttachedFile) return;
-        const chatObj = privateChats[dmTarget];
-        if (!chatObj) return;
-
-        // For image sending, you would extend this logic with FormData and proper multipart handling
-        if (dmAttachedFile) {
-            var formData = new FormData();
-            formData.append('from_user', currentUsername);
-            formData.append('to_user', dmTarget);
-            formData.append('message', text);
-            formData.append('image', dmAttachedFile);
-
-            fetch('/private/messages', { method: 'POST', body: formData })
-                .then(function(res) {
-                    if (res.ok) {
-                        addDmMessage(currentUsername, text || '[Image]');
-                        dmInput.value = '';
-                        dmImagePreview.innerHTML = '';
-                        dmFileInput.value = '';
-                        dmAttachedFile = null;
-                    } else {
-                        alert('Failed to send message.');
-                    }
-                })
-                .catch(function(err) {
-                    alert('Error sending message: ' + err.message);
-                });
-        } else {
-            // Save message to DM room via REST API
-            fetch('/dm-messages/' + encodeURIComponent(chatObj.dmRoom), {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ from_user: currentUsername, message: text })
-            })
-            .then(res => {
-                if (res.ok) {
-                    addDmMessage(currentUsername, text);
-                    dmInput.value = '';
-                    dmImagePreview.innerHTML = '';
-                    dmFileInput.value = '';
-                    dmAttachedFile = null;
-                } else {
-                    alert('Failed to send message.');
-                }
-            })
-            .catch(function(err) {
-                alert('Error sending message: ' + err.message);
-            });
-        }
-    };
-}
+dmSendBtn.addEventListener('click', function() {
+  const now = new Date();
+  const timestamp = now.toLocaleTimeString();
+  const dmRoom = getDmRoomName(currentUsername, dmTarget);
+  if (dmTarget && dmMessageInput.value.trim()) {
+    socket.emit('dm message', {
+      dmRoom,
+      from_user: currentUsername,
+      message: dmMessageInput.value,
+      timestamp
+    });
+    dmMessageInput.value = '';
+  }
+});
 
     function startPrivateChat(username) {
     if (username === currentUsername) { alert("You can't DM yourself."); return; }
@@ -2435,6 +2422,21 @@ let dmBtn = document.createElement('button');
 
 
             
+socket.on('dm message', function(data) {
+  addDmMessage(data.from_user, data.message, data.timestamp);
+});
+socket.on('updateDmMembers', function(members) {
+  // Update DM UI with member list if desired
+});
+socket.on('loadDmMessages', function(msgs) {
+  dmMessages.innerHTML = '';
+  for (var i = 0; i < msgs.length; i++) {
+    var item = document.createElement('li');
+    item.textContent = msgs[i];
+    dmMessages.appendChild(item);
+  }
+});
+
 socket.on('private message', function(obj) {
     var from = obj.from;
     var message = obj.message;
@@ -2443,10 +2445,8 @@ socket.on('private message', function(obj) {
         addDmMessage(from, message);
     } else {
         incrementPrivateMessageBadge();
-        // Optionally play a sound for notification here
     }
 });
-
 function renderPrivateChatsList() {
   const privateChatsList = document.getElementById('private-chats');
   privateChatsList.innerHTML = '';
