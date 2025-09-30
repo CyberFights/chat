@@ -392,9 +392,11 @@
     }
     #dmBox {
         flex: 1 1 auto;
-        display: none;
+        height: 480px;
         flex-direction: column;
         padding:8px;
+        overflow: hidden;
+        overflow-y; auto;
     }
     #dmUserTitle {
         margin-bottom:10px;
@@ -1382,7 +1384,7 @@ body:hover { cursor:url('cursor-image.png'), auto; }
       </ul>
     </div>
     <!-- DM BOX COLUMN -->
-    <div id="dmBox" style="display:none; flex-direction:column;">
+    <div id="dmBox" style="display:flex; flex-direction:column;">
       <h4 id="dmUserTitle"></h4>
       <ul id="dmMessages"></ul>
       <form id="dmForm" style="display:flex; gap:8px; align-items:center;" onsubmit="return false;">
