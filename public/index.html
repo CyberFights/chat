@@ -367,29 +367,7 @@
         color: white;
         min-height: 500px;
     }
-    /* ---- DM sidebar ---- */
-    #dmSidebar {
-        width: 220px;
-        min-width: 160px;
-        background: #191944;
-        color: white;
-        display: flex;
-        flex-direction: column;
-        border-right: 2px solid #333;
-        box-sizing: border-box;
-        height: 100%;
-    }
-    #dmList li {
-        cursor: pointer;
-        padding: 6px 8px;
-        border-radius: 4px;
-        background: #232366;
-        margin-bottom: 4px;
-        transition: background 0.2s;
-    }
-    #dmList li:hover {
-        background: #003090;
-    }
+  
     #dmBox {
         flex: 1 1 auto;
         height: 480px;
@@ -1376,13 +1354,6 @@ body:hover { cursor:url('cursor-image.png'), auto; }
     
   <div class="overlay" id="chatOverlay" style="display:none;">
   <div class="overlay-content">
-    <!-- DM SIDEBAR COLUMN -->
-    <div id="dmSidebar">
-      <h3 style="margin:12px 0 10px 12px;">DMs</h3>
-      <ul id="dmList" style="list-style:none; padding:0 7px; margin:0 9px 0 0; max-height:150px; overflow-y:auto;">
-        <!-- DM users will appear here dynamically -->
-      </ul>
-    </div>
     <!-- DM BOX COLUMN -->
     <div id="dmBox" style="display:flex; flex-direction:column;">
       <h4 id="dmUserTitle"></h4>
