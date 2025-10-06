@@ -1346,13 +1346,13 @@ body:hover { cursor:url('cursor-image.png'), auto; }
     <div id="dmBox">
       <h4 id="dmUserTitle"></h4>
       <ul id="dmMessages"></ul>
+         <div id="dmImagePreview" style="margin-top:8px; max-height:60px;"></div>
       <form id="dmForm" onsubmit="return false;">
         <input id="dmInput" autocomplete="off" placeholder="Type your private message..." style="padding:7px; border-radius:5px; border:1px solid #ccc;" />
         <input type="file" id="dmFileInput" accept="image/*" style="display:none;" />
         <button type="button" id="dmAttachBtn" title="Attach" style="background:none; border:none; cursor:pointer; font-size:18px;">📎</button>
         <button type="submit" style="padding:8px 14px; border-radius:6px; background:#1700fb; color:#fff; border:none;">Send</button>
       </form>
-      <div id="dmImagePreview" style="margin-top:8px; max-height:60px;"></div>
     </div>
     <!-- ROOM LIST SIDEBAR COLUMN -->
     <div id="chatSidebar">
@@ -1366,21 +1366,19 @@ body:hover { cursor:url('cursor-image.png'), auto; }
       </ul>
     </div>
     <!-- MAIN CHAT / ONLINE MEMBERS COLUMN -->
-    <div id="main-chat-content">
+
  
         <div id="messages-column">
           <div id="roomTitle"></div>
           <ul id="messages"></ul>
+             <form id="form" style="margin-top:10px; display:flex; gap:10px;" onSubmit="return false;">
+        <input id="m" autocomplete="off" placeholder="Type your message..." style="padding:8px; border-radius:4px; border:none;" />
+        <button id="sendBtn" style="padding:8px 12px; border-radius:4px; background:limegreen; color:white; border:none;">Send</button>
+      </form>
         </div>
         <div id="online-members">
           <b>Online:</b>
           <ul id="members-list"></ul>
-        </div>
-
-      <form id="form" style="margin-top:10px; display:flex; gap:10px;" onSubmit="return false;">
-        <input id="m" autocomplete="off" placeholder="Type your message..." style="padding:8px; border-radius:4px; border:none;" />
-        <button id="sendBtn" style="padding:8px 12px; border-radius:4px; background:limegreen; color:white; border:none;">Send</button>
-      </form>
     </div>
   </div>
 </div>
