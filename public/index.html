@@ -1361,11 +1361,11 @@ body:hover { cursor:url('cursor-image.png'), auto; }
   <div class="overlay" id="chatOverlay" style="display:none;">
   <div class="overlay-content">
     <!-- DM BOX COLUMN -->
-    <div id="dmBox" style="display:flex; flex-direction:column;">
+    <div id="dmBox">
       <h4 id="dmUserTitle"></h4>
       <ul id="dmMessages"></ul>
-      <form id="dmForm" style="display:flex; gap:8px; align-items:center;" onsubmit="return false;">
-        <input id="dmInput" autocomplete="off" placeholder="Type your private message..." style="flex:1; padding:7px; border-radius:5px; border:1px solid #ccc;" />
+      <form id="dmForm" onsubmit="return false;">
+        <input id="dmInput" autocomplete="off" placeholder="Type your private message..." style="padding:7px; border-radius:5px; border:1px solid #ccc;" />
         <input type="file" id="dmFileInput" accept="image/*" style="display:none;" />
         <button type="button" id="dmAttachBtn" title="Attach" style="background:none; border:none; cursor:pointer; font-size:18px;">📎</button>
         <button type="submit" style="padding:8px 14px; border-radius:6px; background:#1700fb; color:#fff; border:none;">Send</button>
@@ -1374,7 +1374,7 @@ body:hover { cursor:url('cursor-image.png'), auto; }
     </div>
     <!-- ROOM LIST SIDEBAR COLUMN -->
     <div id="chatSidebar">
-      <div style="display:flex; justify-content:space-between; margin-bottom:12px;">
+      <div>
         <button id="btnDMs" style="margin-right:8px; padding:8px; background-color:#222; border:none; color:white; cursor:pointer;">DMs</button>
         <button id="btnRooms" style="padding:8px; background-color:#222; border:none; color:white; cursor:pointer;">Rooms</button>
       </div>
@@ -1384,13 +1384,13 @@ body:hover { cursor:url('cursor-image.png'), auto; }
       </ul>
     </div>
     <!-- MAIN CHAT / ONLINE MEMBERS COLUMN -->
-    <div id="main-chat-content" style="display:flex; flex-direction:column; border-left:1px solid #444; padding-left:10px;">
+    <div id="main-chat-content">
  
-        <div id="messages-column" style="display:flex; flex-direction:column;">
+        <div id="messages-column">
           <div id="roomTitle"></div>
-          <ul id="messages" style="overflow-y:auto;"></ul>
+          <ul id="messages"></ul>
         </div>
-        <div id="online-members" style="color:white; width:30%; padding-left:10px;">
+        <div id="online-members">
           <b>Online:</b>
           <ul id="members-list"></ul>
         </div>
