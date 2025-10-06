@@ -342,10 +342,10 @@
 
 .overlay {
     position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 500px;
+    top: 10;
+    left: 10;
+    width: 95%;
+    height: 480px;
     background-color: rgba(0, 0, 0, 0.8);
     display: none;
     justify-content: center;
@@ -358,7 +358,7 @@
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
     width: 90%;
-    max-width: 1200px;
+    max-width: 90%;
     position: relative;
     border: 8px solid grey;
     display: flex;
@@ -1373,11 +1373,11 @@ body:hover { cursor:url('cursor-image.png'), auto; }
     <!-- ROOM LIST SIDEBAR COLUMN -->
     <div id="chatSidebar">
       <div style="display:flex; justify-content:space-between; margin-bottom:12px;">
-        <button id="btnDMs" style="flex:1; margin-right:8px; padding:8px; background-color:#222; border:none; color:white; cursor:pointer;">DMs</button>
-        <button id="btnRooms" style="flex:1; padding:8px; background-color:#222; border:none; color:white; cursor:pointer;">Rooms</button>
+        <button id="btnDMs" style="margin-right:8px; padding:8px; background-color:#222; border:none; color:white; cursor:pointer;">DMs</button>
+        <button id="btnRooms" style="padding:8px; background-color:#222; border:none; color:white; cursor:pointer;">Rooms</button>
       </div>
       <button id="btnCreateRoom" style="margin-bottom:12px; padding:8px; background-color:#3700ff; border:none; color:white; cursor:pointer; border-radius:6px;">Create New Room</button>
-      <ul id="roomList" style="list-style:none; padding:0; margin:0; overflow-y:auto; overflow:hidden; width:15%;">
+      <ul id="roomList">
         <!-- Rooms inserted dynamically -->
       </ul>
     </div>
