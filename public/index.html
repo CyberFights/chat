@@ -369,7 +369,8 @@
     height: 85vh;
     align-items: stretch;
     box-sizing: border-box;
-    overflow: hidden; /* prevents wrapping */
+    overflow: hidden;
+    min-width: 0; /* <-- ADD THIS! */
 }
 
 #dmBox,
@@ -382,9 +383,9 @@
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
-    flex-shrink: 0; /* <--- Prevent shrinking! */
-    /* Remove width: 100% or display: block if present */
     overflow-y: auto;
+    min-width: 0;     /* <-- ADD THIS! */
+    flex-shrink: 1;   /* <-- ALLOW SHRINKING! */
 }
 
 #dmBox { width: 22%; background: black; border: 3px solid white; }
