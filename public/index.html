@@ -371,6 +371,7 @@
     box-sizing: border-box;
     overflow: hidden;
     min-width: 0; /* <-- ADD THIS! */
+    flex-wrap: nowrap;
 }
 
 #dmBox,
@@ -388,10 +389,10 @@
     flex-shrink: 1;   /* <-- ALLOW SHRINKING! */
 }
 
-#dmBox { width: 22%; background: black; border: 3px solid white; }
-#chatSidebar { width: 12%; background: #232366; border: 3px solid white; }
-#messages-column { width: 44%; background-color: #000; border: 3px solid white; }
-#online-members { width: 22%; background-color: grey; border: 3px solid white; color: white; font-size: 16px; border-left: 1px solid #eee; }
+#dmBox { width: 21%; background: black; border: 3px solid white; }
+#chatSidebar { width: 11%; background: #232366; border: 3px solid white; }
+#messages-column { width: 43%; background-color: #000; border: 3px solid white; }
+#online-members { width: 21%; background-color: grey; border: 3px solid white; color: white; font-size: 16px; border-left: 1px solid #eee; }
 
 /* Remove grid properties from child columns */
 #dmBox, #chatSidebar, #messages-column, #online-members {
