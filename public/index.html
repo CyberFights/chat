@@ -342,10 +342,10 @@
 
 .overlay {
     position: fixed;
-    top: 10;
-    left: 10;
-    width: 95%;
-    height: 480px;
+    top: 0;
+    left: 0;
+    width: 90%;
+    height: 85%;
     background-color: rgba(0, 0, 0, 0.8);
     display: none;
     justify-content: center;
@@ -364,7 +364,7 @@
     display: flex;
     gap: 20px; /* add some spacing between columns */
     color: white;
-    min-height: 500px;
+    height: 85%;
 }
 
 #dmBox {
@@ -380,7 +380,6 @@
 
 #chatSidebar {
     width: 12%;
-    height: 480px;
     display: flex;
     flex-direction: column;
     background: #232366;
@@ -391,7 +390,6 @@
 
 #messages-column {
     width: 44%;
-    height: 480px;
     display: flex;
     flex-direction: column;
     background-color: #000;
@@ -402,7 +400,6 @@
 
 #online-members {
     width: 22%;
-    height: 480px;
     padding: 10px;
     color: white;
     border-left: 1px solid #eee;
@@ -418,7 +415,6 @@
     #dmMessages {
         list-style:none;
         padding:0;
-        max-height:480px;
         width: 25%;
         overflow-y:auto;
         background:#eee;
@@ -500,8 +496,6 @@
     }
 
     #form {
-        grid-column: 3 / 3;
-        grid-row: 2 / 2;
         display: flex;
         padding: 10px;
         background: #f0f0f0;
