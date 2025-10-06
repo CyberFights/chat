@@ -344,8 +344,8 @@
     position: fixed;
     top: 0;
     left: 0;
-    width: 90%;
-    height: 85%;
+    width: 90vw;
+    height: 85vh;
     background-color: rgba(0, 0, 0, 0.8);
     display: none;
     justify-content: center;
@@ -357,60 +357,65 @@
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
-    width: 90%;
-    max-width: 90%;
+    width: 90vw;
+    max-width: 1200px;
+    min-width: 800px;
     position: relative;
     border: 8px solid grey;
     display: flex;
-    gap: 20px; /* add some spacing between columns */
+    flex-direction: row;
+    gap: 20px;
     color: white;
-    height: 85%;
+    height: 85vh;
+    align-items: stretch;
+}
+
+#dmBox,
+#chatSidebar,
+#messages-column,
+#online-members {
+    height: 100%;
+    margin: 0;
+    padding: 8px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
 }
 
 #dmBox {
     width: 22%;
-    height: 85%;
-    display: flex;
-    flex-direction: column;
-    padding: 8px;
     background: black;
     border: 3px solid white;
-    overflow-y: auto;
 }
 
 #chatSidebar {
     width: 12%;
-    height: 85%;
-    display: flex;
-    flex-direction: column;
     background: #232366;
     border: 3px solid white;
-    overflow-y: auto;
-    padding: 8px;
 }
 
 #messages-column {
     width: 44%;
-    display: flex;
-    flex-direction: column;
     background-color: #000;
     border: 3px solid white;
-    overflow-y: auto;
-    padding: 8px;
-    height: 85%;
 }
 
 #online-members {
     width: 22%;
-    padding: 10px;
-    color: white;
-    border-left: 1px solid #eee;
     background-color: grey;
     border: 3px solid white;
+    color: white;
     font-size: 16px;
-    overflow-y: auto;
-    height: 85%;
+    border-left: 1px solid #eee;
 }
+
+/* Remove grid properties from child columns (important for flex layout) */
+#dmBox, #chatSidebar, #messages-column, #online-members {
+    grid-column: unset !important;
+    grid-row: unset !important;
+}
+
 
     #dmUserTitle {
         margin-bottom:10px;
