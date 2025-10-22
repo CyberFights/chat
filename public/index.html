@@ -363,7 +363,6 @@
     position: relative;
     border: 8px solid grey;
     display: flex;
-    flex-direction: column;
     gap: 20px;
     color: white;
     height: 85vh;
@@ -389,16 +388,11 @@
     
 }
 
-#dmBox { width: 21%; background: black; border: 3px solid white; }
+#dmBox { width: 21%; background: black; border: 3px solid white; flex: 1;}
 #chatSidebar { width: 11%; background: #232366; border: 3px solid white; }
-#messages-column { width: 43%; background-color: #000; border: 3px solid white; }
+#messages-column { width: 43%; background-color: #000; border: 3px solid white; flex: 2;}
 #online-members { width: 21%; background-color: grey; border: 3px solid white; color: white; font-size: 16px; border-left: 1px solid #eee; }
 
-/* Remove grid properties from child columns */
-#dmBox, #chatSidebar, #messages-column, #online-members {
-    grid-column: unset !important;
-    grid-row: unset !important;
-}
 
     #dmUserTitle {
         margin-bottom:10px;
