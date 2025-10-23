@@ -358,17 +358,15 @@
     width: 90vw;
     max-width: 1200px;
     min-width: 800px;
-    position: relative;
     border: 8px solid grey;
     display: flex;
+    flex-direction: row;
     gap: 20px;
     color: white;
     height: 85vh;
     align-items: stretch;
     box-sizing: border-box;
     overflow: hidden;
-    min-width: 0; /* <-- ADD THIS! */
-    flex-wrap: nowrap;
 }
 
 #dmBox,
@@ -386,10 +384,10 @@
     
 }
 
-#dmBox { width: 21%; background: black; border: 3px solid white; flex: 1;}
-#chatSidebar { width: 11%; background: #232366; border: 3px solid white; }
-#messages-column { width: 43%; background-color: #000; border: 3px solid white; flex: 2;}
-#online-members { width: 21%; background-color: grey; border: 3px solid white; color: white; font-size: 16px; border-left: 1px solid #eee; }
+#dmBox { width: 30%; background: black; border: 3px solid white; }
+#chatSidebar { width: 20%; background: #232366; border: 3px solid white; }
+#messages-column { width: 30%; background-color: #000; border: 3px solid white; }
+#online-members { width: 20%; background-color: grey; border: 3px solid white; color: white; font-size: 16px; border-left: 1px solid #eee; }
 
 
     #dmUserTitle {
