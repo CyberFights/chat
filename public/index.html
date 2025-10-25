@@ -340,39 +340,11 @@
         object-fit: cover;
     }
 
-.overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 90vw;
-    height: 85vh;
-    background-color: rgba(0, 0, 0, 0.8);
-    display: none;
-    z-index: 1000;
-}
-.overlay-content {
-    background-color: #1700fb;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
-    width: 90vw;
-    max-width: 1200px;
-    min-width: 800px;
-    border: 8px solid grey;
-    display: flex;
-    flex-direction: row;
-    gap: 20px;
-    color: white;
-    height: 85vh;
-    align-items: stretch;
-    box-sizing: border-box;
-    overflow: hidden;
-}
-
-#dmBox,
-#chatSidebar,
-#messages-column,
-#online-members {
+/* Layout for chat columns inside the overlay content */
+.overlay-content #dmBox,
+.overlay-content #chatSidebar,
+.overlay-content #messages-column,
+.overlay-content #online-members {
     height: 480px;
     margin: 0;
     padding: 8px;
@@ -380,294 +352,288 @@
     display: flex;
     flex-direction: column;
     overflow-y: auto;
-    min-width: 0;     /* <-- ADD THIS! */
-    
+    min-width: 0;
 }
 
-#dmBox { width: 30%; background: black; border: 3px solid white; }
-#chatSidebar { width: 20%; background: #232366; border: 3px solid white; }
-#messages-column { width: 30%; background-color: #000; border: 3px solid white; }
-#online-members { width: 20%; background-color: grey; border: 3px solid white; color: white; font-size: 16px; border-left: 1px solid #eee; }
+/* Individual column widths */
+.overlay-content #dmBox { width: 30%; background: black; border: 3px solid white; }
+.overlay-content #chatSidebar { width: 20%; background: #232366; border: 3px solid white; }
+.overlay-content #messages-column { width: 30%; background-color: #000; border: 3px solid white; }
+.overlay-content #online-members { width: 20%; background-color: grey; border: 3px solid white; color: white; font-size: 16px; border-left: 1px solid #eee; }
 
+/* DM area specifics */
+.overlay-content #dmUserTitle {
+    margin-bottom: 10px;
+}
+.overlay-content #dmMessages {
+    list-style: none;
+    padding: 0;
+    width: 25%;
+    overflow-y: auto;
+    background: #eee;
+    border-radius: 8px;
+    margin-bottom: 12px;
+    color: #222;
+}
+.overlay-content #dmMessages li.me {
+    background: #c6e1fc; text-align: right;
+}
+.overlay-content #dmImagePreview img {
+    max-height: 60px;
+    border-radius: 8px;
+    margin-right: 8px;
+}
 
-    #dmUserTitle {
-        margin-bottom:10px;
-    }
-    #dmMessages {
-        list-style:none;
-        padding:0;
-        width: 25%;
-        overflow-y:auto;
-        background:#eee;
-        border-radius:8px;
-        margin-bottom:12px;
-        color:#222;
-    }
-    #dmMessages li.me {
-        background: #c6e1fc; text-align:right;
-    }
-    #dmImagePreview img {
-        max-height: 60px;
-        border-radius: 8px;
-        margin-right: 8px;
-    }
+/* Room title & messages column */
+.overlay-content #roomTitle {
+    font-size: 30px;
+    text-shadow: 0 0 7px lightskyblue, 0 0 4px lightskyblue, 0 0 10px lightskyblue, 0 0 12px lightskyblue;
+    color: ghostwhite;
+    margin-left: 60%;
+    z-index: 2;
+    margin-bottom: 10px;
+}
 
-    #roomTitle {
-        font-size: 30px;
-        text-shadow: 0 0 7px lightskyblue, 0 0 4px lightskyblue, 0 0 10px lightskyblue, 0 0 12px lightskyblue;
-        color: ghostwhite;
-        margin-left: 60%;
-        z-index: 2;
-        margin-bottom: 10px;
-    }
+.overlay-content #messages {
+    list-style-type: none;
+    padding: 10px;
+    margin: 0;
+    overflow-y: auto;
+    max-height: 83%;
+}
 
-    #messages {
-        list-style-type: none;
-        padding: 10px;
-        margin: 0;
-        overflow-y: auto;
-        max-height: 83%;
-    }
+.overlay-content #messages li {
+    padding: 5px 10px;
+    border-bottom: 1px solid #eee;
+    color: white;
+    word-wrap: break-word;
+}
 
-    #messages li {
-        padding: 5px 10px;
-        border-bottom: 1px solid #eee;
-        color: white;
-        word-wrap: break-word;
-    }
+/* Members list */
+.overlay-content #members-list {
+    list-style: none;
+    padding: 0;
+    margin: 10px 0 0 0;
+}
 
-    #members-list {
-        list-style: none;
-        padding: 0;
-        margin: 10px 0 0 0;
-    }
+.overlay-content .member-item {
+    display: flex;
+    align-items: center;
+    padding: 5px;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.2s ease;
+}
 
-    .member-item {
-        display: flex;
-        align-items: center;
-        padding: 5px;
-        cursor: pointer;
-        border-radius: 5px;
-        transition: background-color 0.2s ease;
-    }
+.overlay-content .member-item:hover {
+    background-color: #222;
+}
 
-    .member-item:hover {
-        background-color: #222;
-    }
+.overlay-content .member-item img {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    margin-right: 10px;
+    object-fit: cover;
+}
 
-    .member-item img {
-        width: 30px;
-        height: 30px;
-        border-radius: 50%;
-        margin-right: 10px;
-        object-fit: cover;
-    }
-    
-    #roomList li {
-      padding: 8px 12px;
-      cursor: pointer;
-      background-color: #222;
-      border-radius: 6px;
-      margin-bottom: 6px;
-      transition: background-color 0.3s;
-    }
+/* Room list items */
+.overlay-content #roomList li {
+    padding: 8px 12px;
+    cursor: pointer;
+    background-color: #222;
+    border-radius: 6px;
+    margin-bottom: 6px;
+    transition: background-color 0.3s;
+}
+.overlay-content #roomList li:hover {
+    background-color: #444;
+}
 
-    #roomList li:hover {
-      background-color: #444;
-    }
+/* Message form inside overlay */
+.overlay-content #form {
+    display: flex;
+    padding: 10px;
+    background: #f0f0f0;
+    width: 98%;
+    border-radius: 8px;
+}
 
-    #form {
-        display: flex;
-        padding: 10px;
-        background: #f0f0f0;
-        width: 98%;
-        border-radius: 8px;
-    }
+.overlay-content #m {
+    border: none;
+    padding: 10px;
+    font-size: 1em;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(7, 1, 1, 0.41), 0 7px 13px -3px rgba(0, 0, 0, 0.91), inset 0 -3px 0 rgba(0, 0, 0, 0.51);
+}
 
-    #m {
-        border: none;
-        padding: 10px;
-        font-size: 1em;
-        border-radius: 5px;
-        box-shadow: 0 2px 4px rgba(7, 1, 1, 0.41), 0 7px 13px -3px rgba(0, 0, 0, 0.91), inset 0 -3px 0 rgba(0, 0, 0, 0.51);
-    }
+.overlay-content #form button {
+    background: #333;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    border-radius: 5px;
+    margin-left: 10px;
+    width: 80px;
+}
+.overlay-content #form button:hover {
+    background: #555;
+}
 
-    #form button {
-        background: #333;
-        color: #fff;
-        border: none;
-        padding: 10px 20px;
-        cursor: pointer;
-        border-radius: 5px;
-        margin-left: 10px;
-        width: 80px;
-    }
+.overlay-content #form label {
+    cursor: pointer;
+    margin-left: 10px;
+    display: flex;
+    align-items: center;
+    color: #333;
+}
+.overlay-content #form input[type="file"] {
+    display: none;
+}
 
-    #form button:hover {
-        background: #555;
-    }
+/* Close button within overlay panels */
+.overlay-content .close-button {
+    position: absolute;
+    top: 5px;
+    right: 10px;
+    cursor: pointer;
+    font-size: 2em;
+    color: #aaa;
+    z-index: 10;
+}
+.overlay-content .close-button:hover {
+    color: #fff;
+}
 
-    #form label {
-        cursor: pointer;
-        margin-left: 10px;
-        display: flex;
-        align-items: center;
-        color: #333;
-    }
+/* Side Tab for Private Chats (scoped) */
+.overlay-content .side-tab {
+    height: 80%;
+    width: 0;
+    position: fixed;
+    z-index: 2;
+    top: 0;
+    left: 0;
+    background-color: #111;
+    overflow-x: hidden;
+    transition: width 0.5s;
+    padding-top: 60px;
+    text-align: left;
+    border-radius: 0 0 10px 0;
+    font-size: 18px;
+    display: none;
+}
+.overlay-content .side-tab.open {
+    width: 250px !important;
+    display: block;
+}
+.overlay-content .side-tab a.closebtn {
+    position: absolute;
+    top: 10%;
+    right: 10%;
+    font-size: 36px;
+    color: red;
+    cursor: pointer;
+    text-decoration: none;
+}
+.overlay-content .side-tab a.closebtn:hover {
+    color: #f00;
+}
+.overlay-content .side-tab div.title {
+    color: ghostwhite;
+    margin-top: 25px;
+    margin-left: 20px;
+    font-size: 24px;
+    text-shadow: 0 0 7px purple, 0 0 4px purple, 0 0 10px purple, 0 0 12px purple;
+}
 
-    #form input[type="file"] {
-        display: none;
-    }
+/* Private chats list in side-tab */
+.overlay-content #private-chats {
+    color: white;
+    list-style-type: none;
+    padding: 0;
+    margin: 10px 0 0 0;
+    max-height: 70vh;
+    overflow-y: auto;
+}
+.overlay-content #private-chats li {
+    padding: 10px;
+    border-bottom: 1px solid #444;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+.overlay-content #private-chats li:hover {
+    background-color: #333;
+}
 
-    .close-button {
-        position: absolute;
-        top: 5px;
-        right: 10px;
-        cursor: pointer;
-        font-size: 2em;
-        color: #aaa;
-        z-index: 10;
-    }
+/* Button that opens the side-tab (scoped) */
+.overlay-content .open-tab {
+    font-size: 30px;
+    cursor: pointer;
+    background-color: #111;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    position: fixed;
+    top: 10px;
+    left: 10px;
+    z-index: 2;
+    border-radius: 8px;
+    box-shadow: 0 0 10px #000;
+    transition: background-color 0.3s ease;
+    display: none;
+}
+.overlay-content .open-tab:hover {
+    background-color: #222;
+}
 
-    .close-button:hover {
-        color: #fff;
-    }
+/* Hidden page / profile sections that may appear inside overlay */
+.overlay-content #hiddenPage {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+.overlay-content .profile-section,
+.overlay-content .updates-section {
+    padding: 20px;
+    border-radius: 10px;
+    background-color: #222;
+    margin-bottom: 20px;
+}
+.overlay-content .profile-section h2,
+.overlay-content .updates-section h2 {
+    margin-bottom: 15px;
+    color: #ff0000;
+}
+.overlay-content .blank-profile,
+.overlay-content .user-profile {
+    text-align: center;
+    padding: 20px;
+    border: 1px solid #444;
+    border-radius: 10px;
+    background-color: #111;
+    color: white;
+}
 
-    /* Side Tab for Private Chats */
-    .side-tab {
-        height: 80%;
-        width: 0;
-        position: fixed;
-        z-index: 2;
-        top: 0;
-        left: 0;
-        background-color: #111;
-        overflow-x: hidden;
-        transition: width 0.5s;
-        padding-top: 60px;
-        text-align: left;
-        border-radius: 0 0 10px 0;
-        font-size: 18px;
-        display: none;
-    }
-
-    .side-tab.open {
-        width: 250px !important;
-        display: block;
-    }
-
-    .side-tab a.closebtn {
-        position: absolute;
-        top: 10%;
-        right: 10%;
-        font-size: 36px;
-        color: red;
-        cursor: pointer;
-        text-decoration: none;
-    }
-
-    .side-tab a.closebtn:hover {
-        color: #f00;
-    }
-
-    .side-tab div.title {
-        color: ghostwhite;
-        margin-top: 25px;
-        margin-left: 20px;
-        font-size: 24px;
-        text-shadow: 0 0 7px purple, 0 0 4px purple, 0 0 10px purple, 0 0 12px purple;
-    }
-
-    #private-chats {
-        color: white;
-        list-style-type: none;
-        padding: 0;
-        margin: 10px 0 0 0;
-        max-height: 70vh;
-        overflow-y: auto;
-    }
-
-    #private-chats li {
-        padding: 10px;
-        border-bottom: 1px solid #444;
-        cursor: pointer;
-        transition: background-color 0.2s ease;
-    }
-
-    #private-chats li:hover {
-        background-color: #333;
-    }
-
-    .open-tab {
-        font-size: 30px;
-        cursor: pointer;
-        background-color: #111;
-        color: white;
-        padding: 10px 15px;
-        border: none;
-        position: fixed;
-        top: 10px;
-        left: 10px;
-        z-index: 2;
-        border-radius: 8px;
-        box-shadow: 0 0 10px #000;
-        transition: background-color 0.3s ease;
-        display: none;
-    }
-
-    .open-tab:hover {
-        background-color: #222;
-    }
-
-    /* Profile and Updates Section */
-    #hiddenPage {
-        max-width: 1200px;
-        margin: 0 auto;
-        padding: 20px;
-    }
-
-    .profile-section, .updates-section {
-        padding: 20px;
-        border-radius: 10px;
-        background-color: #222;
-        margin-bottom: 20px;
-    }
-
-    .profile-section h2, .updates-section h2 {
-        margin-bottom: 15px;
-        color: #ff0000;
-    }
-
-    .blank-profile, .user-profile {
-        text-align: center;
-        padding: 20px;
-        border: 1px solid #444;
-        border-radius: 10px;
-        background-color: #111;
-        color: white;
-    }
-
-    #myNavi2 {
-        display: none;
-        position: fixed;
-        z-index: 2;
-        text-align: center;
-    }
-
-    .profile2{
-        width: 100vw;
-        height: 100vh;
-        display:flex;
-        align-items: center;
-        justify-content: center;
-        flex-direction: column;
-        background: transparent;
-        z-index: 0;
-        padding:0;
-        margin: 0;
-        position: relative;
-        overflow: hidden;
-    }
+/* Misc small scoped items */
+.overlay-content #myNavi2 {
+    display: none;
+    position: fixed;
+    z-index: 2;
+    text-align: center;
+}
+.overlay-content #privateChatBadge {
+    display: none;
+    position: absolute;
+    top: -8px; right: -8px;
+    background: red;
+    color: white;
+    border-radius: 50%;
+    padding: 2px 6px;
+    font-size: 12px;
+    font-weight: bold;
+    user-select: none;
+}
 
     svg{
         z-index: -10;
@@ -805,18 +771,6 @@
         z-index:2;
     }
 
-    #privateChatBadge {
-        display:none;
-        position:absolute;
-        top:-8px; right:-8px;
-        background:red;
-        color:white;
-        border-radius:50%;
-        padding: 2px 6px;
-        font-size: 12px;
-        font-weight: bold;
-        user-select:none;
-    }
    /* Popup Overlay (fixed size, always centered, no resize on search) */
 #popup1.popup-overlay {
   position: fixed;
