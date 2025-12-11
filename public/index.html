@@ -1259,6 +1259,72 @@ body:hover { cursor:url('cursor-image.png'), auto; }
     border-radius: 8px;
   }
 }
+    @media (max-width: 900px) {
+  /* Ensure the document can scroll on mobile */
+  html, body {
+    height: auto !important;
+    min-height: 100% !important;
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Prevent large fixed/100vh elements from blocking page flow */
+  .container,
+  body > .container,
+  .main-layout,
+  .content,
+  .middle,
+  .middlecont,
+  .grid-wrapper,
+  .grid,
+  .holo-container,
+  .popup-overlay,
+  .overlay,
+  #popup1.popup-overlay {
+    height: auto !important;
+    min-height: 0 !important;
+    max-height: none !important;
+    overflow: visible !important;
+  }
+
+  /* Allow internal scroll areas to scroll but not block the page */
+  #messagesbox,
+  #dmmessages,
+  #dmMessages,
+  #roomList,
+  #messages,
+  #members-list {
+    max-height: 45vh !important;
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* If any overlay/popup is hidden via inline style display:none, make sure it doesn't block touches */
+  .popup-overlay[style*="display:none"],
+  .overlay[style*="display:none"],
+  .support-overlay[style*="display:none"] {
+    pointer-events: none !important;
+  }
+
+  /* If a full-screen element was accidentally left visible but transparent, ensure it doesn't block page scroll */
+  [style*="position:fixed"][style*="width:100vw"][style*="height:100vh"] {
+    pointer-events: auto;
+  }
+
+  /* Minor touch-target improvements for mobile main page */
+  .arrow, #dmAttachBtn, .button-row button, #btnCreateRoom {
+    min-height: 44px;
+    min-width: 44px;
+    touch-action: manipulation;
+  }
+}
+
+/* Emergency override if another rule still forces overflow hidden */
+@media (max-width: 900px) {
+  * {
+    -webkit-overflow-scrolling: touch;
+  }
+}
 </style>
    
 <script src="/socket.io/socket.io.js"></script>
