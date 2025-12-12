@@ -345,8 +345,8 @@
 .overlay {
   position: fixed;
   inset: 0;
-  background: radial-gradient(circle at top, rgba(110, 103, 255, 0.25), transparent 55%) ,
-              radial-gradient(circle at bottom, rgba(0, 255, 204, 0.15), transparent 55%),
+  background: radial-gradient(circle at top, rgba(110, 103, 255, 0.25), transparent 85%) ,
+              radial-gradient(circle at bottom, rgba(0, 255, 204, 0.15), transparent 85%),
               rgba(3, 6, 23, 0.92);
   display: none;              /* toggle with JS */
   justify-content: center;
@@ -410,7 +410,6 @@
   background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(109, 40, 217, 0.45));
   border: 1px solid rgba(167, 139, 250, 0.5);
   box-shadow: inset 0 0 0 1px rgba(15, 23, 42, 0.6);
-    overflow-y: auto;
 }
 
 #messagesbox {
@@ -422,8 +421,6 @@
   background: black;
   border: 1px solid white;
   box-shadow: inset 0 0 0 1px rgba(15, 23, 42, 0.6);
-    overflow: hidden;
-    overflow-y: auto;
 }
 
 #dmmessages {
@@ -435,8 +432,6 @@
   background: black;
   border: 1px solid white;
   box-shadow: inset 0 0 0 1px rgba(15, 23, 42, 0.6);
-       overflow: hidden;
-    overflow-y: auto;
 }
 
 /* Optional: move online members into messages column footer or overlay corner */
@@ -451,7 +446,6 @@
     border: 1px solid rgba(45, 212, 191, 0.45);
   box-shadow: inset 0 0 0 1px rgba(15, 23, 42, 0.6);
   max-width: 260px;
-  overflow: hidden;
 }
 
 /* Scrollable lists */
@@ -462,8 +456,7 @@
   list-style: none;
   margin: 8px 0 0;
   padding: 0;
-  overflow-y: auto;
-    overflow:hidden;
+    overflow: scroll;
 }
 
 /* Shared scrollbar styling */
