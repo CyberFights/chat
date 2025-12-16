@@ -1090,7 +1090,8 @@ body:hover { cursor:url('cursor-image.png'), auto; }
     position: relative;
     flex-direction: column;
     height: 100vh;
-    overflow: scroll;
+    overflow-y: auto;
+    overflow: hidden;
   }
 
   /* Hide dmBox and chatSidebar off-canvas by default */
@@ -1100,6 +1101,7 @@ body:hover { cursor:url('cursor-image.png'), auto; }
     top: 0;
     bottom: 0;
     width: 80%;
+    margin-top:5%;
     max-width: 320px;
     background: rgba(15, 23, 42, 0.97);
     box-shadow: 0 0 30px rgba(0, 0, 0, 0.6);
