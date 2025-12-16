@@ -2553,7 +2553,64 @@ socket.on('create-dm', function({ from, room }) {
   }
   openDmOverlay(from); // Optionally auto-open DM overlay
 });
+const dmBox = document.getElementById('dmBox');
+const chatSidebar = document.getElementById('chatSidebar');
+const btnToggleDmBox = document.getElementById('toggleDmBox');
+const btnToggleChatSidebar = document.getElementById('toggleChatSidebar');
 
+function togglePanel(panelEl, buttonEl) {
+  const isOpen = panelEl.classList.toggle('open');
+  if (buttonEl) {
+    buttonEl.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+  }
+}
+
+// Open/close DM box
+if (btnToggleDmBox && dmBox) {
+  btnToggleDmBox.addEventListener('click', () => {
+    // Close sidebar if open
+    if (chatSidebar && chatSidebar.classList.contains('open')) {
+      chatSidebar.classList.remove('open');
+      if (btnToggleChatSidebar) {
+        btnToggleChatSidebar.setAttribute('aria-expanded', 'false');
+      }
+    }
+    togglePanel(dmBox, btnToggleDmBox);
+  });
+}
+
+// Open/close Rooms sidebar
+if (btnToggleChatSidebar && chatSidebar) {
+  btnToggleChatSidebar.addEventListener('click', () => {
+    // Close dmBox if open
+    if (dmBox && dmBox.classList.contains('open')) {
+      dmBox.classList.remove('open');
+      if (btnToggleDmBox) {
+        btnToggleDmBox.setAttribute('aria-expanded', 'false');
+      }
+    }
+    togglePanel(chatSidebar, btnToggleChatSidebar);
+  });
+}
+
+// Optional: tap overlay background to close panels on mobile
+document.getElementById('chatOverlay').addEventListener('click', (e) => {
+  // Only if clicking the dark background, not inside panels
+  if (e.target.id === 'chatOverlay') {
+    if (dmBox) {
+      dmBox.classList.remove('open');
+    }
+    if (chatSidebar) {
+      chatSidebar.classList.remove('open');
+    }
+    if (btnToggleDmBox) {
+      btnToggleDmBox.setAttribute('aria-expanded', 'false');
+    }
+    if (btnToggleChatSidebar) {
+      btnToggleChatSidebar.setAttribute('aria-expanded', 'false');
+    }
+  }
+});
 
 
 </script>
