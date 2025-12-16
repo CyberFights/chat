@@ -1086,49 +1086,78 @@ body:hover { cursor:url('cursor-image.png'), auto; }
   }
 
   /* Overlay content stacks vertically and uses full width */
-  .overlay-content {
+    .overlay-content {
+    position: relative;
     flex-direction: column;
-    width: 100%;
-    height: 100%;
-    max-height: 100%;
-    padding: 12px;
-    gap: 10px;
-    overflow: scroll;
+    height: 100vh;
+    overflow: hidden;
   }
 
-  /* Columns in overlay become full-width stacked */
+  /* Hide dmBox and chatSidebar off-canvas by default */
   #dmBox,
-  #chatSidebar,
+  #chatSidebar {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    width: 80%;
+    max-width: 320px;
+    background: rgba(15, 23, 42, 0.97);
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.6);
+    z-index: 20;
+    transform: translateX(-100%);
+    transition: transform 0.25s ease-out;
+    overflow-y: auto;
+  }
+
+  /* dmBox slides in from left */
+  #dmBox {
+    left: 0;
+  }
+
+  /* chatSidebar slides in from right */
+  #chatSidebar {
+    right: 0;
+    left: auto;
+    transform: translateX(100%);
+  }
+
+  /* When “open” class is added, make them visible */
+  #dmBox.open {
+    transform: translateX(0);
+  }
+
+  #chatSidebar.open {
+    transform: translateX(0);
+  }
+
+  /* Main chat column takes full width behind drawers */
   #messages-column,
-  #messagesbox,
-  #dmmessages,
   #online-members {
-    flex: 0 0 auto;
     width: 100%;
-    padding: 10px;
-    margin: 0;
   }
 
-  /* Inputs, buttons: full-width and finger-friendly */
-  #dmInput, #m, #dmForm input, #form input, #searchBar, .palak input, .palak textarea {
-    font-size: 16px;
-    padding: 12px;
-    width: 100%;
-    border-radius: 12px;
-  }
-  #dmForm button[type="submit"], #sendBtn, .palak button.register, .support button {
-    padding: 12px 16px;
-    min-height: 44px;
-    font-size: 16px;
-    border-radius: 12px;
-    width: auto;
+  /* Optional: add a simple toggle bar on top of messages-column for mobile */
+  #mobile-toggles {
+    display: flex;
+    justify-content: space-between;
+    gap: 8px;
+    padding: 8px 12px;
+    background: rgba(15, 23, 42, 0.95);
+    position: sticky;
+    top: 0;
+    z-index: 10;
   }
 
-  /* Make lists easier to scroll and tap */
-  #dmMessages, #roomList, #messages, #members-list {
-    max-height: 36vh;
-    -webkit-overflow-scrolling: touch;
+  #mobile-toggles button {
+    flex: 1;
+    padding: 8px 10px;
+    border-radius: 999px;
+    border: 1px solid rgba(148, 163, 184, 0.7);
+    background: rgba(15, 23, 42, 0.9);
+    color: #e5e7eb;
+    font-size: 0.9rem;
   }
+}
 
   /* Holo card and profile images scale down */
   .holo-card {
@@ -1443,6 +1472,14 @@ body:hover { cursor:url('cursor-image.png'), auto; }
 
  
         <div id="messages-column">
+            <div id="mobile-toggles">
+    <button id="toggleDmBox" aria-controls="dmBox" aria-expanded="false">
+      DMs
+    </button>
+    <button id="toggleChatSidebar" aria-controls="chatSidebar" aria-expanded="false">
+      Rooms
+    </button>
+  </div>
           <div id="roomTitle"></div>
 <div id="messagesbox">
           <ul id="messages"></ul>
