@@ -2138,18 +2138,18 @@ function addDmMessage(from, message) {
 }
 
 // Send DM message (text or with image)
-dmSendBtn.addEventListener('click', function() {
+dmForm.addEventListener('click', function() {
   const now = new Date();
   const timestamp = now.toLocaleTimeString();
   const dmRoom = getDmRoomName(currentUsername, dmTarget);
-  if (dmTarget && dmMessageInput.value.trim()) {
+  if (dmTarget && dmInput.value.trim()) {
     socket.emit('dm message', {
       dmRoom,
       from_user: currentUsername,
-      message: dmMessageInput.value,
+      message: dmInput.value,
       timestamp
     });
-    dmMessageInput.value = '';
+    dmInput.value = '';
   }
 });
 
