@@ -2143,13 +2143,17 @@ dmBtn.addEventListener('click', function() {
   const now = new Date();
   const timestamp = now.toLocaleTimeString();
   const dmRoom = getDmRoomName(currentUsername, dmTarget);
+    const color = sessionStorage.getItem('color');
+    const profileImage = sessionStorage.getItem('profileImage');
   if (dmTarget && dmInput.value.trim()) {
-    socket.emit('private message', {
-      dmRoom,
+    socket.emit('dm message', {
+      room: dmRoom,
       to: dmTarget,
       from: currentUsername,
       message: dmInput.value,
-      timestamp
+      timestamp: timestamp,
+        color: color,
+        profileImage: profileImage
     });
     dmInput.value = '';
   }
