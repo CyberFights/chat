@@ -1706,6 +1706,7 @@ function cacheDOM() {
     openPrivateChatsBtn = document.getElementById('openPrivateChats');
     privateChatBadge = document.getElementById('privateChatBadge');
     sideTab = document.getElementById('mySideTab');
+    dmSend = document.getElementById('dmSend');
 }
 
 // --- Age Verification and App Launch ---
@@ -2137,15 +2138,15 @@ function addDmMessage(from, message) {
 }
 
 // Send DM message (text or with image)
-    const dmBtn = document.getElementById('dmSend');
-if (dmBtn) {
-dmBtn.addEventListener('click', function() {
+    const dmSend = document.getElementById('dmSend');
+if (dmSend) {
+dmSend.addEventListener('click', function() {
   const now = new Date();
   const timestamp = now.toLocaleTimeString();
   const dmRoom = getDmRoomName(currentUsername, dmTarget);
     const color = sessionStorage.getItem('color');
     const profileImage = sessionStorage.getItem('profileImage');
-  if (dmTarget && dmInput.value.trim()) {
+  if (dmRoom && dmInput.value.trim()) {
     socket.emit('dm message', {
       room: dmRoom,
       to: dmTarget,
