@@ -392,10 +392,10 @@ io.on("connection", (socket) => {
     delete userSockets[username];
   });
 
-  socket.on("chat message", async ({ room, username, message, timestamp }) => {
+  socket.on("chat message", async ({ room, username, message, timestamp, color, profileImage }) => {
     try {
       await db.collection("messages").insertOne({ room, username, message, timestamp });
-      io.to(room).emit("chat message", { username, message, timestamp });
+      io.to(room).emit("chat message", { username, message, timestamp, color, profileImage });
     } catch (err) {
       console.error(err);
     }
