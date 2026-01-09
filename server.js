@@ -401,11 +401,11 @@ io.on("connection", (socket) => {
     }
   });
 
-  socket.on("private message", async ({ to, from, message }) => {
+  socket.on("dm message", async ({ room, to, from, message, timestamp, color, profileImage }) => {
     try {
       const recipientSocket = userSockets[to];
       if (recipientSocket) {
-        io.to(recipientSocket).emit("private message", { from, message });
+        io.to(room).emit("private message", { from, message, color, profileImage, timestamp });
       }
       await db.collection("private_messages").insertOne({
         user1: from,
