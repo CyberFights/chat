@@ -2141,11 +2141,11 @@ dmForm.addEventListener('click', function() {
   const now = new Date();
   const timestamp = now.toLocaleTimeString();
   const dmRoom = getDmRoomName(currentUsername, dmTarget);
-  if (dmTarget && dmInput.value.trim()) {
+  if (dmTarget && dmMessageInput.value.trim()) {
     socket.emit('dm message', {
       dmRoom,
       from_user: currentUsername,
-      message: dmInput.value,
+      message: dmMessageInput.value,
       timestamp
     });
     dmInput.value = '';
