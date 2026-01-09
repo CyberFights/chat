@@ -2518,7 +2518,7 @@ socket.on('loadDmMessages', function(msgs) {
 socket.on('private message', function(obj) {
     var from = obj.from;
     var message = obj.message;
-    var currentlyChatting = (dmOverlay.style.display === 'flex' && dmTarget === from);
+    var currentlyChatting = (dmTarget === from);
     if (currentlyChatting) {
         addDmMessage(from, message);
     } else {
