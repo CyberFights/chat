@@ -1464,7 +1464,7 @@ body:hover { cursor:url('cursor-image.png'), auto; }
         <input id="dmInput" autocomplete="off" placeholder="Type your private message..." style="padding:7px; border-radius:5px; border:1px solid #ccc;" />
         <input type="file" id="dmFileInput" accept="image/*" style="display:none;" />
         <button type="button" id="dmAttachBtn" title="Attach" style="background:none; border:none; cursor:pointer; font-size:18px;">📎</button>
-        <button type="submit" style="padding:8px 14px; border-radius:6px; background:#1700fb; color:#fff; border:none;">Send</button>
+        <button id="dmSend" style="padding:8px 14px; border-radius:6px; background:#1700fb; color:#fff; border:none;">Send</button>
       </form>
     </div>
     <!-- ROOM LIST SIDEBAR COLUMN -->
@@ -2137,7 +2137,9 @@ function addDmMessage(from, message) {
 }
 
 // Send DM message (text or with image)
-dmForm.addEventListener('click', function() {
+    const dmBtn = document.getElementById('dmSend');
+if (dmBtn) {
+dmBtn.addEventListener('click', function() {
   const now = new Date();
   const timestamp = now.toLocaleTimeString();
   const dmRoom = getDmRoomName(currentUsername, dmTarget);
@@ -2152,7 +2154,7 @@ dmForm.addEventListener('click', function() {
     dmInput.value = '';
   }
 });
-
+    }
     function startPrivateChat(username) {
     if (username === currentUsername) { alert("You can't DM yourself."); return; }
     // Always request or create room from backend
@@ -2230,6 +2232,7 @@ if (sendBtn) {
   });
 }
 
+    
 function scrollToBottom() {
     messages.scrollTop = messages.scrollHeight;
 }
