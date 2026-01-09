@@ -2069,7 +2069,7 @@ function openDmOverlay(username) {
         alert("You can't DM yourself.");
         return;
     }
- dmTarget = username;
+ const dmTarget = username;
   const dmRoom = getDmRoomName(currentUsername, username);
   socket.emit('joinDmRoom', { dmRoom, username: currentUsername });
   
@@ -2213,13 +2213,17 @@ if (sendBtn) {
     const hours = now.getHours().toString().padStart(2,'0');
     const minutes = now.getMinutes().toString().padStart(2,'0');
     const timestamp = `${hours}:${minutes}`;
+    const profileImage = sessionStorage.getItem('profileImage');
+    const color = seasionStorage.getItem('color');
     
     if (currentRoom && input.value.trim() ) {
       socket.emit('chat message', {
         room: currentRoom,
         username: currentUsername,
         message: input.value,
-        timestamp: timestamp
+        timestamp: timestamp,
+        color: color,
+        profileImage: profileImage
       });
       input.value = '';
     }
@@ -2384,14 +2388,21 @@ socket.on('chat message', function(data) {
 
     var username = document.createElement('strong');
     username.textContent = data.username;
-    var userColor = sessionStorage.getItem('color') || '#007bff';
+    var userColor = data.color;
     username.style.color = userColor;
     username.style.marginLeft = '5px';
-
+    var img = document.createElement('img');
+    img.src = data.profileImage;
+    img.alt = data.username;
+    img.style.width = '30px';
+    img.style.height = '30px';
+    img.style.borderRadius = '50%';
+    img.style.marginRight = '10px';
     var br = document.createElement('br');
     var msg = document.createElement('span');
     msg.textContent = data.message;
 
+    item.appendChild(img);
     item.appendChild(username);
     item.appendChild(timestamp);
     item.appendChild(br);
@@ -2405,7 +2416,7 @@ socket.on('chat message', function(data) {
         body: JSON.stringify({
             username: data.username,
             message: data.message,
-            avatarUrl: sessionStorage.getItem('profileImageURL') || ''
+            avatarUrl: data.profileImage
         })
     }).catch(err => console.error('Failed to send chat message to backend:', err));
 });
@@ -2421,7 +2432,7 @@ socket.on('discord message', function(data) {
 
     var username = document.createElement('strong');
     username.textContent = data.username;
-    var userColor = sessionStorage.getItem('color') || '#007bff';
+    var userColor = data.color;
     username.style.color = userColor;
     username.style.marginLeft = '5px';
 
