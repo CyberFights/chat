@@ -2214,7 +2214,7 @@ if (sendBtn) {
     const minutes = now.getMinutes().toString().padStart(2,'0');
     const timestamp = `${hours}:${minutes}`;
     const profileImage = sessionStorage.getItem('profileImage');
-    const color = seasionStorage.getItem('color');
+    const color = sessionStorage.getItem('color');
     
     if (currentRoom && input.value.trim() ) {
       socket.emit('chat message', {
