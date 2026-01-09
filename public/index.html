@@ -2142,9 +2142,10 @@ dmForm.addEventListener('click', function() {
   const timestamp = now.toLocaleTimeString();
   const dmRoom = getDmRoomName(currentUsername, dmTarget);
   if (dmTarget && dmInput.value.trim()) {
-    socket.emit('dm message', {
+    socket.emit('private message', {
       dmRoom,
-      from_user: currentUsername,
+      to: dmTarget,
+      from: currentUsername,
       message: dmInput.value,
       timestamp
     });
