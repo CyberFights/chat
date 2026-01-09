@@ -2075,7 +2075,6 @@ function openDmOverlay(username) {
   
     const chatObj = privateChats[username];
     if (!chatObj) return;
-    dmOverlay.style.display = 'flex';
     dmTitle.textContent = 'Chat with ' + username;
     dmMessages.innerHTML = '<li>Loading...</li>';
     fetch('/dm-messages/' + encodeURIComponent(chatObj.dmRoom))
