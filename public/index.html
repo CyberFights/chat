@@ -2538,12 +2538,42 @@ socket.on('loadDmMessages', function(msgs) {
 });
 
 socket.on('private message', function(obj) {
+     var item = document.createElement('li');
+    item.style.textAlign = 'left';
+
+    var timestamp = document.createElement('span');
+    timestamp.textContent = `[${data.timestamp}] `;
+    timestamp.style.fontSize = '0.8em';
+    timestamp.style.color = '#999';
+
+    var username = document.createElement('strong');
+    username.textContent = obj.from;
+    var userColor = obj.color;
+    username.style.color = userColor;
+    username.style.marginLeft = '5px';
+    var img = document.createElement('img');
+    img.src = obj.profileImage;
+    img.alt = obj.username;
+    img.style.width = '30px';
+    img.style.height = '30px';
+    img.style.borderRadius = '50%';
+    img.style.marginRight = '10px';
+    var br = document.createElement('br');
+    var msg = document.createElement('span');
+    msg.textContent = obj.message;
+
+    item.appendChild(img);
+    item.appendChild(username);
+    item.appendChild(timestamp);
+    item.appendChild(br);
+    item.appendChild(msg);
+
+    messages.appendChild(item);
+    scrollToBottom();
     var from = obj.from;
-    var message = obj.message;
+    var dmTarget = obj.to;
     var currentlyChatting = (dmTarget === from);
-    if (currentlyChatting) {
-        addDmMessage(from, message);
-    } else {
+    if (!currentlyChatting) {
         incrementPrivateMessageBadge();
     }
 });
