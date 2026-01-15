@@ -403,15 +403,12 @@ io.on("connection", (socket) => {
 
   socket.on("dm message", async ({ room, to, from, message, timestamp, color, profileImage }) => {
     try {
-      await db.collection("private_messages").insertOne({
-        userA: from,
-        userB: to,
+      await db.collection("dm_messages").insertOne({
+        room: room,
         from_user: from,
-        to_user: to,
-        message,
-        timestamp: new Date()
+        message
       });
-    io.to(room).emit("private message", { from, message, color, profileImage, timestamp });
+    io.to(room).emit("private message", { to, from, message, color, profileImage, timestamp });
       } catch (err) {
       console.error(err);
     }
