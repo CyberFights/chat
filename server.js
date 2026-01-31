@@ -392,6 +392,67 @@ io.on("connection", (socket) => {
     delete userSockets[username];
   });
 
+    // Join a DM room
+  socket.on("joinDmRoom", async ({ dmRoom, username }) => {
+    try {
+      // Track current room/user for this socket
+      currentRoom = dmRoom;
+      currentUser = username;
+      profilePic = socket.handshake.query.profilePic || null;
+
+      // Join the Socket.IO room
+      socket.join(dmRoom);
+
+      // Map username to socket id for push notifications
+      userSockets[username] = socket.id;
+
+      // Keep an in-memory member list for the DM room
+      if (!roomMembers[dmRoom]) roomMembers[dmRoom] = [];
+      if (!roomMembers[dmRoom].some(m => m.username === username)) {
+        roomMembers[dmRoom].push({ username, profilePic });
+      }
+
+      // Load DM history from DB (collection: dm_messages)
+      const dmHistory = await db.collection("dm_messages")
+        .find({ room: dmRoom })
+        .sort({ timestamp: 1 })
+        .toArray();
+
+      // Emit DM history back to the joiner (client can also fetch via REST)
+      socket.emit("loadDmMessages", dmHistory.map(m => ({
+        from: m.from_user,
+        message: m.message,
+        timestamp: m.timestamp
+      })));
+
+      // Notify members in the DM room about current members
+      io.to(dmRoom).emit("updateMembers", roomMembers[dmRoom]);
+    } catch (err) {
+      console.error("Error in joinDmRoom:", err);
+    }
+  });
+
+  // Leave a DM room
+  socket.on("leaveDmRoom", ({ dmRoom, username }) => {
+    try {
+      socket.leave(dmRoom);
+
+      if (roomMembers[dmRoom]) {
+        roomMembers[dmRoom] = roomMembers[dmRoom].filter(m => m.username !== username);
+        io.to(dmRoom).emit("updateMembers", roomMembers[dmRoom]);
+      }
+
+      // Only delete userSockets entry if it belongs to this socket
+      if (userSockets[username] === socket.id) {
+        delete userSockets[username];
+      }
+
+      if (currentRoom === dmRoom) currentRoom = null;
+      if (currentUser === username) currentUser = null;
+    } catch (err) {
+      console.error("Error in leaveDmRoom:", err);
+    }
+  });
   socket.on("chat message", async ({ room, username, message, timestamp, color, profileImage }) => {
     try {
       await db.collection("messages").insertOne({ room, username, message, timestamp });
