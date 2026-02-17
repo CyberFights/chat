@@ -2537,7 +2537,7 @@ socket.on('loadDmMessages', function(msgs) {
   }
 });
 
-socket.on('private message', function(obj) {
+socket.on('private message', function(data) {
      var item = document.createElement('li');
     item.style.textAlign = 'left';
 
@@ -2547,20 +2547,20 @@ socket.on('private message', function(obj) {
     timestamp.style.color = '#999';
 
     var username = document.createElement('strong');
-    username.textContent = obj.from;
-    var userColor = obj.color;
+    username.textContent = data.from;
+    var userColor = data.color;
     username.style.color = userColor;
     username.style.marginLeft = '5px';
     var img = document.createElement('img');
-    img.src = obj.profileImage;
-    img.alt = obj.username;
+    img.src = data.profileImage;
+    img.alt = data.from;
     img.style.width = '30px';
     img.style.height = '30px';
     img.style.borderRadius = '50%';
     img.style.marginRight = '10px';
     var br = document.createElement('br');
     var msg = document.createElement('span');
-    msg.textContent = obj.message;
+    msg.textContent = data.message;
 
     item.appendChild(img);
     item.appendChild(username);
@@ -2570,8 +2570,8 @@ socket.on('private message', function(obj) {
 
     messages.appendChild(item);
     scrollToBottom();
-    var from = obj.from;
-    var dmTarget = obj.to;
+    var from = data.from;
+    var dmTarget = data.to;
     var currentlyChatting = (dmTarget === from);
     if (!currentlyChatting) {
         incrementPrivateMessageBadge();
@@ -2676,4 +2676,5 @@ document.getElementById('chatOverlay').addEventListener('click', (e) => {
 
 </script>
 </body>
+</html>
 </html>
