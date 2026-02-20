@@ -2072,8 +2072,9 @@ function openDmOverlay(username) {
         alert("You can't DM yourself.");
         return;
     }
- const dmTarget = username;
+  dmTarget = username;
   const dmRoom = getDmRoomName(currentUsername, username);
+  window.currentDmRoom = dmRoom;  // ← ADD THIS LINE to track current DM room
   socket.emit('joinDmRoom', { dmRoom, username: currentUsername });
   
     const chatObj = privateChats[username];
@@ -2081,8 +2082,7 @@ function openDmOverlay(username) {
     dmTitle.textContent = 'Chat with ' + username;
     dmMessages.innerHTML = '<li>Loading...</li>';
     fetch('/dm-messages/' + encodeURIComponent(chatObj.dmRoom))
-      .then(res => res.json
-())
+      .then(res => res.json())
       .then(messagesArr => {
         dmMessages.innerHTML = '';
         messagesArr.forEach(msg => {
@@ -2102,12 +2102,13 @@ function closeDmOverlay() {
   dmOverlay.style.display = 'none';
   const dmRoom = getDmRoomName(currentUsername, dmTarget);
   socket.emit('leaveDmRoom', { dmRoom, username: currentUsername });
+  window.currentDmRoom = null;  // ← ADD THIS LINE
   dmTarget = null;
-            dmInput.value = '';
-            dmMessages.innerHTML = '';
-            dmImagePreview.innerHTML = '';
-            dmFileInput.value = '';
-            dmAttachedFile = null;
+  dmInput.value = '';
+  dmMessages.innerHTML = '';
+  dmImagePreview.innerHTML = '';
+  dmFileInput.value = '';
+  dmAttachedFile = null;
 }
 window.closeDmOverlay = closeDmOverlay;
     
