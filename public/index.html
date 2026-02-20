@@ -2140,28 +2140,19 @@ function addDmMessage(from, message) {
 }
 
 // Send DM message (text or with image)
-    const dmSend = document.getElementById('dmSend');
-if (dmSend) {
-dmSend.addEventListener('click', function() {
-  const now = new Date();
-  const timestamp = now.toLocaleTimeString();
-  const dmRoom = getDmRoomName(currentUsername, dmTarget);
-    const color = sessionStorage.getItem('color');
-    const profileImage = sessionStorage.getItem('profileImage');
-  if (dmRoom && dmInput.value.trim()) {
-    socket.emit('dm message', {
-      room: dmRoom,
-      to: dmTarget,
-      from: currentUsername,
-      message: dmInput.value,
-      timestamp: timestamp,
-        color: color,
-        profileImage: profileImage
-    });
-    dmInput.value = '';
-  }
+   document.getElementById('dmSend').addEventListener('click', () => {
+  const message = document.getElementById('dmInput').value;
+  socket.emit("dm message", {
+    room: currentDmRoom,
+    to: otherUsername,
+    from: currentUsername,
+    message: message,
+    timestamp: new Date(),
+    color: userColor,
+    profileImage: userProfileImage
+  });
+  document.getElementById('dmInput').value = '';
 });
-    }
     function startPrivateChat(username) {
     if (username === currentUsername) { alert("You can't DM yourself."); return; }
     // Always request or create room from backend
@@ -2519,8 +2510,6 @@ let dmBtn = document.createElement('button');
     membersList.appendChild(memberItem);
   });
 });
-
-
             
 socket.on('dm message', function(data) {
   addDmMessage(data.from_user, data.message, data.timestamp);
@@ -2538,43 +2527,65 @@ socket.on('loadDmMessages', function(msgs) {
 });
 
 socket.on('private message', function(data) {
-     var item = document.createElement('li');
+    // Create <li> for the message
+    var item = document.createElement('li');
     item.style.textAlign = 'left';
 
-    var timestamp = document.createElement('span');
-    timestamp.textContent = `[${data.timestamp}] `;
-    timestamp.style.fontSize = '0.8em';
-    timestamp.style.color = '#999';
-
-    var username = document.createElement('strong');
-    username.textContent = data.from;
-    var userColor = data.color;
-    username.style.color = userColor;
-    username.style.marginLeft = '5px';
+    // Avatar image
     var img = document.createElement('img');
-    img.src = data.profileImage;
+    img.src = data.profileImage || 'https://via.placeholder.com/30';
     img.alt = data.from;
     img.style.width = '30px';
     img.style.height = '30px';
     img.style.borderRadius = '50%';
-    img.style.marginRight = '10px';
-    var br = document.createElement('br');
+    img.style.verticalAlign = 'middle';
+    img.style.marginRight = '8px';
+
+    // Username in their color
+    var username = document.createElement('strong');
+    username.textContent = data.from;
+    username.style.color = data.color || 'white';
+    username.style.marginRight = '6px';
+
+    // Timestamp
+    var timestamp = document.createElement('span');
+    var timeString = typeof data.timestamp === 'string' && !isNaN(Date.parse(data.timestamp))
+        ? `[${new Date(data.timestamp).toLocaleTimeString()}]`
+        : `[${data.timestamp}]`;
+    timestamp.textContent = timeString + " ";
+    timestamp.style.fontSize = '0.8em';
+    timestamp.style.color = '#999';
+
+    // Actual message content
     var msg = document.createElement('span');
     msg.textContent = data.message;
 
+    // Compose the message item: [Avatar] [Username] [Timestamp]
+    //                             [Message text...]
     item.appendChild(img);
     item.appendChild(username);
     item.appendChild(timestamp);
-    item.appendChild(br);
+    item.appendChild(document.createElement('br'));
     item.appendChild(msg);
 
-    messages.appendChild(item);
-    scrollToBottom();
-    var from = data.from;
-    var dmTarget = data.to;
-    var currentlyChatting = (dmTarget === from);
-    if (!currentlyChatting) {
-        incrementPrivateMessageBadge();
+    // Add to DM message list
+    var dmMsgList = document.getElementById('dmMessages');
+    if (dmMsgList) {
+        dmMsgList.appendChild(item);
+
+        // Auto-scroll to bottom
+        var dmMessagesContainer = document.getElementById('dmmessages');
+        if (dmMessagesContainer) {
+            dmMessagesContainer.scrollTop = dmMessagesContainer.scrollHeight;
+        }
+    }
+
+    // Notification badge logic: Only show unread badge if NOT currently viewing this user's DM
+    let chattingWith = window.currentlyOpenedDmUser; // Set this when user opens a DM
+    if (!chattingWith || chattingWith !== data.from) {
+        if (typeof incrementPrivateMessageBadge === 'function') {
+            incrementPrivateMessageBadge(data.from);
+        }
     }
 });
 function renderPrivateChatsList() {
