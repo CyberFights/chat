@@ -1676,6 +1676,7 @@ body:hover { cursor:url('cursor-image.png'), auto; }
 const socket = io();
 let currentUsername = '';
 let currentRoom = null;
+let currentDmRoom = null;
 let dmTarget = null;
 let dmAttachedFile = null;
 let unseenPrivateMessages = 0;
@@ -2145,7 +2146,7 @@ function addDmMessage(from, message) {
   const message = document.getElementById('dmInput').value;
   socket.emit("dm message", {
     room: currentDmRoom,
-    to: otherUsername,
+    to: dmTarget,
     from: currentUsername,
     message: message,
     timestamp: new Date(),
