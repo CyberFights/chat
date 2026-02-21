@@ -2144,6 +2144,8 @@ function addDmMessage(from, message) {
 // Send DM message (text or with image)
    document.getElementById('dmSend').addEventListener('click', () => {
   const message = document.getElementById('dmInput').value;
+  const userProfileImage = sessionStorage.getItem('profileImage');
+  const userColor = sessionStorage.getItem('color');
   socket.emit("dm message", {
     room: currentDmRoom,
     to: dmTarget,
