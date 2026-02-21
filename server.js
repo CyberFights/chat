@@ -168,7 +168,7 @@ app.post("/dm-room", async (req, res) => {
   const { userA, userB } = req.body;
   if (!userA || !userB) return res.status(400).json({ error: "Missing users" });
   const usersSorted = [userA, userB].sort();
-  const roomName = `dm-${usersSorted[0]}-${usersSorted[1]}`;
+  const roomName = `dm_${usersSorted[0]}_${usersSorted[1]}`;
   try {
     let room = await db.collection("dm_rooms").findOne({ room: roomName });
     if (!room) {
