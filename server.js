@@ -463,29 +463,48 @@ io.on("connection", (socket) => {
   });
 
   socket.on("dm message", async ({ room, to, from, message, timestamp, color, profileImage }) => {
-    try {
-      await db.collection("dm_messages").insertOne({
-        room: room,
-        from_user: from,
-        message
-      });
-    io.to(room).emit("private message", { to, from, message, color, profileImage, timestamp });
-      } catch (err) {
-      console.error(err);
-    }
-  });
+  try {
+    const ts = timestamp || Date.now();
 
-  socket.on("get private history", async ({ userA, userB }, callback) => {
-    try {
-      const messages = await db.collection("private_messages").find({
-        user1: { $in: [userA, userB] },
-        user2: { $in: [userA, userB] }
-      }).sort({ timestamp: 1 }).toArray();
-      callback(messages);
-    } catch (err) {
-      console.error(err);
-    }
-  });
+    await db.collection("dm_messages").insertOne({
+      room,
+      from,
+      to,
+      message,
+      color,
+      profileImage,
+      timestamp: ts
+    });
+
+    io.to(room).emit("private message", {
+      room,
+      to,
+      from,
+      message,
+      color,
+      profileImage,
+      timestamp: ts
+    });
+  } catch (err) {
+    console.error(err);
+  }
+});
+
+socket.on("get private history", async ({ room }, callback) => {
+  try {
+    const messages = await db
+      .collection("dm_messages")
+      .find({ room })
+      .sort({ timestamp: 1 })
+      .toArray();
+
+    callback(messages);
+  } catch (err) {
+    console.error(err);
+    callback([]); // or handle error another way
+  }
+});
+
   
   socket.on('request-create-dm', async ({ from, to, room }) => {
   const usersSorted = [from, to].sort();
