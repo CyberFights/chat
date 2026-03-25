@@ -1,4 +1,3 @@
-
 <!doctype html>
 <html lang="en">
 <head>
@@ -7,378 +6,349 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
   <style>
-/* --- Full CSS reinsertion (from your design) --- */
+/* Full CSS (kept from your design) */
+      @import url('https://fonts.googleapis.com/css?family=Lato');
+    body {
+        font-family: 'Lato', Arial, sans-serif;
+        margin: 40px;
+        background: linear-gradient(45deg, #000, #03055b);
+        text-align: center;
+        width: 100%;
+        height: 100vh;
+        overflow-x: hidden;
+        color: white;
+    }
+    .container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        text-align: center;
+        background: url('https://raw.githubusercontent.com/CyberFights/chat/refs/heads/main/public/assets/images/New_Concept_v2.png');
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-position: center;
+    }
+    .content {
+        animation: fadeIn 2s ease-in-out;
+    }
+    h1 {
+        font-size: 2.5rem;
+        text-transform: uppercase;
+        letter-spacing: 5px;
+        color: #ff0000;
+        text-shadow:
+            -1px 0 #ff0000,
+            0 2px #ff0000,
+            2px 0 #ff0000,
+            0 -2px #ff0000,
+            0 0 8px #000,
+            0 0 12px #1700fb,
+            0 0 15px #1700fb;
+        margin-bottom: 20px;
+    }
+    #p {
+        font-size: 2.5rem;
+        margin-top: 40%;
+        color: #fff;
+        text-shadow:
+            -1px 0 #ff0000,
+            0 2px #ff0000,
+            2px 0 #ff0000,
+            0 -2px #ff0000,
+            0 0 8px #000,
+            0 0 12px #1700fb,
+            0 0 15px #1700fb;
+    }
+    .fade-out {
+        animation: fadeOut 2s forwards;
+    }
+    @keyframes fadeIn {
+        from { opacity: 0; transform: scale(0.9);}
+        to   { opacity: 1; transform: scale(1);}
+    }
+    @keyframes fadeOut {
+        to { opacity: 0; visibility: hidden; }
+    }
+    .hidden-page {
+        display: none;
+        color: white;
+    }
+    .button-row {
+        display: flex;
+        justify-content: center;
+        gap: 15px;
+        margin-bottom: 30px;
+    }
+    .button-row button {
+        padding: 10px 20px;
+        font-size: 16px;
+        cursor: pointer;
+        border-radius: 8px;
+        border: none;
+        background-color: #ff0000;
+        color: white;
+        transition: background-color 0.3s ease;
+    }
+    .button-row button:hover { background-color: #cc0000; }
+    .main-layout {
+      display: flex;
+      flex-direction: row;
+      align-items: flex-start;
+      gap: 40px;
+      width: 96%;
+      margin: 0 auto 30px auto;
+      justify-content: flex-start;
+    }
+    .profile-section {
+      min-width: 260px;
+      max-width: 340px;
+      background: #222;
+      color: white;
+      border-radius: 12px;
+      padding: 32px 24px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.3);
+      text-align: center;
+      margin-bottom: 0;
+      margin-right: 0;
+    }
+    .updates-section {
+      margin-top: 24px;
+      background: #232366;
+      padding: 16px;
+      border-radius: 10px;
+      color: #f3f3f3;
+    }
+    .blank-profile, .user-profile {
+        text-align: center;
+        padding: 20px;
+        border: 1px solid #444;
+        border-radius: 10px;
+        background-color: #111;
+        color: white;
+    }
+    .grid-wrapper {
+        position: relative;
+        max-width: 60%;
+        margin: 0 auto 20px auto;
+        overflow: hidden;
+        background: rgba(22,22,70,0.08);
+        border-radius: 16px;
+        box-shadow: 0 2px 12px rgba(0,0,0,0.3);
+        flex: 1 1 0;
+        min-width: 0;
+    }
+    .grid-track {
+        display: flex;
+        transition: transform 0.6s cubic-bezier(0.6,0,0.25,1);
+        width: 100%;
+    }
+    .grid {
+        flex: 0 0 100%;
+        box-sizing: border-box;
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 2px;
+        padding: 5px;
+        min-height: 340px;
+        background: rgba(10, 10, 44, 0.17);
+    }
+    .image-item {
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .image-grid img {
+        width: 100%;
+        max-width: 175px;
+        border-radius: 10px;
+        cursor: pointer;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+        transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .image-grid img:hover {
+        transform: scale(1.05);
+        box-shadow: 0 4px 16px rgba(0,0,0,0.5);
+    }
+    .room-label {
+        position: absolute;
+        top: 14px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: rgba(0,0,0,0.65);
+        color: #fff;
+        padding: 6px 18px;
+        border-radius: 8px;
+        font-size: 1.2em;
+        font-weight: bold;
+        letter-spacing: 1px;
+        pointer-events: none;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+        text-shadow: 0 1px 8px #000;
+        z-index: 2;
+    }
+    .arrow {
+        font-size: 3rem;
+        padding: 5px 10px;
+        color: white;
+        cursor: pointer;
+        border-radius: 50%;
+        background: rgba(0,0,0,0.4);
+        user-select: none;
+        transition: background 0.3s;
+    }
+    .arrow:hover {
+        background: rgba(0,0,0,0.85);
+    }
+    /* Popups */
+    .popup-overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background: rgba(0,0,0,0.4);
+        justify-content: center;
+        align-items: center;
+        z-index: 999;
+        overflow: hidden;
+        overflow-y: auto;
+    }
 
-@import url('https://fonts.googleapis.com/css?family=Lato');
+    .popup-box {
+        background: #fff;
+        padding: 30px 20px;
+        border-radius: 8px;
+        min-width: 250px;
+        position: relative;
+        box-shadow: 0 2px 16px rgba(0,0,0,0.2);
+        color: #000;
+        max-width: 90%;
+        max-height: 80vh;
+        overflow-y: auto;
+        overflow: hidden;
+    }
 
-body {
-  font-family: 'Lato', Arial, sans-serif;
-  margin: 40px;
-  background: linear-gradient(45deg, #000, #03055b);
-  text-align: center;
-  width: 100%;
-  height: 100vh;
-  overflow-x: hidden;
-  color: white;
-}
+    .close-btn {
+        position: absolute;
+        top: 10px;
+        right: 14px;
+        background: none;
+        border: none;
+        font-size: 24px;
+        cursor: pointer;
+        color: #333;
+    }
 
-.container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-  text-align: center;
-  background: url('https://raw.githubusercontent.com/CyberFights/chat/refs/heads/main/public/assets/images/New_Concept_v2.png');
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-position: center;
-}
+    .close-btn:hover {
+        color: #000;
+    }
 
-.content {
-  animation: fadeIn 2s ease-in-out;
-}
+    .palak {
+        background: linear-gradient(blue, black);
+        box-shadow: 1px 2px 5px gold, 1px 2px 12px red;
+        border-radius: 70px;
+        padding: 20px;
+        color: red;
+        max-width: 600px;
+        margin: 0 auto;
+    }
 
-h1 {
-  font-size: 2.5rem;
-  text-transform: uppercase;
-  letter-spacing: 5px;
-  color: #ff0000;
-  text-shadow:
-    -1px 0 #ff0000,
-    0 2px #ff0000,
-    2px 0 #ff0000,
-    0 -2px #ff0000,
-    0 0 8px #000,
-    0 0 12px #1700fb,
-    0 0 15px #1700fb;
-  margin-bottom: 20px;
-}
+    .palak .img span {
+        display: block;
+        width: 90px;
+        height: 90px;
+        border-radius: 50%;
+        margin: 0 auto 10px auto;
+        box-shadow: 1px 2px 8px red, 1px 0px 12px black;
+        overflow: hidden;
+    }
 
-#p {
-  font-size: 2.5rem;
-  margin-top: 40%;
-  color: #fff;
-  text-shadow:
-    -1px 0 #ff0000,
-    0 2px #ff0000,
-    2px 0 #ff0000,
-    0 -2px #ff0000,
-    0 0 8px #000,
-    0 0 12px #1700fb,
-    0 0 15px #1700fb;
-}
+    .palak .img span img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 50%;
+    }
 
-.fade-out {
-  animation: fadeOut 2s forwards;
-}
+    .palak .head {
+        text-align: center;
+        font-size: 40px;
+        font-weight: bold;
+        margin-bottom: 15px;
+        text-shadow: 0px 3px 19px black;
+    }
 
-@keyframes fadeIn {
-  from { opacity: 0; transform: scale(0.9);}
-  to { opacity: 1; transform: scale(1);}
-}
+    .palak .head2 {
+        background-color: black;
+        color: grey;
+        font-size: 18px;
+        font-weight: bold;
+        border-radius: 40px;
+        padding: 15px;
+        max-height: 300px;
+        overflow-y: auto;
+        margin-bottom: 20px;
+        line-height: 1.5;
+    }
 
-@keyframes fadeOut {
-  to { opacity: 0; visibility: hidden; }
-}
+    .palak input[type="text"],
+    .palak input[type="password"],
+    .palak textarea,
+    .palak select {
+        border-radius: 15%;
+        font-size: 18px;
+        width: 100%;
+        padding: 8px;
+        margin: 8px 0;
+        box-sizing: border-box;
+    }
 
-.hidden-page {
-  display: none;
-  color: white;
-}
+    .palak textarea {
+        resize: vertical;
+        height: 80px;
+    }
 
-.button-row {
-  display: flex;
-  justify-content: center;
-  gap: 15px;
-  margin-bottom: 30px;
-}
+    .palak button.register {
+        background-color: green;
+        color: white;
+        width: 50%;
+        padding: 10px;
+        border-radius: 20%/20%;
+        font-size: 25px;
+        cursor: pointer;
+        border: none;
+        margin: 0 auto;
+        display: block;
+        transition: background-color 0.3s ease;
+    }
 
-.button-row button {
-  padding: 10px 20px;
-  font-size: 16px;
-  cursor: pointer;
-  border-radius: 8px;
-  border: none;
-  background-color: #ff0000;
-  color: white;
-  transition: background-color 0.3s ease;
-}
+    .palak button.register:hover {
+        background-color: darkgreen;
+    }
 
-.button-row button:hover { background-color: #cc0000; }
+    #imagePreviewContainer {
+        margin-bottom: 20px;
+        text-align: center;
+    }
 
-.main-layout {
-  display: flex;
-  flex-direction: row;
-  align-items: flex-start;
-  gap: 40px;
-  width: 96%;
-  margin: 0 auto 30px auto;
-  justify-content: flex-start;
-}
+    #imagePreview {
+        max-width: 50%;
+        max-height: 150px;
+        border-radius: 10px;
+        object-fit: cover;
+    }
 
-.profile-section {
-  min-width: 260px;
-  max-width: 340px;
-  background: #222;
-  color: white;
-  border-radius: 12px;
-  padding: 32px 24px;
-  box-shadow: 0 2px 12px rgba(0,0,0,0.3);
-  text-align: center;
-  margin-bottom: 0;
-  margin-right: 0;
-}
-
-.updates-section {
-  margin-top: 24px;
-  background: #232366;
-  padding: 16px;
-  border-radius: 10px;
-  color: #f3f3f3;
-}
-
-.blank-profile, .user-profile {
-  text-align: center;
-  padding: 20px;
-  border: 1px solid #444;
-  border-radius: 10px;
-  background-color: #111;
-  color: white;
-}
-
-.grid-wrapper {
-  position: relative;
-  max-width: 60%;
-  margin: 0 auto 20px auto;
-  overflow: hidden;
-  background: rgba(22,22,70,0.08);
-  border-radius: 16px;
-  box-shadow: 0 2px 12px rgba(0,0,0,0.3);
-  flex: 1 1 0;
-  min-width: 0;
-}
-
-.grid-track {
-  display: flex;
-  transition: transform 0.6s cubic-bezier(0.6,0,0.25,1);
-  width: 100%;
-}
-
-.grid {
-  flex: 0 0 100%;
-  box-sizing: border-box;
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 2px;
-  padding: 5px;
-  min-height: 340px;
-  background: rgba(10, 10, 44, 0.17);
-}
-
-.image-item {
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.image-grid img {
-  width: 100%;
-  max-width: 175px;
-  border-radius: 10px;
-  cursor: pointer;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.3);
-  transition: transform 0.2s, box-shadow 0.2s;
-}
-
-.image-grid img:hover {
-  transform: scale(1.05);
-  box-shadow: 0 4px 16px rgba(0,0,0,0.5);
-}
-
-.room-label {
-  position: absolute;
-  top: 14px;
-  left: 50%;
-  transform: translateX(-50%);
-  background: rgba(0,0,0,0.65);
-  color: #fff;
-  padding: 6px 18px;
-  border-radius: 8px;
-  font-size: 1.2em;
-  font-weight: bold;
-  letter-spacing: 1px;
-  pointer-events: none;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.3);
-  text-shadow: 0 1px 8px #000;
-  z-index: 2;
-}
-
-.arrow {
-  font-size: 3rem;
-  padding: 5px 10px;
-  color: white;
-  cursor: pointer;
-  border-radius: 50%;
-  background: rgba(0,0,0,0.4);
-  user-select: none;
-  transition: background 0.3s;
-}
-
-.arrow:hover {
-  background: rgba(0,0,0,0.85);
-}
-
-/* Popups */
-
-.popup-overlay {
-  display: none;
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background: rgba(0,0,0,0.4);
-  justify-content: center;
-  align-items: center;
-  z-index: 999;
-  overflow: hidden;
-  overflow-y: auto;
-}
-
-.popup-box {
-  background: #fff;
-  padding: 30px 20px;
-  border-radius: 8px;
-  min-width: 250px;
-  position: relative;
-  box-shadow: 0 2px 16px rgba(0,0,0,0.2);
-  color: #000;
-  max-width: 90%;
-  max-height: 80vh;
-  overflow-y: auto;
-  overflow: hidden;
-}
-
-.close-btn {
-  position: absolute;
-  top: 10px;
-  right: 14px;
-  background: none;
-  border: none;
-  font-size: 24px;
-  cursor: pointer;
-  color: #333;
-}
-
-.close-btn:hover {
-  color: #000;
-}
-
-.palak {
-  background: linear-gradient(blue, black);
-  box-shadow: 1px 2px 5px gold, 1px 2px 12px red;
-  border-radius: 70px;
-  padding: 20px;
-  color: red;
-  max-width: 600px;
-  margin: 0 auto;
-}
-
-.palak .img span {
-  display: block;
-  width: 90px;
-  height: 90px;
-  border-radius: 50%;
-  margin: 0 auto 10px auto;
-  box-shadow: 1px 2px 8px red, 1px 0px 12px black;
-  overflow: hidden;
-}
-
-.palak .img span img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  border-radius: 50%;
-}
-
-.palak .head {
-  text-align: center;
-  font-size: 40px;
-  font-weight: bold;
-  margin-bottom: 15px;
-  text-shadow: 0px 3px 19px black;
-}
-
-.palak .head2 {
-  background-color: black;
-  color: grey;
-  font-size: 18px;
-  font-weight: bold;
-  border-radius: 40px;
-  padding: 15px;
-  max-height: 300px;
-  overflow-y: auto;
-  margin-bottom: 20px;
-  line-height: 1.5;
-}
-
-.palak input[type="text"],
-.palak input[type="password"],
-.palak textarea,
-.palak select {
-  border-radius: 15%;
-  font-size: 18px;
-  width: 100%;
-  padding: 8px;
-  margin: 8px 0;
-  box-sizing: border-box;
-}
-
-.palak textarea {
-  resize: vertical;
-  height: 80px;
-}
-
-.palak button.register {
-  background-color: green;
-  color: white;
-  width: 50%;
-  padding: 10px;
-  border-radius: 20%/20%;
-  font-size: 25px;
-  cursor: pointer;
-  border: none;
-  margin: 0 auto;
-  display: block;
-  transition: background-color 0.3s ease;
-}
-
-.palak button.register:hover {
-  background-color: darkgreen;
-}
-
-#imagePreviewContainer {
-  margin-bottom: 20px;
-  text-align: center;
-}
-
-#imagePreview {
-  max-width: 50%;
-  max-height: 150px;
-  border-radius: 10px;
-  object-fit: cover;
-}
-
-/* Fullscreen dark overlay */
-
+   /* Fullscreen dark overlay */
 .overlay {
   position: fixed;
   inset: 0;
   background: radial-gradient(circle at top, rgba(110, 103, 255, 0.25), transparent 25%) ,
               radial-gradient(circle at bottom, rgba(0, 255, 204, 0.15), transparent 25%),
               rgba(3, 6, 23, 0.92);
-  display: none; /* toggle with JS */
+  display: none;              /* toggle with JS */
   justify-content: center;
   align-items: center;
   z-index: 9999;
@@ -386,7 +356,6 @@ h1 {
 }
 
 /* Main popup panel */
-
 .overlay-content {
   display: flex;
   width: 1000vw;
@@ -410,7 +379,6 @@ h1 {
 }
 
 /* Columns: 30% / 40% / 30% */
-
 #dmBox {
   flex: 0 0 25%;
   display: flex;
@@ -458,7 +426,7 @@ h1 {
 }
 
 #dmmessages {
-  flex: 0 0 90%;
+ flex: 0 0 90%;
   display: flex;
   flex-direction: column;
   border-radius: 14px;
@@ -471,26 +439,23 @@ h1 {
 }
 
 /* Optional: move online members into messages column footer or overlay corner */
-
 #online-members {
-  flex: 0 0 20%;
+   flex: 0 0 20%;
   display: flex;
   flex-direction: column;
   border-radius: 14px;
   padding: 10px 12px;
   background: white;
   font-size: 12px;
-  border: 1px solid rgba(45, 212, 191, 0.45);
+    border: 1px solid rgba(45, 212, 191, 0.45);
   box-shadow: inset 0 0 0 1px rgba(15, 23, 42, 0.6);
   max-width: 260px;
 }
 
-#mobile-toggles {
-  display: none;
-}
-
+  #mobile-toggles {
+    display: none;
+  }
 /* Scrollable lists */
-
 #dmMessages,
 #roomList,
 #messages,
@@ -500,8 +465,8 @@ h1 {
   padding: 0;
 }
 
-/* Titles */
 
+/* Titles */
 #dmUserTitle,
 #roomTitle {
   font-size: 14px;
@@ -512,7 +477,6 @@ h1 {
 }
 
 /* DM input area */
-
 #dmForm,
 #form {
   margin-top: auto;
@@ -533,14 +497,12 @@ h1 {
   outline: none;
   box-shadow: 0 0 0 1px rgba(15, 23, 42, 0.9);
 }
-
 #dmInput::placeholder,
 #m::placeholder {
   color: rgba(148, 163, 184, 0.7);
 }
 
-/* Buttons */
-
+    /* Buttons */
 #dmAttachBtn {
   background: radial-gradient(circle at 30% 0, rgba(244, 244, 245, 0.6), rgba(148, 163, 184, 0.2));
   border: 1px solid rgba(148, 163, 184, 0.7);
@@ -555,7 +517,6 @@ h1 {
   font-size: 16px;
   transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
 }
-
 #dmAttachBtn:hover {
   transform: translateY(-1px) scale(1.03);
   box-shadow: 0 0 18px rgba(129, 140, 248, 0.8);
@@ -577,7 +538,6 @@ h1 {
     0 10px 25px rgba(16, 185, 129, 0.5);
   transition: transform 0.12s ease, box-shadow 0.12s ease, filter 0.12s ease;
 }
-
 #dmForm button[type="submit"]:hover,
 #sendBtn:hover {
   transform: translateY(-1px);
@@ -585,7 +545,6 @@ h1 {
 }
 
 /* Sidebar buttons */
-
 #btnDMs,
 #btnRooms {
   padding: 7px 10px;
@@ -599,7 +558,6 @@ h1 {
   text-transform: uppercase;
   margin-right: 6px;
 }
-
 #btnDMs.active,
 #btnRooms.active {
   background: linear-gradient(135deg, #4f46e5, #22d3ee);
@@ -620,7 +578,6 @@ h1 {
 }
 
 /* Message items basic look (tweak as needed) */
-
 #messages li,
 #dmMessages li {
   padding: 6px 9px;
@@ -631,7 +588,6 @@ h1 {
 }
 
 /* Room list items */
-
 #roomList li {
   padding: 7px 9px;
   margin-bottom: 4px;
@@ -640,20 +596,17 @@ h1 {
   border: 1px solid rgba(75, 85, 99, 0.9);
   cursor: pointer;
 }
-
 #roomList li:hover {
   border-color: rgba(129, 140, 248, 0.9);
   background: rgba(15, 23, 42, 0.95);
 }
 
 /* Small responsive tweak: stack on narrow screens */
-
 @media (max-width: 960px) {
   .overlay-content {
     flex-direction: column;
     height: 90vh;
   }
-
   #dmBox,
   #chatSidebar,
   #messages-column {
@@ -662,144 +615,143 @@ h1 {
   }
 }
 
-svg{
-  z-index: -10;
-  background: transparent;
-  position: absolute;
-  overflow: hidden;
-  max-height: 100%;
-  max-width: 100%;
-}
+    svg{
+        z-index: -10;
+        background: transparent;
+        position: absolute;
+        overflow: hidden;
+        max-height: 100%;
+        max-width: 100%;
+    }
 
-.profile-img{
-  border-radius: 50%;
-  height: 90px;
-  width: 90px;
-  border: 7px solid rgba(90,140,240,1);
-  position: absolute;
-  left:15px;
-  top: 15px;
-}
+    .profile-img{
+        border-radius: 50%;
+        height: 90px;
+        width: 90px;
+        border: 7px solid rgba(90,140,240,1);
+        position: absolute;
+        left:15px;
+        top: 15px;
+    }
 
-p{
-  font-size: 1.30em;
-}
+    p{
+        font-size: 1.30em;
+    }
 
-.middlecont p{
-  color: rgb(200,200,205);
-}
+    .middlecont p{
+        color: rgb(200,200,205);
+    }
 
-.top{
-  background:rgb(80,80,87);
-  height: 30px;
-  width: 410px;
-  max-width: 95%;
-  border-radius: 15px 15px 3px 3px;
-  display: block;
-  position: relative;
-  box-shadow: inset 6px 6px 5px rgba(200,200,205,0.4), inset -6px 6px 6px rgba(10,10,15,0.4), inset -2px -2px 2px rgba(10,10,15,0.4);
-  z-index:2;
-}
+    .top{
+        background:rgb(80,80,87);
+        height: 30px;
+        width: 410px;
+        max-width: 95%;
+        border-radius: 15px 15px 3px 3px;
+        display: block;
+        position: relative;
+        box-shadow: inset 6px 6px 5px rgba(200,200,205,0.4), inset -6px 6px 6px rgba(10,10,15,0.4), inset -2px -2px 2px rgba(10,10,15,0.4);
+        z-index:2;
+    }
 
-.light{
-  background: rgb(10,10,15);
-  width: 20px;
-  height: 5px;
-  border-radius: 3px;
-  position: absolute ;
-  right: 15px;
-  top: 13px;
-  box-shadow: inset 1px 1px 2px rgba(0,0,0,0.2), inset -1px -1px 2px rgba(150,150,155,0.4);
-  animation: 1.5s lf ease forwards;
-  animation-delay: 2s;
-}
+    .light{
+        background: rgb(10,10,15);
+        width: 20px;
+        height: 5px;
+        border-radius: 3px;
+        position: absolute ;
+        right: 15px;
+        top: 13px;
+        box-shadow: inset 1px 1px 2px rgba(0,0,0,0.2), inset -1px -1px 2px rgba(150,150,155,0.4);
+        animation: 1.5s lf ease forwards;
+        animation-delay: 2s;
+    }
 
-@keyframes lf{
-  0%{
-    background: rgb(10,10,15);
-  }
-  25%{background: rgb(50,100,200);}
-  50%{background: rgb(10,60,160);}
-  100%{background: rgb(90,140,240);}
-}
+    @keyframes lf{
+        0%{
+            background: rgb(10,10,15);
+        }
+        25%{background: rgb(50,100,200);}
+        50%{background: rgb(10,60,160);}
+        100%{background: rgb(90,140,240);}
+    }
 
-.middle{
-  background: linear-gradient(45deg, rgba(30,80,180,1), rgba(90,140,240,1));
-  width: 400px;
-  height: 450px;
-  max-width: 92%;
-  max-height: 80%;
-  transition: all 1s ease;
-  z-index:2;
-  overflow: hidden;
-  margin: 0;
-  padding: 0;
-}
+    .middle{
+        background: linear-gradient(45deg, rgba(30,80,180,1), rgba(90,140,240,1));
+        width: 400px;
+        height: 450px;
+        max-width: 92%;
+        max-height: 80%;
+        transition: all 1s ease;
+        z-index:2;
+        overflow: hidden;
+        margin: 0;
+        padding: 0;
+    }
 
-.middlecont{
-  height: 100%;
-  max-width: 95%;
-  color: white;
-  padding: 5px;
-  text-align: center;
-  z-index: 10;
-  position: relative;
-  left:0;
-  right:0;
-  margin: auto;
-}
+    .middlecont{
+        height: 100%;
+        max-width: 95%;
+        color: white;
+        padding: 5px;
+        text-align: center;
+        z-index: 10;
+        position: relative;
+        left:0;
+        right:0;
+        margin: auto;
+    }
 
-.open{
-  height: 400px;
-  opacity: 0.9;
-  animation: 15s hg ease infinite;
-}
+    .open{
+        height: 400px;
+        opacity: 0.9;
+        animation: 15s hg ease infinite;
+    }
 
-@keyframes hg{
-  0%{
-    transform: skewX(1deg);
-    opacity: 0.7;
-  }
-  1%{ transform: skewX(0);
-    opacity: 0.9;
-  }
-  69%{
-    transform: skewX(0.5deg);
-    opacity: 0.8;
-  }
-  70%{
-    transform: skewX(-1deg);
-    opacity: 0.7;
-  }
-  71%{
-    transform: skewX(0.5deg);
-    opacity: 0.9;
-  }
-  100%{
-    transform: skewX(0);
-    opacity: 0.9;
-  }
-}
+    @keyframes hg{
+        0%{
+            transform: skewX(1deg);
+            opacity: 0.7;
+        }
+        1%{ transform: skewX(0);
+            opacity: 0.9;
+        }
+        69%{
+            transform: skewX(0.5deg);
+            opacity: 0.8;
+        }
+        70%{
+            transform: skewX(-1deg);
+            opacity: 0.7;
+        }
+        71%{
+            transform: skewX(0.5deg);
+            opacity: 0.9;
+        }
+        100%{
+            transform: skewX(0);
+            opacity: 0.9;
+        }
+    }
 
-.closed{
-  height: 0px;
-  opacity: 0;
-}
+    .closed{
+        height: 0px;
+        opacity: 0;
+    }
 
-.bottom{
-  background: rgb(80,80,87);
-  width: 410px;
-  height: 30px;
-  max-width: 95%;
-  border-radius: 3px 3px 15px 15px;
-  display: block;
-  position: relative;
-  box-shadow: inset -6px -6px 6px rgba(10,10,15,0.5), inset 6px -6px 6px rgba(200, 200, 205, 0.4), inset 2px 2px 2px rgba(200,200,205,0.2);
-  z-index:2;
-}
+    .bottom{
+        background: rgb(80,80,87);
+        width: 410px;
+        height: 30px;
+        max-width: 95%;
+        border-radius: 3px 3px 15px 15px;
+        display: block;
+        position: relative;
+        box-shadow: inset -6px -6px 6px rgba(10,10,15,0.5), inset 6px -6px 6px rgba(200, 200, 205, 0.4), inset 2px 2px 2px rgba(200,200,205,0.2);
+        z-index:2;
+    }
 
-/* Popup Overlay (fixed size, always centered, no resize on search) */
-
+   /* Popup Overlay (fixed size, always centered, no resize on search) */
 #popup1.popup-overlay {
   position: fixed;
   top: 0; left: 0;
@@ -812,13 +764,11 @@ p{
   z-index: 9999;
   overflow: hidden;
 }
-
 #popup1.popup-overlay[style*="display:block"] {
   display: flex !important; /* Show popup if display:block */
 }
 
 /* Popup Box (fixed size) */
-
 .popup-box {
   background: radial-gradient(circle, #1a1a2e, #16213e);
   width: 600px;
@@ -830,14 +780,12 @@ p{
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: flex-start;
   padding: 36px 32px 32px 32px;
   position: relative;
   overflow: hidden;
 }
 
 /* Close Button */
-
 .close-btn {
   position: absolute;
   top: 18px;
@@ -850,11 +798,9 @@ p{
   z-index: 2;
   transition: color 0.2s;
 }
-
 .close-btn:hover { color: #00ffff; }
 
 /* Search Bar - full width, fixed position under close */
-
 #searchBar {
   width: 100%;
   padding: 12px 18px;
@@ -870,7 +816,6 @@ p{
 }
 
 /* Holo Container - always below search bar, profile never resizes */
-
 .holo-container {
   flex: 1 1 auto;
   display: flex;
@@ -881,11 +826,10 @@ p{
   margin: 0;
   padding: 0;
   overflow: hidden;
-  overflow-y: auto;
+    overflow-y: auto;
 }
 
 /* Holo Card - fixed size, never resizes */
-
 .holo-card {
   position: relative;
   width: 95%;
@@ -901,15 +845,12 @@ p{
   padding: 32px 16px 18px 16px;
   text-align: center;
   overflow: hidden;
-  overflow-y: auto;
+    overflow-y: auto;
 }
-
 .holo-card:hover { transform: rotateY(30deg) rotateX(15deg); transition: transform 0.5s; }
-
 .holo-card { transform-style: preserve-3d; transition: transform 0.5s; }
 
 /* Profile Image */
-
 #profile-img {
   width: 120px;
   height: 120px;
@@ -920,7 +861,6 @@ p{
 }
 
 /* Holo Text Styling */
-
 .holo-text {
   font-size: 1.5rem;
   font-weight: bold;
@@ -933,7 +873,6 @@ p{
   text-shadow: 0 0 10px #8888, 0 0 20px #0bf8;
   margin: 0.2em 0 0.1em 0;
 }
-
 @keyframes shimmer {
   0% { background-position: 0% 50%; }
   50% { background-position: 100% 50%; }
@@ -941,7 +880,6 @@ p{
 }
 
 /* Animation Overlay */
-
 .animation-overlay {
   position: absolute;
   top: 0; left: 0; width: 100%; height: 100%;
@@ -951,11 +889,9 @@ p{
   z-index: 0;
   animation: glow 2s infinite alternate-reverse;
 }
-
 @keyframes glow { from { opacity: 0.1; } to { opacity: 0.3; } }
 
 /* Answer Styling */
-
 .answer {
   font-size: 1.15rem;
   color: #fff;
@@ -972,99 +908,84 @@ p{
   font-size: 1rem;
 }
 
-.support-overlay {
-  position: fixed;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
-  background: black;
-  display: none;
-  justify-content: center;
-  align-items: center;
-  z-index: 1;
-}
-
-.support {
-  background-image: linear-gradient(skyblue, blue);
-  padding: 20px;
-  width: 400px;
-  border-radius: 8px;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.3);
-}
-
-.support h2 {
-  margin-top: 0;
-}
-
-.support label {
-  display: block;
-  margin: 10px 0 5px;
-}
-
-.support input, .support select, .support textarea {
-  width: 90%;
-  padding: 8px;
-  margin-bottom: 15px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-}
-
-.support button {
-  padding: 10px 15px;
-  margin-right: 10px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-.support-submit {
-  background: limegreen;
-  color: #fff;
-}
-
+    .support-overlay {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: black;
+      display: none;
+      justify-content: center;
+      align-items: center;
+        z-index: 1;
+    }
+    .support {
+      background-image: linear-gradient(skyblue, blue);
+      padding: 20px;
+      width: 400px;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+    }
+    .support h2 {
+      margin-top: 0;
+    }
+    .support label {
+      display: block;
+      margin: 10px 0 5px;
+    }
+    .support input, .support select, .support textarea {
+      width: 90%;
+      padding: 8px;
+      margin-bottom: 15px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+    .support button {
+      padding: 10px 15px;
+      margin-right: 10px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    .support-submit {
+      background: limegreen;
+      color: #fff;
+    }
 /* Optional: custom cursor */
-
 body:hover { cursor:url('cursor-image.png'), auto; }
 
 #popup5 .popup-box form#registerForm > * {
-  margin-top: 15px;
-  margin-bottom: 0;
-  width: 100%;
-  box-sizing: border-box;
-  display: block;
+    margin-top: 15px;
+    margin-bottom: 0;
+    width: 100%;
+    box-sizing: border-box;
+    display: block;
 }
-
 #popup5 .popup-box form#registerForm label {
-  margin-top: 10px;
-  margin-bottom: 0;
-  font-weight: bold;
+    margin-top: 10px;
+    margin-bottom: 0;
+    font-weight: bold;
 }
-
 #registerImagePreviewContainer {
-  margin-top: 15px !important;
-  margin-bottom: 15px !important;
+    margin-top: 15px !important;
+    margin-bottom: 15px !important;
 }
-
 #popup5 .popup-box form#registerForm button[type="submit"] {
-  margin-top: 20px;
+    margin-top: 20px;
 }
 
 /* Base adjustments for all small screens */
-
 @media (max-width: 768px) {
-
   /* Reduce heavy backgrounds for mobile to save bandwidth & improve readability */
-
   body {
     margin: 12px;
     background: linear-gradient(180deg, #000014, #01103a);
     font-size: 16px;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    overflow-y: scroll;
+      overflow-y: scroll;
   }
 
   /* Container and main layout stack vertically */
-
   .container {
     background: none;
     background-image: none;
@@ -1072,7 +993,8 @@ body:hover { cursor:url('cursor-image.png'), auto; }
     height: auto;
     min-height: 100vh;
     justify-content: center;
-    align-items: center;
+        align-items: center;
+    
   }
 
   .main-layout {
@@ -1085,7 +1007,6 @@ body:hover { cursor:url('cursor-image.png'), auto; }
   }
 
   /* Profile panel should be full width and compress spacing */
-
   .profile-section {
     min-width: auto;
     max-width: 100%;
@@ -1096,7 +1017,6 @@ body:hover { cursor:url('cursor-image.png'), auto; }
   }
 
   /* Grid should be single column with consistent spacing */
-
   .grid-wrapper {
     max-width: 100%;
     width: 100%;
@@ -1104,14 +1024,12 @@ body:hover { cursor:url('cursor-image.png'), auto; }
     padding: 8px;
     border-radius: 12px;
   }
-
   .grid {
     grid-template-columns: 1fr;
     gap: 8px;
     padding: 8px;
     min-height: auto;
   }
-
   .image-grid img {
     max-width: 100%;
     width: 100%;
@@ -1120,13 +1038,11 @@ body:hover { cursor:url('cursor-image.png'), auto; }
   }
 
   /* Headings and large text scale down */
-
   h1 {
     font-size: 1.4rem;
     letter-spacing: 2px;
     margin-bottom: 12px;
   }
-
   #p {
     font-size: 1.25rem;
     margin-top: 12%;
@@ -1136,7 +1052,6 @@ body:hover { cursor:url('cursor-image.png'), auto; }
     flex-wrap: wrap;
     gap: 10px;
   }
-
   .button-row button {
     flex: 1 1 auto;
     min-width: 120px;
@@ -1145,7 +1060,6 @@ body:hover { cursor:url('cursor-image.png'), auto; }
   }
 
   /* Arrows & navigation: smaller and touch-friendly */
-
   .arrow {
     font-size: 2rem;
     padding: 8px;
@@ -1157,7 +1071,6 @@ body:hover { cursor:url('cursor-image.png'), auto; }
   }
 
   /* Make popups full-screen friendly */
-
   .popup-overlay, .overlay, #popup1.popup-overlay {
     display: none; /* toggled by JS */
     position: fixed;
@@ -1179,18 +1092,16 @@ body:hover { cursor:url('cursor-image.png'), auto; }
   }
 
   /* Overlay content stacks vertically and uses full width */
-
-  .overlay-content {
+    .overlay-content {
     position: relative;
     flex-direction: column;
-    height: 90vh;
+    height: 80vh;
     overflow-y: auto;
     overflow: hidden;
     margin-top:12%;
   }
 
   /* Hide dmBox and chatSidebar off-canvas by default */
-
   #dmBox,
   #chatSidebar {
     position: fixed;
@@ -1209,13 +1120,11 @@ body:hover { cursor:url('cursor-image.png'), auto; }
   }
 
   /* dmBox slides in from left */
-
   #dmBox {
     left: 0;
   }
 
   /* chatSidebar slides in from right */
-
   #chatSidebar {
     right: 0;
     left: auto;
@@ -1223,7 +1132,6 @@ body:hover { cursor:url('cursor-image.png'), auto; }
   }
 
   /* When “open” class is added, make them visible */
-
   #dmBox.open {
     transform: translateX(0);
   }
@@ -1233,14 +1141,12 @@ body:hover { cursor:url('cursor-image.png'), auto; }
   }
 
   /* Main chat column takes full width behind drawers */
-
   #messages-column,
   #online-members {
     width: 100%;
   }
 
   /* Optional: add a simple toggle bar on top of messages-column for mobile */
-
   #mobile-toggles {
     display: flex;
     justify-content: space-between;
@@ -1262,63 +1168,52 @@ body:hover { cursor:url('cursor-image.png'), auto; }
     color: #e5e7eb;
     font-size: 0.9rem;
   }
-
 }
 
-/* Holo card and profile images scale down */
+  /* Holo card and profile images scale down */
+  .holo-card {
+    max-width: 100%;
+    min-height: 320px;
+    padding: 20px;
+  }
+  #profile-img, .palak .img span {
+    width: 96px;
+    height: 96px;
+  }
 
-.holo-card {
-  max-width: 100%;
-  min-height: 320px;
-  padding: 20px;
-}
+  /* Support overlay */
+  .support {
+    width: 100%;
+    max-width: 420px;
+    margin: 0 auto;
+  }
 
-#profile-img, .palak .img span {
-  width: 96px;
-  height: 96px;
-}
+  /* Tidy up margins/paddings */
+  .content, .middlecont, .palak, .support {
+    margin: 0;
+    padding: 0 6px;
+  }
 
-/* Support overlay */
-
-.support {
-  width: 100%;
-  max-width: 420px;
-  margin: 0 auto;
-}
-
-/* Tidy up margins/paddings */
-
-.content, .middlecont, .palak, .support {
-  margin: 0;
-  padding: 0 6px;
-}
-
-/* Remove decorative heavy box-shadows on small screens */
-
-.profile-section, .grid-wrapper, .popup-box, .holo-card {
-  box-shadow: none;
-  border: 1px solid rgba(255,255,255,0.04);
-  background: linear-gradient(180deg, rgba(12,14,28,0.7), rgba(18,24,40,0.9));
-}
-
+  /* Remove decorative heavy box-shadows on small screens */
+  .profile-section, .grid-wrapper, .popup-box, .holo-card {
+    box-shadow: none;
+    border: 1px solid rgba(255,255,255,0.04);
+    background: linear-gradient(180deg, rgba(12,14,28,0.7), rgba(18,24,40,0.9));
+  }
 }
 
 /* Extra small phones (<=420px) - tighter tuning */
-
 @media (max-width: 420px) {
-
   body {
     font-size: 15px;
     margin: 8px;
   }
 
   /* More compact header */
-
   h1 {
     font-size: 1.15rem;
     letter-spacing: 1px;
   }
-
   #p {
     font-size: 1.05rem;
     margin-top: 8%;
@@ -1331,7 +1226,6 @@ body:hover { cursor:url('cursor-image.png'), auto; }
   }
 
   /* Reduce grid gutters */
-
   .grid {
     gap: 6px;
     padding: 6px;
@@ -1343,7 +1237,6 @@ body:hover { cursor:url('cursor-image.png'), auto; }
   }
 
   /* Make popup close control easier to tap */
-
   .close-btn {
     top: 10px;
     right: 10px;
@@ -1352,7 +1245,6 @@ body:hover { cursor:url('cursor-image.png'), auto; }
   }
 
   /* Ensure minimum touch target for small-action icons */
-
   .arrow, #dmAttachBtn, #btnDMs, #btnRooms, #btnCreateRoom {
     min-width: 44px;
     min-height: 44px;
@@ -1360,52 +1252,40 @@ body:hover { cursor:url('cursor-image.png'), auto; }
   }
 
   /* Reduce overlay paddings to maximize usable space */
-
   .overlay-content, .popup-box {
     padding: 10px;
     margin-top:12%;
   }
 
   /* Make registration form controls full width and easy to read */
-
   #popup5 .popup-box form#registerForm > * {
     margin-top: 12px;
     width: 100%;
   }
 
   /* Hide decorative animation overlay to improve performance */
-
   .animation-overlay { display: none !important; }
 
   /* Fallback for devices with low viewport height (keyboard open) */
-
   .popup-box, .overlay-content {
     max-height: calc(100vh - 40px);
     height: auto;
   }
-
 }
 
 /* Accessibility helpers for mobile: enough contrast & focus styles */
-
 @media (max-width: 900px) {
-
   button, a, input, textarea, select {
     -webkit-tap-highlight-color: rgba(255,255,255,0.06);
   }
-
   button:focus, a:focus, input:focus, textarea:focus {
     outline: 3px solid rgba(99,102,241,0.24);
     outline-offset: 2px;
     border-radius: 8px;
   }
-
 }
-
-@media (max-width: 900px) {
-
+    @media (max-width: 900px) {
   /* Ensure the document can scroll on mobile */
-
   html, body {
     height: auto !important;
     min-height: 100% !important;
@@ -1414,7 +1294,6 @@ body:hover { cursor:url('cursor-image.png'), auto; }
   }
 
   /* Prevent large fixed/100vh elements from blocking page flow */
-
   .container,
   body > .container,
   .main-layout,
@@ -1434,7 +1313,6 @@ body:hover { cursor:url('cursor-image.png'), auto; }
   }
 
   /* Allow internal scroll areas to scroll but not block the page */
-
   #messagesbox,
   #dmmessages,
   #dmMessages,
@@ -1447,7 +1325,6 @@ body:hover { cursor:url('cursor-image.png'), auto; }
   }
 
   /* If any overlay/popup is hidden via inline style display:none, make sure it doesn't block touches */
-
   .popup-overlay[style*="display:none"],
   .overlay[style*="display:none"],
   .support-overlay[style*="display:none"] {
@@ -1455,30 +1332,27 @@ body:hover { cursor:url('cursor-image.png'), auto; }
   }
 
   /* If a full-screen element was accidentally left visible but transparent, ensure it doesn't block page scroll */
-
   [style*="position:fixed"][style*="width:100vw"][style*="height:100vh"] {
     pointer-events: auto;
   }
 
   /* Minor touch-target improvements for mobile main page */
-
   .arrow, #dmAttachBtn, .button-row button, #btnCreateRoom {
     min-height: 44px;
     min-width: 44px;
     touch-action: manipulation;
   }
-
 }
 
 /* Emergency override if another rule still forces overflow hidden */
-
 @media (max-width: 900px) {
   * {
     -webkit-overflow-scrolling: touch;
   }
 }
 
-/* End of full CSS block */
+/* ... (the entire CSS block from your previous file is preserved here) ... */
+/* For brevity in this message I assume the full CSS block you previously provided is pasted here unchanged. */
   </style>
 </head>
 <body>
@@ -1505,6 +1379,10 @@ body:hover { cursor:url('cursor-image.png'), auto; }
         <h2>User Profile</h2>
         <div id="profile" class="blank-profile"><p>Please log in to see your profile.</p></div>
         <div class="updates-section"><h3>Website Updates</h3><ul id="updates-list"><li>No updates available.</li></ul></div>
+        <div style="margin-top:16px;">
+          <h4>Rooms</h4>
+          <ul id="roomList"></ul>
+        </div>
       </div>
 
       <div class="grid-wrapper" style="flex:1;">
@@ -1556,20 +1434,15 @@ body:hover { cursor:url('cursor-image.png'), auto; }
         </div>
       </div>
 
-      <div style="width:300px;">
-        <h3>Quick Actions</h3>
-        <button id="openChatOverlay" onclick="document.getElementById('chatOverlay').style.display='flex'">Open Chat Overlay</button>
-        <h4>Rooms</h4>
-        <ul id="roomList"></ul>
-      </div>
     </div>
   </div>
 
-  <!-- Chat overlay -->
+  <!-- Chat overlay (restored original three-column layout) -->
   <div class="overlay" id="chatOverlay" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.7);">
-    <div class="overlay-content" style="display:flex; gap:12px; padding:18px; width:95%; margin:auto; max-width:1200px;">
+    <div class="overlay-content" style="display:flex; gap:12px; padding:18px; width:95%; margin:auto; max-width:1500px;">
+      <!-- DM column -->
       <div id="dmBox" style="flex:0 0 25%; background:#111; padding:12px; border-radius:8px;">
-        <h4 id="dmUserTitle">DM Message</h4>
+        <h4 id="dmUserTitle">DMs</h4>
         <div id="dmmessages" style="height:300px; overflow:auto; background:#000; padding:8px; border-radius:6px;">
           <ul id="dmMessages"></ul>
         </div>
@@ -1581,24 +1454,26 @@ body:hover { cursor:url('cursor-image.png'), auto; }
         </form>
       </div>
 
+      <!-- Messages column -->
       <div id="messages-column" style="flex:0 0 55%; background:#0b1220; padding:12px; border-radius:8px;">
         <div style="display:flex; justify-content:space-between; align-items:center;">
           <div id="roomTitle">No room</div>
           <button onclick="closeChat()">Close</button>
         </div>
-        <div id="messagesbox" style="height:420px; overflow:auto; background:#000; padding:8px; border-radius:6px; margin-top:8px;">
+        <div id="messagesbox" style="height:600px; overflow:auto; background:#000; padding:8px; border-radius:6px; margin-top:8px;">
           <ul id="messages"></ul>
         </div>
         <form id="form" onsubmit="return false;" style="display:flex; gap:8px; margin-top:8px;">
-          <input id="roomSelect" style="width:180px;" />
+          <select id="roomSelect" style="width:180px;"></select>
           <input id="m" placeholder="Type your message..." style="flex:1; padding:8px;" />
           <button id="sendBtn" type="button">Send</button>
         </form>
       </div>
 
-      <div id="online-members" style="flex:0 0 20%; background:#111; padding:12px; border-radius:8px;">
-        <b style="color:lime">Online:</b>
-        <ul id="members-list"></ul>
+      <!-- Sidebar / members -->
+      <div id="chatSidebar" style="flex:0 0 20%; background:#111; padding:12px; border-radius:8px;">
+        <b style="color:lime">Members</b>
+        <ul id="roomMembersList"></ul>
       </div>
     </div>
   </div>
@@ -1721,7 +1596,7 @@ body:hover { cursor:url('cursor-image.png'), auto; }
     const dmAttachBtn = document.getElementById('dmAttachBtn');
     const dmFileInput = document.getElementById('dmFileInput');
     const roomListEl = document.getElementById('roomList');
-    const membersList = document.getElementById('members-list');
+    const roomMembersList = document.getElementById('roomMembersList');
     const roomTitle = document.getElementById('roomTitle');
     const registerForm = document.getElementById('registerForm');
     const loginForm = document.getElementById('loginForm');
@@ -1819,7 +1694,7 @@ body:hover { cursor:url('cursor-image.png'), auto; }
       }
     });
 
-    // room carousel click -> open chat
+    // room image click -> open chat
     images.forEach(img => img.addEventListener('click', function() {
       if (!currentUsername) { alert('Please log in'); openPopup('popup0'); return; }
       const room = this.dataset.room;
@@ -1869,21 +1744,40 @@ body:hover { cursor:url('cursor-image.png'), auto; }
     // helper to create dm room name
     function getDmRoomName(a,b) { return 'dm_' + [a,b].sort().join('_'); }
 
-    // open DM overlay (called from member list)
+    // START PRIVATE CHAT: restored to previous behavior
+    // - opens the chat overlay (if not open)
+    // - joins the DM room via socket
+    // - fetches DM history via REST and populates DM pane
     function startPrivateChat(username) {
       if (!currentUsername) return alert('Please log in');
       if (username === currentUsername) return alert("You can't DM yourself");
       dmTarget = username;
       currentDmRoom = getDmRoomName(currentUsername, username);
+
+      // open overlay and focus DM column
+      overlay.style.display = 'flex';
+
+      // join DM room on socket
       socket.emit('joinDmRoom', { dmRoom: currentDmRoom, username: currentUsername });
-      fetch('/dm-messages/' + encodeURIComponent(currentDmRoom)).then(r => r.json()).then(msgs => {
-        dmMessages.innerHTML = '';
-        msgs.forEach(m => {
-          const li = document.createElement('li');
-          li.textContent = `${m.from_user}: ${m.message}`;
-          dmMessages.appendChild(li);
+
+      // fetch DM history via REST and populate DM pane
+      fetch('/dm-messages/' + encodeURIComponent(currentDmRoom))
+        .then(r => r.json())
+        .then(msgs => {
+          dmMessages.innerHTML = '';
+          msgs.forEach(m => {
+            const li = document.createElement('li');
+            const who = m.from_user || m.from || m.fromUser || 'Unknown';
+            const time = m.timestamp ? (new Date(m.timestamp)).toLocaleTimeString() : '';
+            li.textContent = `${who}: ${m.message} ${time ? '['+time+']' : ''}`;
+            dmMessages.appendChild(li);
+          });
+          dmMessages.scrollTop = dmMessages.scrollHeight;
+        })
+        .catch(err => {
+          console.error('Failed to load DM history', err);
+          dmMessages.innerHTML = '';
         });
-      });
     }
     window.startPrivateChat = startPrivateChat;
 
@@ -1956,26 +1850,70 @@ body:hover { cursor:url('cursor-image.png'), auto; }
       dmMessages.scrollTop = dmMessages.scrollHeight;
     });
 
+    // updateMembers now renders images and clicking a member opens a DM (restored behavior)
     socket.on('updateMembers', members => {
-      membersList.innerHTML = '';
-      const roomMembersList = document.getElementById('roomMembersList');
-      if (roomMembersList) roomMembersList.innerHTML = '';
+      roomMembersList.innerHTML = '';
       members.forEach(m => {
+        // m may be { username, profilePic } or a string
         const name = typeof m === 'string' ? m : (m.username || m);
+        const profilePic = (typeof m === 'object' && (m.profilePic || m.imagePath || m.avatar)) ? (m.profilePic || m.imagePath || m.avatar) : null;
+
         const li = document.createElement('li');
-        li.textContent = name;
-        const msgBtn = document.createElement('button'); msgBtn.textContent = 'Msg'; msgBtn.style.marginLeft='8px';
+        li.style.display = 'flex';
+        li.style.alignItems = 'center';
+        li.style.justifyContent = 'space-between';
+        li.style.gap = '8px';
+        li.style.padding = '6px 4px';
+
+        const left = document.createElement('div');
+        left.style.display = 'flex';
+        left.style.alignItems = 'center';
+        left.style.gap = '8px';
+        left.style.cursor = 'pointer';
+
+        // profile image (if available)
+        const img = document.createElement('img');
+        img.src = profilePic || 'https://via.placeholder.com/40?text=U';
+        img.alt = name;
+        img.style.width = '40px';
+        img.style.height = '40px';
+        img.style.borderRadius = '50%';
+        img.style.objectFit = 'cover';
+        img.onclick = (e) => { e.stopPropagation(); startPrivateChat(name); }; // clicking image starts DM
+
+        // name label (clickable to start DM)
+        const span = document.createElement('span');
+        span.textContent = name;
+        span.style.cursor = 'pointer';
+        span.onclick = (e) => { e.stopPropagation(); startPrivateChat(name); };
+
+        left.appendChild(img);
+        left.appendChild(span);
+
+        // actions (Msg and Remove)
+        const actions = document.createElement('div');
+
+        const msgBtn = document.createElement('button');
+        msgBtn.textContent = 'Msg';
+        msgBtn.style.marginLeft = '8px';
         msgBtn.onclick = (e) => { e.stopPropagation(); startPrivateChat(name); };
-        const removeBtn = document.createElement('button'); removeBtn.textContent = 'Remove'; removeBtn.style.marginLeft='6px';
+
+        const removeBtn = document.createElement('button');
+        removeBtn.textContent = 'Remove';
+        removeBtn.style.marginLeft = '6px';
         removeBtn.onclick = (e) => {
           e.stopPropagation();
           if (!confirm('Remove ' + name + ' from this room?')) return;
           socket.emit('remove_user', { roomName: currentRoom, targetUsername: name });
         };
-        li.appendChild(msgBtn);
-        li.appendChild(removeBtn);
-        membersList.appendChild(li);
-        if (roomMembersList) roomMembersList.appendChild(li.cloneNode(true));
+
+        actions.appendChild(msgBtn);
+        actions.appendChild(removeBtn);
+
+        li.appendChild(left);
+        li.appendChild(actions);
+
+        roomMembersList.appendChild(li);
       });
     });
 
@@ -1992,8 +1930,8 @@ body:hover { cursor:url('cursor-image.png'), auto; }
 
     socket.on('error', err => console.error('Socket error', err));
 
-    // create room button (in overlay)
-    document.getElementById('createRoomBtn')?.addEventListener('click', async () => {
+    // create room button (in profile section) - optional
+    document.getElementById('btnCreateRoom')?.addEventListener('click', async () => {
       const name = prompt('Enter new room name');
       if (!name) return;
       socket.emit('create_room', { name, public: true });
