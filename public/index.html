@@ -1,354 +1,384 @@
-<!DOCTYPE html>
+
+<!doctype html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <title>Chat Room Hub</title>
+  <meta charset="utf-8" />
   <title>Chat Room Hub</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
-<style>
-      @import url('https://fonts.googleapis.com/css?family=Lato');
-    body {
-        font-family: 'Lato', Arial, sans-serif;
-        margin: 40px;
-        background: linear-gradient(45deg, #000, #03055b);
-        text-align: center;
-        width: 100%;
-        height: 100vh;
-        overflow-x: hidden;
-        color: white;
-    }
-    .container {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 100vh;
-        text-align: center;
-        background: url('https://raw.githubusercontent.com/CyberFights/chat/refs/heads/main/public/assets/images/New_Concept_v2.png');
-        background-repeat: no-repeat;
-        background-size: cover;
-        background-position: center;
-    }
-    .content {
-        animation: fadeIn 2s ease-in-out;
-    }
-    h1 {
-        font-size: 2.5rem;
-        text-transform: uppercase;
-        letter-spacing: 5px;
-        color: #ff0000;
-        text-shadow:
-            -1px 0 #ff0000,
-            0 2px #ff0000,
-            2px 0 #ff0000,
-            0 -2px #ff0000,
-            0 0 8px #000,
-            0 0 12px #1700fb,
-            0 0 15px #1700fb;
-        margin-bottom: 20px;
-    }
-    #p {
-        font-size: 2.5rem;
-        margin-top: 40%;
-        color: #fff;
-        text-shadow:
-            -1px 0 #ff0000,
-            0 2px #ff0000,
-            2px 0 #ff0000,
-            0 -2px #ff0000,
-            0 0 8px #000,
-            0 0 12px #1700fb,
-            0 0 15px #1700fb;
-    }
-    .fade-out {
-        animation: fadeOut 2s forwards;
-    }
-    @keyframes fadeIn {
-        from { opacity: 0; transform: scale(0.9);}
-        to   { opacity: 1; transform: scale(1);}
-    }
-    @keyframes fadeOut {
-        to { opacity: 0; visibility: hidden; }
-    }
-    .hidden-page {
-        display: none;
-        color: white;
-    }
-    .button-row {
-        display: flex;
-        justify-content: center;
-        gap: 15px;
-        margin-bottom: 30px;
-    }
-    .button-row button {
-        padding: 10px 20px;
-        font-size: 16px;
-        cursor: pointer;
-        border-radius: 8px;
-        border: none;
-        background-color: #ff0000;
-        color: white;
-        transition: background-color 0.3s ease;
-    }
-    .button-row button:hover { background-color: #cc0000; }
-    .main-layout {
-      display: flex;
-      flex-direction: row;
-      align-items: flex-start;
-      gap: 40px;
-      width: 96%;
-      margin: 0 auto 30px auto;
-      justify-content: flex-start;
-    }
-    .profile-section {
-      min-width: 260px;
-      max-width: 340px;
-      background: #222;
-      color: white;
-      border-radius: 12px;
-      padding: 32px 24px;
-      box-shadow: 0 2px 12px rgba(0,0,0,0.3);
-      text-align: center;
-      margin-bottom: 0;
-      margin-right: 0;
-    }
-    .updates-section {
-      margin-top: 24px;
-      background: #232366;
-      padding: 16px;
-      border-radius: 10px;
-      color: #f3f3f3;
-    }
-    .blank-profile, .user-profile {
-        text-align: center;
-        padding: 20px;
-        border: 1px solid #444;
-        border-radius: 10px;
-        background-color: #111;
-        color: white;
-    }
-    .grid-wrapper {
-        position: relative;
-        max-width: 60%;
-        margin: 0 auto 20px auto;
-        overflow: hidden;
-        background: rgba(22,22,70,0.08);
-        border-radius: 16px;
-        box-shadow: 0 2px 12px rgba(0,0,0,0.3);
-        flex: 1 1 0;
-        min-width: 0;
-    }
-    .grid-track {
-        display: flex;
-        transition: transform 0.6s cubic-bezier(0.6,0,0.25,1);
-        width: 100%;
-    }
-    .grid {
-        flex: 0 0 100%;
-        box-sizing: border-box;
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
-        gap: 2px;
-        padding: 5px;
-        min-height: 340px;
-        background: rgba(10, 10, 44, 0.17);
-    }
-    .image-item {
-        position: relative;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-    .image-grid img {
-        width: 100%;
-        max-width: 175px;
-        border-radius: 10px;
-        cursor: pointer;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.3);
-        transition: transform 0.2s, box-shadow 0.2s;
-    }
-    .image-grid img:hover {
-        transform: scale(1.05);
-        box-shadow: 0 4px 16px rgba(0,0,0,0.5);
-    }
-    .room-label {
-        position: absolute;
-        top: 14px;
-        left: 50%;
-        transform: translateX(-50%);
-        background: rgba(0,0,0,0.65);
-        color: #fff;
-        padding: 6px 18px;
-        border-radius: 8px;
-        font-size: 1.2em;
-        font-weight: bold;
-        letter-spacing: 1px;
-        pointer-events: none;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.3);
-        text-shadow: 0 1px 8px #000;
-        z-index: 2;
-    }
-    .arrow {
-        font-size: 3rem;
-        padding: 5px 10px;
-        color: white;
-        cursor: pointer;
-        border-radius: 50%;
-        background: rgba(0,0,0,0.4);
-        user-select: none;
-        transition: background 0.3s;
-    }
-    .arrow:hover {
-        background: rgba(0,0,0,0.85);
-    }
-    /* Popups */
-    .popup-overlay {
-        display: none;
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100vw;
-        height: 100vh;
-        background: rgba(0,0,0,0.4);
-        justify-content: center;
-        align-items: center;
-        z-index: 999;
-        overflow: hidden;
-        overflow-y: auto;
-    }
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
+  <style>
+/* --- Full CSS reinsertion (from your design) --- */
 
-    .popup-box {
-        background: #fff;
-        padding: 30px 20px;
-        border-radius: 8px;
-        min-width: 250px;
-        position: relative;
-        box-shadow: 0 2px 16px rgba(0,0,0,0.2);
-        color: #000;
-        max-width: 90%;
-        max-height: 80vh;
-        overflow-y: auto;
-        overflow: hidden;
-    }
+@import url('https://fonts.googleapis.com/css?family=Lato');
 
-    .close-btn {
-        position: absolute;
-        top: 10px;
-        right: 14px;
-        background: none;
-        border: none;
-        font-size: 24px;
-        cursor: pointer;
-        color: #333;
-    }
+body {
+  font-family: 'Lato', Arial, sans-serif;
+  margin: 40px;
+  background: linear-gradient(45deg, #000, #03055b);
+  text-align: center;
+  width: 100%;
+  height: 100vh;
+  overflow-x: hidden;
+  color: white;
+}
 
-    .close-btn:hover {
-        color: #000;
-    }
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  text-align: center;
+  background: url('https://raw.githubusercontent.com/CyberFights/chat/refs/heads/main/public/assets/images/New_Concept_v2.png');
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+}
 
-    .palak {
-        background: linear-gradient(blue, black);
-        box-shadow: 1px 2px 5px gold, 1px 2px 12px red;
-        border-radius: 70px;
-        padding: 20px;
-        color: red;
-        max-width: 600px;
-        margin: 0 auto;
-    }
+.content {
+  animation: fadeIn 2s ease-in-out;
+}
 
-    .palak .img span {
-        display: block;
-        width: 90px;
-        height: 90px;
-        border-radius: 50%;
-        margin: 0 auto 10px auto;
-        box-shadow: 1px 2px 8px red, 1px 0px 12px black;
-        overflow: hidden;
-    }
+h1 {
+  font-size: 2.5rem;
+  text-transform: uppercase;
+  letter-spacing: 5px;
+  color: #ff0000;
+  text-shadow:
+    -1px 0 #ff0000,
+    0 2px #ff0000,
+    2px 0 #ff0000,
+    0 -2px #ff0000,
+    0 0 8px #000,
+    0 0 12px #1700fb,
+    0 0 15px #1700fb;
+  margin-bottom: 20px;
+}
 
-    .palak .img span img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        border-radius: 50%;
-    }
+#p {
+  font-size: 2.5rem;
+  margin-top: 40%;
+  color: #fff;
+  text-shadow:
+    -1px 0 #ff0000,
+    0 2px #ff0000,
+    2px 0 #ff0000,
+    0 -2px #ff0000,
+    0 0 8px #000,
+    0 0 12px #1700fb,
+    0 0 15px #1700fb;
+}
 
-    .palak .head {
-        text-align: center;
-        font-size: 40px;
-        font-weight: bold;
-        margin-bottom: 15px;
-        text-shadow: 0px 3px 19px black;
-    }
+.fade-out {
+  animation: fadeOut 2s forwards;
+}
 
-    .palak .head2 {
-        background-color: black;
-        color: grey;
-        font-size: 18px;
-        font-weight: bold;
-        border-radius: 40px;
-        padding: 15px;
-        max-height: 300px;
-        overflow-y: auto;
-        margin-bottom: 20px;
-        line-height: 1.5;
-    }
+@keyframes fadeIn {
+  from { opacity: 0; transform: scale(0.9);}
+  to { opacity: 1; transform: scale(1);}
+}
 
-    .palak input[type="text"],
-    .palak input[type="password"],
-    .palak textarea,
-    .palak select {
-        border-radius: 15%;
-        font-size: 18px;
-        width: 100%;
-        padding: 8px;
-        margin: 8px 0;
-        box-sizing: border-box;
-    }
+@keyframes fadeOut {
+  to { opacity: 0; visibility: hidden; }
+}
 
-    .palak textarea {
-        resize: vertical;
-        height: 80px;
-    }
+.hidden-page {
+  display: none;
+  color: white;
+}
 
-    .palak button.register {
-        background-color: green;
-        color: white;
-        width: 50%;
-        padding: 10px;
-        border-radius: 20%/20%;
-        font-size: 25px;
-        cursor: pointer;
-        border: none;
-        margin: 0 auto;
-        display: block;
-        transition: background-color 0.3s ease;
-    }
+.button-row {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin-bottom: 30px;
+}
 
-    .palak button.register:hover {
-        background-color: darkgreen;
-    }
+.button-row button {
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  border-radius: 8px;
+  border: none;
+  background-color: #ff0000;
+  color: white;
+  transition: background-color 0.3s ease;
+}
 
-    #imagePreviewContainer {
-        margin-bottom: 20px;
-        text-align: center;
-    }
+.button-row button:hover { background-color: #cc0000; }
 
-    #imagePreview {
-        max-width: 50%;
-        max-height: 150px;
-        border-radius: 10px;
-        object-fit: cover;
-    }
+.main-layout {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 40px;
+  width: 96%;
+  margin: 0 auto 30px auto;
+  justify-content: flex-start;
+}
 
-   /* Fullscreen dark overlay */
+.profile-section {
+  min-width: 260px;
+  max-width: 340px;
+  background: #222;
+  color: white;
+  border-radius: 12px;
+  padding: 32px 24px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.3);
+  text-align: center;
+  margin-bottom: 0;
+  margin-right: 0;
+}
+
+.updates-section {
+  margin-top: 24px;
+  background: #232366;
+  padding: 16px;
+  border-radius: 10px;
+  color: #f3f3f3;
+}
+
+.blank-profile, .user-profile {
+  text-align: center;
+  padding: 20px;
+  border: 1px solid #444;
+  border-radius: 10px;
+  background-color: #111;
+  color: white;
+}
+
+.grid-wrapper {
+  position: relative;
+  max-width: 60%;
+  margin: 0 auto 20px auto;
+  overflow: hidden;
+  background: rgba(22,22,70,0.08);
+  border-radius: 16px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.3);
+  flex: 1 1 0;
+  min-width: 0;
+}
+
+.grid-track {
+  display: flex;
+  transition: transform 0.6s cubic-bezier(0.6,0,0.25,1);
+  width: 100%;
+}
+
+.grid {
+  flex: 0 0 100%;
+  box-sizing: border-box;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 2px;
+  padding: 5px;
+  min-height: 340px;
+  background: rgba(10, 10, 44, 0.17);
+}
+
+.image-item {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.image-grid img {
+  width: 100%;
+  max-width: 175px;
+  border-radius: 10px;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.image-grid img:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.5);
+}
+
+.room-label {
+  position: absolute;
+  top: 14px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0,0,0,0.65);
+  color: #fff;
+  padding: 6px 18px;
+  border-radius: 8px;
+  font-size: 1.2em;
+  font-weight: bold;
+  letter-spacing: 1px;
+  pointer-events: none;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+  text-shadow: 0 1px 8px #000;
+  z-index: 2;
+}
+
+.arrow {
+  font-size: 3rem;
+  padding: 5px 10px;
+  color: white;
+  cursor: pointer;
+  border-radius: 50%;
+  background: rgba(0,0,0,0.4);
+  user-select: none;
+  transition: background 0.3s;
+}
+
+.arrow:hover {
+  background: rgba(0,0,0,0.85);
+}
+
+/* Popups */
+
+.popup-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0,0,0,0.4);
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+  overflow: hidden;
+  overflow-y: auto;
+}
+
+.popup-box {
+  background: #fff;
+  padding: 30px 20px;
+  border-radius: 8px;
+  min-width: 250px;
+  position: relative;
+  box-shadow: 0 2px 16px rgba(0,0,0,0.2);
+  color: #000;
+  max-width: 90%;
+  max-height: 80vh;
+  overflow-y: auto;
+  overflow: hidden;
+}
+
+.close-btn {
+  position: absolute;
+  top: 10px;
+  right: 14px;
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  color: #333;
+}
+
+.close-btn:hover {
+  color: #000;
+}
+
+.palak {
+  background: linear-gradient(blue, black);
+  box-shadow: 1px 2px 5px gold, 1px 2px 12px red;
+  border-radius: 70px;
+  padding: 20px;
+  color: red;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.palak .img span {
+  display: block;
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  margin: 0 auto 10px auto;
+  box-shadow: 1px 2px 8px red, 1px 0px 12px black;
+  overflow: hidden;
+}
+
+.palak .img span img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+.palak .head {
+  text-align: center;
+  font-size: 40px;
+  font-weight: bold;
+  margin-bottom: 15px;
+  text-shadow: 0px 3px 19px black;
+}
+
+.palak .head2 {
+  background-color: black;
+  color: grey;
+  font-size: 18px;
+  font-weight: bold;
+  border-radius: 40px;
+  padding: 15px;
+  max-height: 300px;
+  overflow-y: auto;
+  margin-bottom: 20px;
+  line-height: 1.5;
+}
+
+.palak input[type="text"],
+.palak input[type="password"],
+.palak textarea,
+.palak select {
+  border-radius: 15%;
+  font-size: 18px;
+  width: 100%;
+  padding: 8px;
+  margin: 8px 0;
+  box-sizing: border-box;
+}
+
+.palak textarea {
+  resize: vertical;
+  height: 80px;
+}
+
+.palak button.register {
+  background-color: green;
+  color: white;
+  width: 50%;
+  padding: 10px;
+  border-radius: 20%/20%;
+  font-size: 25px;
+  cursor: pointer;
+  border: none;
+  margin: 0 auto;
+  display: block;
+  transition: background-color 0.3s ease;
+}
+
+.palak button.register:hover {
+  background-color: darkgreen;
+}
+
+#imagePreviewContainer {
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+#imagePreview {
+  max-width: 50%;
+  max-height: 150px;
+  border-radius: 10px;
+  object-fit: cover;
+}
+
+/* Fullscreen dark overlay */
+
 .overlay {
   position: fixed;
   inset: 0;
   background: radial-gradient(circle at top, rgba(110, 103, 255, 0.25), transparent 25%) ,
               radial-gradient(circle at bottom, rgba(0, 255, 204, 0.15), transparent 25%),
               rgba(3, 6, 23, 0.92);
-  display: none;              /* toggle with JS */
+  display: none; /* toggle with JS */
   justify-content: center;
   align-items: center;
   z-index: 9999;
@@ -356,6 +386,7 @@
 }
 
 /* Main popup panel */
+
 .overlay-content {
   display: flex;
   width: 1000vw;
@@ -379,6 +410,7 @@
 }
 
 /* Columns: 30% / 40% / 30% */
+
 #dmBox {
   flex: 0 0 25%;
   display: flex;
@@ -426,7 +458,7 @@
 }
 
 #dmmessages {
- flex: 0 0 90%;
+  flex: 0 0 90%;
   display: flex;
   flex-direction: column;
   border-radius: 14px;
@@ -439,23 +471,26 @@
 }
 
 /* Optional: move online members into messages column footer or overlay corner */
+
 #online-members {
-   flex: 0 0 20%;
+  flex: 0 0 20%;
   display: flex;
   flex-direction: column;
   border-radius: 14px;
   padding: 10px 12px;
   background: white;
   font-size: 12px;
-    border: 1px solid rgba(45, 212, 191, 0.45);
+  border: 1px solid rgba(45, 212, 191, 0.45);
   box-shadow: inset 0 0 0 1px rgba(15, 23, 42, 0.6);
   max-width: 260px;
 }
 
-  #mobile-toggles {
-    display: none;
-  }
+#mobile-toggles {
+  display: none;
+}
+
 /* Scrollable lists */
+
 #dmMessages,
 #roomList,
 #messages,
@@ -465,8 +500,8 @@
   padding: 0;
 }
 
-
 /* Titles */
+
 #dmUserTitle,
 #roomTitle {
   font-size: 14px;
@@ -477,6 +512,7 @@
 }
 
 /* DM input area */
+
 #dmForm,
 #form {
   margin-top: auto;
@@ -497,12 +533,14 @@
   outline: none;
   box-shadow: 0 0 0 1px rgba(15, 23, 42, 0.9);
 }
+
 #dmInput::placeholder,
 #m::placeholder {
   color: rgba(148, 163, 184, 0.7);
 }
 
-    /* Buttons */
+/* Buttons */
+
 #dmAttachBtn {
   background: radial-gradient(circle at 30% 0, rgba(244, 244, 245, 0.6), rgba(148, 163, 184, 0.2));
   border: 1px solid rgba(148, 163, 184, 0.7);
@@ -517,6 +555,7 @@
   font-size: 16px;
   transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
 }
+
 #dmAttachBtn:hover {
   transform: translateY(-1px) scale(1.03);
   box-shadow: 0 0 18px rgba(129, 140, 248, 0.8);
@@ -538,6 +577,7 @@
     0 10px 25px rgba(16, 185, 129, 0.5);
   transition: transform 0.12s ease, box-shadow 0.12s ease, filter 0.12s ease;
 }
+
 #dmForm button[type="submit"]:hover,
 #sendBtn:hover {
   transform: translateY(-1px);
@@ -545,6 +585,7 @@
 }
 
 /* Sidebar buttons */
+
 #btnDMs,
 #btnRooms {
   padding: 7px 10px;
@@ -558,6 +599,7 @@
   text-transform: uppercase;
   margin-right: 6px;
 }
+
 #btnDMs.active,
 #btnRooms.active {
   background: linear-gradient(135deg, #4f46e5, #22d3ee);
@@ -578,6 +620,7 @@
 }
 
 /* Message items basic look (tweak as needed) */
+
 #messages li,
 #dmMessages li {
   padding: 6px 9px;
@@ -588,6 +631,7 @@
 }
 
 /* Room list items */
+
 #roomList li {
   padding: 7px 9px;
   margin-bottom: 4px;
@@ -596,17 +640,20 @@
   border: 1px solid rgba(75, 85, 99, 0.9);
   cursor: pointer;
 }
+
 #roomList li:hover {
   border-color: rgba(129, 140, 248, 0.9);
   background: rgba(15, 23, 42, 0.95);
 }
 
 /* Small responsive tweak: stack on narrow screens */
+
 @media (max-width: 960px) {
   .overlay-content {
     flex-direction: column;
     height: 90vh;
   }
+
   #dmBox,
   #chatSidebar,
   #messages-column {
@@ -615,143 +662,144 @@
   }
 }
 
-    svg{
-        z-index: -10;
-        background: transparent;
-        position: absolute;
-        overflow: hidden;
-        max-height: 100%;
-        max-width: 100%;
-    }
+svg{
+  z-index: -10;
+  background: transparent;
+  position: absolute;
+  overflow: hidden;
+  max-height: 100%;
+  max-width: 100%;
+}
 
-    .profile-img{
-        border-radius: 50%;
-        height: 90px;
-        width: 90px;
-        border: 7px solid rgba(90,140,240,1);
-        position: absolute;
-        left:15px;
-        top: 15px;
-    }
+.profile-img{
+  border-radius: 50%;
+  height: 90px;
+  width: 90px;
+  border: 7px solid rgba(90,140,240,1);
+  position: absolute;
+  left:15px;
+  top: 15px;
+}
 
-    p{
-        font-size: 1.30em;
-    }
+p{
+  font-size: 1.30em;
+}
 
-    .middlecont p{
-        color: rgb(200,200,205);
-    }
+.middlecont p{
+  color: rgb(200,200,205);
+}
 
-    .top{
-        background:rgb(80,80,87);
-        height: 30px;
-        width: 410px;
-        max-width: 95%;
-        border-radius: 15px 15px 3px 3px;
-        display: block;
-        position: relative;
-        box-shadow: inset 6px 6px 5px rgba(200,200,205,0.4), inset -6px 6px 6px rgba(10,10,15,0.4), inset -2px -2px 2px rgba(10,10,15,0.4);
-        z-index:2;
-    }
+.top{
+  background:rgb(80,80,87);
+  height: 30px;
+  width: 410px;
+  max-width: 95%;
+  border-radius: 15px 15px 3px 3px;
+  display: block;
+  position: relative;
+  box-shadow: inset 6px 6px 5px rgba(200,200,205,0.4), inset -6px 6px 6px rgba(10,10,15,0.4), inset -2px -2px 2px rgba(10,10,15,0.4);
+  z-index:2;
+}
 
-    .light{
-        background: rgb(10,10,15);
-        width: 20px;
-        height: 5px;
-        border-radius: 3px;
-        position: absolute ;
-        right: 15px;
-        top: 13px;
-        box-shadow: inset 1px 1px 2px rgba(0,0,0,0.2), inset -1px -1px 2px rgba(150,150,155,0.4);
-        animation: 1.5s lf ease forwards;
-        animation-delay: 2s;
-    }
+.light{
+  background: rgb(10,10,15);
+  width: 20px;
+  height: 5px;
+  border-radius: 3px;
+  position: absolute ;
+  right: 15px;
+  top: 13px;
+  box-shadow: inset 1px 1px 2px rgba(0,0,0,0.2), inset -1px -1px 2px rgba(150,150,155,0.4);
+  animation: 1.5s lf ease forwards;
+  animation-delay: 2s;
+}
 
-    @keyframes lf{
-        0%{
-            background: rgb(10,10,15);
-        }
-        25%{background: rgb(50,100,200);}
-        50%{background: rgb(10,60,160);}
-        100%{background: rgb(90,140,240);}
-    }
+@keyframes lf{
+  0%{
+    background: rgb(10,10,15);
+  }
+  25%{background: rgb(50,100,200);}
+  50%{background: rgb(10,60,160);}
+  100%{background: rgb(90,140,240);}
+}
 
-    .middle{
-        background: linear-gradient(45deg, rgba(30,80,180,1), rgba(90,140,240,1));
-        width: 400px;
-        height: 450px;
-        max-width: 92%;
-        max-height: 80%;
-        transition: all 1s ease;
-        z-index:2;
-        overflow: hidden;
-        margin: 0;
-        padding: 0;
-    }
+.middle{
+  background: linear-gradient(45deg, rgba(30,80,180,1), rgba(90,140,240,1));
+  width: 400px;
+  height: 450px;
+  max-width: 92%;
+  max-height: 80%;
+  transition: all 1s ease;
+  z-index:2;
+  overflow: hidden;
+  margin: 0;
+  padding: 0;
+}
 
-    .middlecont{
-        height: 100%;
-        max-width: 95%;
-        color: white;
-        padding: 5px;
-        text-align: center;
-        z-index: 10;
-        position: relative;
-        left:0;
-        right:0;
-        margin: auto;
-    }
+.middlecont{
+  height: 100%;
+  max-width: 95%;
+  color: white;
+  padding: 5px;
+  text-align: center;
+  z-index: 10;
+  position: relative;
+  left:0;
+  right:0;
+  margin: auto;
+}
 
-    .open{
-        height: 400px;
-        opacity: 0.9;
-        animation: 15s hg ease infinite;
-    }
+.open{
+  height: 400px;
+  opacity: 0.9;
+  animation: 15s hg ease infinite;
+}
 
-    @keyframes hg{
-        0%{
-            transform: skewX(1deg);
-            opacity: 0.7;
-        }
-        1%{ transform: skewX(0);
-            opacity: 0.9;
-        }
-        69%{
-            transform: skewX(0.5deg);
-            opacity: 0.8;
-        }
-        70%{
-            transform: skewX(-1deg);
-            opacity: 0.7;
-        }
-        71%{
-            transform: skewX(0.5deg);
-            opacity: 0.9;
-        }
-        100%{
-            transform: skewX(0);
-            opacity: 0.9;
-        }
-    }
+@keyframes hg{
+  0%{
+    transform: skewX(1deg);
+    opacity: 0.7;
+  }
+  1%{ transform: skewX(0);
+    opacity: 0.9;
+  }
+  69%{
+    transform: skewX(0.5deg);
+    opacity: 0.8;
+  }
+  70%{
+    transform: skewX(-1deg);
+    opacity: 0.7;
+  }
+  71%{
+    transform: skewX(0.5deg);
+    opacity: 0.9;
+  }
+  100%{
+    transform: skewX(0);
+    opacity: 0.9;
+  }
+}
 
-    .closed{
-        height: 0px;
-        opacity: 0;
-    }
+.closed{
+  height: 0px;
+  opacity: 0;
+}
 
-    .bottom{
-        background: rgb(80,80,87);
-        width: 410px;
-        height: 30px;
-        max-width: 95%;
-        border-radius: 3px 3px 15px 15px;
-        display: block;
-        position: relative;
-        box-shadow: inset -6px -6px 6px rgba(10,10,15,0.5), inset 6px -6px 6px rgba(200, 200, 205, 0.4), inset 2px 2px 2px rgba(200,200,205,0.2);
-        z-index:2;
-    }
+.bottom{
+  background: rgb(80,80,87);
+  width: 410px;
+  height: 30px;
+  max-width: 95%;
+  border-radius: 3px 3px 15px 15px;
+  display: block;
+  position: relative;
+  box-shadow: inset -6px -6px 6px rgba(10,10,15,0.5), inset 6px -6px 6px rgba(200, 200, 205, 0.4), inset 2px 2px 2px rgba(200,200,205,0.2);
+  z-index:2;
+}
 
-   /* Popup Overlay (fixed size, always centered, no resize on search) */
+/* Popup Overlay (fixed size, always centered, no resize on search) */
+
 #popup1.popup-overlay {
   position: fixed;
   top: 0; left: 0;
@@ -764,11 +812,13 @@
   z-index: 9999;
   overflow: hidden;
 }
+
 #popup1.popup-overlay[style*="display:block"] {
   display: flex !important; /* Show popup if display:block */
 }
 
 /* Popup Box (fixed size) */
+
 .popup-box {
   background: radial-gradient(circle, #1a1a2e, #16213e);
   width: 600px;
@@ -780,12 +830,14 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: flex-start;
   padding: 36px 32px 32px 32px;
   position: relative;
   overflow: hidden;
 }
 
 /* Close Button */
+
 .close-btn {
   position: absolute;
   top: 18px;
@@ -798,9 +850,11 @@
   z-index: 2;
   transition: color 0.2s;
 }
+
 .close-btn:hover { color: #00ffff; }
 
 /* Search Bar - full width, fixed position under close */
+
 #searchBar {
   width: 100%;
   padding: 12px 18px;
@@ -816,6 +870,7 @@
 }
 
 /* Holo Container - always below search bar, profile never resizes */
+
 .holo-container {
   flex: 1 1 auto;
   display: flex;
@@ -826,10 +881,11 @@
   margin: 0;
   padding: 0;
   overflow: hidden;
-    overflow-y: auto;
+  overflow-y: auto;
 }
 
 /* Holo Card - fixed size, never resizes */
+
 .holo-card {
   position: relative;
   width: 95%;
@@ -845,12 +901,15 @@
   padding: 32px 16px 18px 16px;
   text-align: center;
   overflow: hidden;
-    overflow-y: auto;
+  overflow-y: auto;
 }
+
 .holo-card:hover { transform: rotateY(30deg) rotateX(15deg); transition: transform 0.5s; }
+
 .holo-card { transform-style: preserve-3d; transition: transform 0.5s; }
 
 /* Profile Image */
+
 #profile-img {
   width: 120px;
   height: 120px;
@@ -861,6 +920,7 @@
 }
 
 /* Holo Text Styling */
+
 .holo-text {
   font-size: 1.5rem;
   font-weight: bold;
@@ -873,6 +933,7 @@
   text-shadow: 0 0 10px #8888, 0 0 20px #0bf8;
   margin: 0.2em 0 0.1em 0;
 }
+
 @keyframes shimmer {
   0% { background-position: 0% 50%; }
   50% { background-position: 100% 50%; }
@@ -880,6 +941,7 @@
 }
 
 /* Animation Overlay */
+
 .animation-overlay {
   position: absolute;
   top: 0; left: 0; width: 100%; height: 100%;
@@ -889,9 +951,11 @@
   z-index: 0;
   animation: glow 2s infinite alternate-reverse;
 }
+
 @keyframes glow { from { opacity: 0.1; } to { opacity: 0.3; } }
 
 /* Answer Styling */
+
 .answer {
   font-size: 1.15rem;
   color: #fff;
@@ -908,84 +972,99 @@
   font-size: 1rem;
 }
 
-    .support-overlay {
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      background: black;
-      display: none;
-      justify-content: center;
-      align-items: center;
-        z-index: 1;
-    }
-    .support {
-      background-image: linear-gradient(skyblue, blue);
-      padding: 20px;
-      width: 400px;
-      border-radius: 8px;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.3);
-    }
-    .support h2 {
-      margin-top: 0;
-    }
-    .support label {
-      display: block;
-      margin: 10px 0 5px;
-    }
-    .support input, .support select, .support textarea {
-      width: 90%;
-      padding: 8px;
-      margin-bottom: 15px;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-    }
-    .support button {
-      padding: 10px 15px;
-      margin-right: 10px;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-    }
-    .support-submit {
-      background: limegreen;
-      color: #fff;
-    }
+.support-overlay {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: black;
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 1;
+}
+
+.support {
+  background-image: linear-gradient(skyblue, blue);
+  padding: 20px;
+  width: 400px;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+}
+
+.support h2 {
+  margin-top: 0;
+}
+
+.support label {
+  display: block;
+  margin: 10px 0 5px;
+}
+
+.support input, .support select, .support textarea {
+  width: 90%;
+  padding: 8px;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.support button {
+  padding: 10px 15px;
+  margin-right: 10px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.support-submit {
+  background: limegreen;
+  color: #fff;
+}
+
 /* Optional: custom cursor */
+
 body:hover { cursor:url('cursor-image.png'), auto; }
 
 #popup5 .popup-box form#registerForm > * {
-    margin-top: 15px;
-    margin-bottom: 0;
-    width: 100%;
-    box-sizing: border-box;
-    display: block;
+  margin-top: 15px;
+  margin-bottom: 0;
+  width: 100%;
+  box-sizing: border-box;
+  display: block;
 }
+
 #popup5 .popup-box form#registerForm label {
-    margin-top: 10px;
-    margin-bottom: 0;
-    font-weight: bold;
+  margin-top: 10px;
+  margin-bottom: 0;
+  font-weight: bold;
 }
+
 #registerImagePreviewContainer {
-    margin-top: 15px !important;
-    margin-bottom: 15px !important;
+  margin-top: 15px !important;
+  margin-bottom: 15px !important;
 }
+
 #popup5 .popup-box form#registerForm button[type="submit"] {
-    margin-top: 20px;
+  margin-top: 20px;
 }
 
 /* Base adjustments for all small screens */
+
 @media (max-width: 768px) {
+
   /* Reduce heavy backgrounds for mobile to save bandwidth & improve readability */
+
   body {
     margin: 12px;
     background: linear-gradient(180deg, #000014, #01103a);
     font-size: 16px;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-      overflow-y: scroll;
+    overflow-y: scroll;
   }
 
   /* Container and main layout stack vertically */
+
   .container {
     background: none;
     background-image: none;
@@ -993,8 +1072,7 @@ body:hover { cursor:url('cursor-image.png'), auto; }
     height: auto;
     min-height: 100vh;
     justify-content: center;
-        align-items: center;
-    
+    align-items: center;
   }
 
   .main-layout {
@@ -1007,6 +1085,7 @@ body:hover { cursor:url('cursor-image.png'), auto; }
   }
 
   /* Profile panel should be full width and compress spacing */
+
   .profile-section {
     min-width: auto;
     max-width: 100%;
@@ -1017,6 +1096,7 @@ body:hover { cursor:url('cursor-image.png'), auto; }
   }
 
   /* Grid should be single column with consistent spacing */
+
   .grid-wrapper {
     max-width: 100%;
     width: 100%;
@@ -1024,12 +1104,14 @@ body:hover { cursor:url('cursor-image.png'), auto; }
     padding: 8px;
     border-radius: 12px;
   }
+
   .grid {
     grid-template-columns: 1fr;
     gap: 8px;
     padding: 8px;
     min-height: auto;
   }
+
   .image-grid img {
     max-width: 100%;
     width: 100%;
@@ -1038,11 +1120,13 @@ body:hover { cursor:url('cursor-image.png'), auto; }
   }
 
   /* Headings and large text scale down */
+
   h1 {
     font-size: 1.4rem;
     letter-spacing: 2px;
     margin-bottom: 12px;
   }
+
   #p {
     font-size: 1.25rem;
     margin-top: 12%;
@@ -1052,6 +1136,7 @@ body:hover { cursor:url('cursor-image.png'), auto; }
     flex-wrap: wrap;
     gap: 10px;
   }
+
   .button-row button {
     flex: 1 1 auto;
     min-width: 120px;
@@ -1060,6 +1145,7 @@ body:hover { cursor:url('cursor-image.png'), auto; }
   }
 
   /* Arrows & navigation: smaller and touch-friendly */
+
   .arrow {
     font-size: 2rem;
     padding: 8px;
@@ -1071,6 +1157,7 @@ body:hover { cursor:url('cursor-image.png'), auto; }
   }
 
   /* Make popups full-screen friendly */
+
   .popup-overlay, .overlay, #popup1.popup-overlay {
     display: none; /* toggled by JS */
     position: fixed;
@@ -1092,16 +1179,18 @@ body:hover { cursor:url('cursor-image.png'), auto; }
   }
 
   /* Overlay content stacks vertically and uses full width */
-    .overlay-content {
+
+  .overlay-content {
     position: relative;
     flex-direction: column;
-    height: 80vh;
+    height: 90vh;
     overflow-y: auto;
     overflow: hidden;
     margin-top:12%;
   }
 
   /* Hide dmBox and chatSidebar off-canvas by default */
+
   #dmBox,
   #chatSidebar {
     position: fixed;
@@ -1120,11 +1209,13 @@ body:hover { cursor:url('cursor-image.png'), auto; }
   }
 
   /* dmBox slides in from left */
+
   #dmBox {
     left: 0;
   }
 
   /* chatSidebar slides in from right */
+
   #chatSidebar {
     right: 0;
     left: auto;
@@ -1132,6 +1223,7 @@ body:hover { cursor:url('cursor-image.png'), auto; }
   }
 
   /* When “open” class is added, make them visible */
+
   #dmBox.open {
     transform: translateX(0);
   }
@@ -1141,12 +1233,14 @@ body:hover { cursor:url('cursor-image.png'), auto; }
   }
 
   /* Main chat column takes full width behind drawers */
+
   #messages-column,
   #online-members {
     width: 100%;
   }
 
   /* Optional: add a simple toggle bar on top of messages-column for mobile */
+
   #mobile-toggles {
     display: flex;
     justify-content: space-between;
@@ -1168,52 +1262,63 @@ body:hover { cursor:url('cursor-image.png'), auto; }
     color: #e5e7eb;
     font-size: 0.9rem;
   }
+
 }
 
-  /* Holo card and profile images scale down */
-  .holo-card {
-    max-width: 100%;
-    min-height: 320px;
-    padding: 20px;
-  }
-  #profile-img, .palak .img span {
-    width: 96px;
-    height: 96px;
-  }
+/* Holo card and profile images scale down */
 
-  /* Support overlay */
-  .support {
-    width: 100%;
-    max-width: 420px;
-    margin: 0 auto;
-  }
+.holo-card {
+  max-width: 100%;
+  min-height: 320px;
+  padding: 20px;
+}
 
-  /* Tidy up margins/paddings */
-  .content, .middlecont, .palak, .support {
-    margin: 0;
-    padding: 0 6px;
-  }
+#profile-img, .palak .img span {
+  width: 96px;
+  height: 96px;
+}
 
-  /* Remove decorative heavy box-shadows on small screens */
-  .profile-section, .grid-wrapper, .popup-box, .holo-card {
-    box-shadow: none;
-    border: 1px solid rgba(255,255,255,0.04);
-    background: linear-gradient(180deg, rgba(12,14,28,0.7), rgba(18,24,40,0.9));
-  }
+/* Support overlay */
+
+.support {
+  width: 100%;
+  max-width: 420px;
+  margin: 0 auto;
+}
+
+/* Tidy up margins/paddings */
+
+.content, .middlecont, .palak, .support {
+  margin: 0;
+  padding: 0 6px;
+}
+
+/* Remove decorative heavy box-shadows on small screens */
+
+.profile-section, .grid-wrapper, .popup-box, .holo-card {
+  box-shadow: none;
+  border: 1px solid rgba(255,255,255,0.04);
+  background: linear-gradient(180deg, rgba(12,14,28,0.7), rgba(18,24,40,0.9));
+}
+
 }
 
 /* Extra small phones (<=420px) - tighter tuning */
+
 @media (max-width: 420px) {
+
   body {
     font-size: 15px;
     margin: 8px;
   }
 
   /* More compact header */
+
   h1 {
     font-size: 1.15rem;
     letter-spacing: 1px;
   }
+
   #p {
     font-size: 1.05rem;
     margin-top: 8%;
@@ -1226,6 +1331,7 @@ body:hover { cursor:url('cursor-image.png'), auto; }
   }
 
   /* Reduce grid gutters */
+
   .grid {
     gap: 6px;
     padding: 6px;
@@ -1237,6 +1343,7 @@ body:hover { cursor:url('cursor-image.png'), auto; }
   }
 
   /* Make popup close control easier to tap */
+
   .close-btn {
     top: 10px;
     right: 10px;
@@ -1245,6 +1352,7 @@ body:hover { cursor:url('cursor-image.png'), auto; }
   }
 
   /* Ensure minimum touch target for small-action icons */
+
   .arrow, #dmAttachBtn, #btnDMs, #btnRooms, #btnCreateRoom {
     min-width: 44px;
     min-height: 44px;
@@ -1252,40 +1360,52 @@ body:hover { cursor:url('cursor-image.png'), auto; }
   }
 
   /* Reduce overlay paddings to maximize usable space */
+
   .overlay-content, .popup-box {
     padding: 10px;
     margin-top:12%;
   }
 
   /* Make registration form controls full width and easy to read */
+
   #popup5 .popup-box form#registerForm > * {
     margin-top: 12px;
     width: 100%;
   }
 
   /* Hide decorative animation overlay to improve performance */
+
   .animation-overlay { display: none !important; }
 
   /* Fallback for devices with low viewport height (keyboard open) */
+
   .popup-box, .overlay-content {
     max-height: calc(100vh - 40px);
     height: auto;
   }
+
 }
 
 /* Accessibility helpers for mobile: enough contrast & focus styles */
+
 @media (max-width: 900px) {
+
   button, a, input, textarea, select {
     -webkit-tap-highlight-color: rgba(255,255,255,0.06);
   }
+
   button:focus, a:focus, input:focus, textarea:focus {
     outline: 3px solid rgba(99,102,241,0.24);
     outline-offset: 2px;
     border-radius: 8px;
   }
+
 }
-    @media (max-width: 900px) {
+
+@media (max-width: 900px) {
+
   /* Ensure the document can scroll on mobile */
+
   html, body {
     height: auto !important;
     min-height: 100% !important;
@@ -1294,6 +1414,7 @@ body:hover { cursor:url('cursor-image.png'), auto; }
   }
 
   /* Prevent large fixed/100vh elements from blocking page flow */
+
   .container,
   body > .container,
   .main-layout,
@@ -1313,6 +1434,7 @@ body:hover { cursor:url('cursor-image.png'), auto; }
   }
 
   /* Allow internal scroll areas to scroll but not block the page */
+
   #messagesbox,
   #dmmessages,
   #dmMessages,
@@ -1325,6 +1447,7 @@ body:hover { cursor:url('cursor-image.png'), auto; }
   }
 
   /* If any overlay/popup is hidden via inline style display:none, make sure it doesn't block touches */
+
   .popup-overlay[style*="display:none"],
   .overlay[style*="display:none"],
   .support-overlay[style*="display:none"] {
@@ -1332,1364 +1455,568 @@ body:hover { cursor:url('cursor-image.png'), auto; }
   }
 
   /* If a full-screen element was accidentally left visible but transparent, ensure it doesn't block page scroll */
+
   [style*="position:fixed"][style*="width:100vw"][style*="height:100vh"] {
     pointer-events: auto;
   }
 
   /* Minor touch-target improvements for mobile main page */
+
   .arrow, #dmAttachBtn, .button-row button, #btnCreateRoom {
     min-height: 44px;
     min-width: 44px;
     touch-action: manipulation;
   }
+
 }
 
 /* Emergency override if another rule still forces overflow hidden */
+
 @media (max-width: 900px) {
   * {
     -webkit-overflow-scrolling: touch;
   }
 }
-</style>
-   
-<script src="/socket.io/socket.io.js"></script>
 
+/* End of full CSS block */
+  </style>
 </head>
-
 <body>
-<!-- Landing Page -->
-<div class="container" id="landingPage">
-  <div class="content">
-    <button id="enterBtn" style="color:black; background-color:skyblue;">
-      Click here to enter the ring!
-    </button>
-  </div>
-</div>
-
-<!-- Hidden Page -->
-<div class="hidden-page" id="hiddenPage" style="display:none;">
-  <h1>Cyberfighters</h1>
-  <!-- Buttons -->
-  <div class="button-row">
-    <button style="background-color: limegreen;" onclick="openPopup('popup0')">Login</button>
-    <button style="background-color: skyblue;" onclick="openPopup('popup1')">Users</button>
-    <button style="background-color: blue;" onclick="openPopup('popup2')">Rules</button>
-    <button style="background-color: orange;" onclick="openPopup('popup3')">Contact</button>
-    <button style="background-color: grey;" onclick="openPopup('popup4')">Settings</button>
-    <button style="background-color: red;" onclick="openPopup('logout')">Logout</button>
-  </div>
-
-  <div class="main-layout">
-    <div class="profile-section">
-      <h2>User Profile</h2>
-      <div id="profile" class="blank-profile">
-        <p>Please log in to see your profile.</p>
-      </div>
-      <div class="updates-section">
-        <h2>Website Updates</h2>
-        <ul id="updates-list">
-          <li>No updates available.</li>
-        </ul>
-      </div>
+  <!-- Landing -->
+  <div class="container" id="landingPage" style="height:100vh;display:flex;align-items:center;justify-content:center;">
+    <div class="content">
+      <button id="enterBtn" style="color:black; background-color:skyblue; padding:14px 20px; font-size:18px;">Click here to enter the ring!</button>
     </div>
-    <div class="grid-wrapper">
-      <div class="grid-arrow-row">
-        <button class="arrow left" onclick="showPrevGrid()">&#10094;</button>
-        <button class="arrow right" onclick="showNextGrid()">&#10095;</button>
+  </div>
+
+  <!-- Hidden Page -->
+  <div class="hidden-page" id="hiddenPage" style="display:none; padding:16px;">
+    <h1>Cyberfighters</h1>
+    <div class="button-row">
+      <button style="background-color: limegreen;" onclick="openPopup('popup0')">Login</button>
+      <button style="background-color: skyblue;" onclick="openPopup('popup1')">Users</button>
+      <button style="background-color: blue;" onclick="openPopup('popup2')">Rules</button>
+      <button style="background-color: orange;" onclick="openPopup('popup3')">Contact</button>
+      <button style="background-color: grey;" onclick="openPopup('popup4')">Settings</button>
+    </div>
+
+    <div class="main-layout" style="display:flex; gap:20px;">
+      <div class="profile-section" style="width:260px;">
+        <h2>User Profile</h2>
+        <div id="profile" class="blank-profile"><p>Please log in to see your profile.</p></div>
+        <div class="updates-section"><h3>Website Updates</h3><ul id="updates-list"><li>No updates available.</li></ul></div>
       </div>
-      <div class="grid-track">
-        <div class="image-grid grid">
-          <div class="image-item">
-            <img src="https://raw.githubusercontent.com/CyberFights/chat/refs/heads/main/public/assets/images/maindesk.jpg" alt="Main Chat" data-room="Main_Chat" />
-            <div class="room-label">Main Desk</div>
-          </div>
-          <div class="image-item">
-            <img src="https://raw.githubusercontent.com/CyberFights/chat/refs/heads/main/public/assets/images/lobby.jpg" alt="Lobby" data-room="Lobby" />
-            <div class="room-label">Lobby</div>
-          </div>
-          <div class="image-item">
-            <img src="https://raw.githubusercontent.com/CyberFights/chat/refs/heads/main/public/assets/images/wrestlingring.jpg" alt="Public Ring" data-room="Public_Ring" />
-            <div class="room-label">Wrestling Ring</div>
-          </div>
-          <div class="image-item">
-            <img src="https://raw.githubusercontent.com/CyberFights/chat/refs/heads/main/public/assets/images/weightroom.jpg" alt="Weight Room" data-room="Weight_Room" />
-            <div class="room-label">Weight Room</div>
-          </div>
-          <div class="image-item">
-            <img src="https://raw.githubusercontent.com/CyberFights/chat/refs/heads/main/public/assets/images/lockerroom.jpg" alt="Locker Room" data-room="Locker_Room" />
-            <div class="room-label">Locker Room</div>
-          </div>
-          <div class="image-item">
-            <img src="https://raw.githubusercontent.com/CyberFights/chat/refs/heads/main/public/assets/images/pool.jpg" alt="Public Pool" data-room="Public_Pool" />
-            <div class="room-label">Pool</div>
-          </div>
+
+      <div class="grid-wrapper" style="flex:1;">
+        <div class="grid-arrow-row" style="display:flex; justify-content:space-between;">
+          <button class="arrow left" onclick="showPrevGrid()">&#10094;</button>
+          <button class="arrow right" onclick="showNextGrid()">&#10095;</button>
         </div>
-        <div class="image-grid grid">
-          <div class="image-item">
-            <img src="https://raw.githubusercontent.com/CyberFights/chat/refs/heads/main/public/assets/images/imagen3_feed8ba2-7532-4a56-9414-488273926d58_0.png" alt="Mat Room" data-room="Mat_Room" />
-            <div class="room-label">Mat Room</div>
+        <div class="grid-track" style="display:flex; transition:transform .5s;">
+          <div class="image-grid grid" style="display:grid; grid-template-columns:repeat(2,1fr); gap:8px;">
+            <div class="image-item">
+              <img src="https://raw.githubusercontent.com/CyberFights/chat/refs/heads/main/public/assets/images/maindesk.jpg" alt="Main Chat" data-room="Main_Chat" />
+              <div class="room-label">Main Desk</div>
+            </div>
+
+            <div class="image-item">
+              <img src="https://raw.githubusercontent.com/CyberFights/chat/refs/heads/main/public/assets/images/lobby.jpg" alt="Lobby" data-room="Lobby" />
+              <div class="room-label">Lobby</div>
+            </div>
+
+            <div class="image-item">
+              <img src="https://raw.githubusercontent.com/CyberFights/chat/refs/heads/main/public/assets/images/wrestlingring.jpg" alt="Public Ring" data-room="Public_Ring" />
+              <div class="room-label">Wrestling Ring</div>
+            </div>
+
+            <div class="image-item">
+              <img src="https://raw.githubusercontent.com/CyberFights/chat/refs/heads/main/public/assets/images/weightroom.jpg" alt="Weight Room" data-room="Weight_Room" />
+              <div class="room-label">Weight Room</div>
+            </div>
+
+            <div class="image-item">
+              <img src="https://raw.githubusercontent.com/CyberFights/chat/refs/heads/main/public/assets/images/lockerroom.jpg" alt="Locker Room" data-room="Locker_Room" />
+              <div class="room-label">Locker Room</div>
+            </div>
+
+            <div class="image-item">
+              <img src="https://raw.githubusercontent.com/CyberFights/chat/refs/heads/main/public/assets/images/pool.jpg" alt="Pool" data-room="Public_Pool" />
+              <div class="room-label">Pool</div>
+            </div>
           </div>
-          <div class="image-item">
-            <img src="https://raw.githubusercontent.com/CyberFights/chat/refs/heads/main/public/assets/images/gras.png" alt="Field" data-room="Field" />
-            <div class="room-label">Field</div>
-          </div>
-          <div class="image-item">
-            <img src="https://raw.githubusercontent.com/CyberFights/chat/refs/heads/main/public/assets/images/urban.png" alt="Urban Brawl" data-room="Urban_Brawl" />
-            <div class="room-label">Urban Brawl</div>
-          </div>
-          <div class="image-item">
-            <img src="https://via.placeholder.com/280x180.png?text=Showroom" alt="W.I.P." data-room="W.I.P." />
-            <div class="room-label" style="cursor:pointer;" onclick="openProfileWindow()">User Search</div>
-          </div>
-          <div class="image-item">
-            <img src="https://via.placeholder.com/280x180.png?text=Gym" alt="W.I.P." data-room="W.I.P." />
-            <div class="room-label">W.I.P.</div>
-          </div>
-          <div class="image-item">
-            <img src="https://via.placeholder.com/280x180.png?text=VIP+Pool" alt="VW.I.P." data-room="W.I.P." />
-            <div class="room-label">W.I.P.</div>
+
+          <div class="image-grid grid" style="display:grid; grid-template-columns:repeat(2,1fr); gap:8px;">
+            <div class="image-item"><img src="https://via.placeholder.com/280x180?text=Mat+Room" alt="Mat Room" data-room="Mat_Room"><div class="room-label">Mat Room</div></div>
+            <div class="image-item"><img src="https://via.placeholder.com/280x180?text=Field" alt="Field" data-room="Field"><div class="room-label">Field</div></div>
+            <div class="image-item"><img src="https://via.placeholder.com/280x180?text=Urban+Brawl" alt="Urban Brawl" data-room="Urban_Brawl"><div class="room-label">Urban Brawl</div></div>
+            <div class="image-item"><img src="https://via.placeholder.com/280x180?text=Showroom" alt="Showroom" data-room="Showroom"><div class="room-label">User Search</div></div>
+            <div class="image-item"><img src="https://via.placeholder.com/280x180?text=Gym" alt="Gym" data-room="Gym"><div class="room-label">W.I.P.</div></div>
+            <div class="image-item"><img src="https://via.placeholder.com/280x180?text=VIP+Pool" alt="VIP Pool" data-room="VIP_Pool"><div class="room-label">W.I.P.</div></div>
           </div>
         </div>
       </div>
-    </div>
-    
-  <div class="overlay" id="chatOverlay" style="display:none;">
-  <div class="overlay-content">
-    <!-- DM BOX COLUMN -->
-    <div id="dmBox">
-      <h4 id="dmUserTitle">DM Message</h4>
-<div id="dmmessages">
-      <ul id="dmMessages"></ul>
-</div>
-         <div id="dmImagePreview" style="margin-top:8px; max-height:60px;"></div>
-      <form id="dmForm" onsubmit="return false;">
-        <input id="dmInput" autocomplete="off" placeholder="Type your private message..." style="padding:7px; border-radius:5px; border:1px solid #ccc;" />
-        <input type="file" id="dmFileInput" accept="image/*" style="display:none;" />
-        <button type="button" id="dmAttachBtn" title="Attach" style="background:none; border:none; cursor:pointer; font-size:18px;">📎</button>
-        <button id="dmSend" style="padding:8px 14px; border-radius:6px; background:#1700fb; color:#fff; border:none;">Send</button>
-      </form>
-    </div>
-    <!-- ROOM LIST SIDEBAR COLUMN -->
-    <div id="chatSidebar">
-      <div>
-        <button id="btnDMs" style="margin-right:8px; padding:8px; background-color:#222; border:none; color:white; cursor:pointer;">DMs</button>
-        <button id="btnRooms" style="padding:8px; background-color:#222; border:none; color:white; cursor:pointer;">Rooms</button>
-      </div>
-      <button id="btnCreateRoom" style="margin-bottom:12px; padding:8px; background-color:#3700ff; border:none; color:white; cursor:pointer; border-radius:6px;">Create New Room</button>
-      <ul id="roomList">
-        <!-- Rooms inserted dynamically -->
-      </ul>
-    </div>
-    <!-- MAIN CHAT / ONLINE MEMBERS COLUMN -->
 
- 
-        <div id="messages-column">
-            <div id="mobile-toggles">
-    <button id="toggleDmBox" aria-controls="dmBox" aria-expanded="false">
-      DMs
-    </button>
-    <button id="toggleChatSidebar" aria-controls="chatSidebar" aria-expanded="false">
-      Rooms
-    </button>
+      <div style="width:300px;">
+        <h3>Quick Actions</h3>
+        <button id="openChatOverlay" onclick="document.getElementById('chatOverlay').style.display='flex'">Open Chat Overlay</button>
+        <h4>Rooms</h4>
+        <ul id="roomList"></ul>
+      </div>
+    </div>
   </div>
-          <div id="roomTitle"></div>
-<div id="messagesbox">
+
+  <!-- Chat overlay -->
+  <div class="overlay" id="chatOverlay" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.7);">
+    <div class="overlay-content" style="display:flex; gap:12px; padding:18px; width:95%; margin:auto; max-width:1200px;">
+      <div id="dmBox" style="flex:0 0 25%; background:#111; padding:12px; border-radius:8px;">
+        <h4 id="dmUserTitle">DM Message</h4>
+        <div id="dmmessages" style="height:300px; overflow:auto; background:#000; padding:8px; border-radius:6px;">
+          <ul id="dmMessages"></ul>
+        </div>
+        <form id="dmForm" onsubmit="return false;" style="display:flex; gap:8px; margin-top:8px;">
+          <input id="dmInput" placeholder="Type your private message..." style="flex:1; padding:8px;" />
+          <input type="file" id="dmFileInput" accept="image/*" style="display:none;" />
+          <button type="button" id="dmAttachBtn">📎</button>
+          <button id="dmSend" type="button">Send</button>
+        </form>
+      </div>
+
+      <div id="messages-column" style="flex:0 0 55%; background:#0b1220; padding:12px; border-radius:8px;">
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <div id="roomTitle">No room</div>
+          <button onclick="closeChat()">Close</button>
+        </div>
+        <div id="messagesbox" style="height:420px; overflow:auto; background:#000; padding:8px; border-radius:6px; margin-top:8px;">
           <ul id="messages"></ul>
-</div>
-             <form id="form" style="margin-top:10px; display:flex; gap:10px;" onSubmit="return false;">
-        <input id="m" autocomplete="off" placeholder="Type your message..." style="padding:8px; border-radius:4px; border:none;" />
-        <button id="sendBtn" style="padding:8px 12px; border-radius:4px; background:limegreen; color:white; border:none;">Send</button>
-      </form>
         </div>
-        <div id="online-members">
-          <b style="color:green";>Online:</b>
-          <ul id="members-list"></ul>
-    </div>
-  </div>
-</div>
-      
-<!-- Popups -->
-<div id="popup0" class="popup-overlay" style="display:none;" onclick="closePopup(event, 'popup0')">
-  <div class="popup-box" onclick="event.stopPropagation();">
-    <button class="close-btn" onclick="closePopup(event, 'popup0')">&times;</button>
- <p class="holo-text">Login</p>
-    <form id="loginForm" onSubmit="return false;">
-      <p class="holo-text">Username:</p>
-      <input type="text" id="loginUsername" placeholder="Username" required />
-      <p class="holo-text">Password:</p>
-      <input type="password" id="loginPassword" placeholder="Password" required /> <br>
-<br>
-      <button type="submit">Login</button>
-    </form>
-  
-    <p class="holo-text">Or</p>
-    <button id="showRegisterBtn" type="button" style="margin-top:15px; width:100%; background: #0077ff; color: #fff; border-radius:8px; font-size:16px;" onclick="openPopup('popup5')">Register</button>
-  </div>
-</div>
+        <form id="form" onsubmit="return false;" style="display:flex; gap:8px; margin-top:8px;">
+          <input id="roomSelect" style="width:180px;" />
+          <input id="m" placeholder="Type your message..." style="flex:1; padding:8px;" />
+          <button id="sendBtn" type="button">Send</button>
+        </form>
+      </div>
 
-<div id="popup5" class="popup-overlay" style="display:none;" onclick="closePopup(event, 'popup5')">
-  <div class="popup-box" onclick="event.stopPropagation();">
-    <button class="close-btn" onclick="closePopup(event, 'popup5')">&times;</button>
-      <div class="holo-container">
-          <h3 class="holo-text">Register</h3>
-<form id="registerForm" enctype="multipart/form-data">
-  <input type="text" name="username" placeholder="Username" required /> <br>
-  <input type="password" name="password" placeholder="Password" required /> <br>
-  <input type="email" name="email" placeholder="Email" required /> <br> 
-  <input type="number" name="age" placeholder="Age" min="13" max="120" required />
-  <input type="text" name="stats" placeholder="Height and Weight" required /> <br>
-  <textarea name="info" placeholder="Tell us about yourself" required></textarea> <br>
-  <label for="nativeLanguage">Native Language:</label> <br>
-  <select name="nativeLanguage" id="nativeLanguage" required>
-    <option value="">Select</option>
-    <option value="en">English</option>
-    <option value="es">Spanish</option>
-    <option value="mandarin">Mandarin</option>
-    <option value="hi">Hindi</option>
-    <option value="ar">Arabic</option>
-  </select> <br>
-  <label for="colorReg">Name Color:</label>
-  <input type="color" id="colorPreference" name="colorPreference" value="#ff0000" style="height:40px;width:60px;" /> <br>
-  <label for="image">Profile Image:</label>
-  <input type="file" id="image" name="image" accept="image/*" />
-  <div id="registerImagePreviewContainer" style="margin-bottom:10px;text-align:center;">
-    <img id="registerImagePreview" style="max-width:50%;max-height:120px;border-radius:10px;display:none;" />
-  </div><br>
-  <button type="submit" style="background:green;color:white;width:100%;border-radius:8px;font-size:18px;">Register</button>
-</form>
-</div>
-  </div>
-</div>
-
-<!-- Profile Popup Component (fixed size, profile always under search and close, does not resize on search) -->
-<div id="popup1" class="popup-overlay">
-  <div class="popup-box" onclick="event.stopPropagation();">
-    <button class="close-btn" onclick="closePopup(event, 'popup1')">&times;</button>
-    <input type="search" id="searchBar" placeholder="Search user by username..." autofocus />
-    <div class="holo-container">
-      <div class="holo-card">
-        <div class="animation-overlay"></div>
-        <p class="holo-text" id="username">Search for a user</p>
-        <img id="profile-img" src="https://via.placeholder.com/200?text=No+Image" alt="Profile Image" />
-        <p class="holo-text">Age:</p>
-        <p id="age" class="answer">-</p>
-        <p class="holo-text">Stats:</p>
-        <p id="stats" class="answer">-</p>
-        <p class="holo-text">Main Language:</p>
-        <p id="lang" class="answer">-</p>
-        <p class="holo-text">Info:</p>
-        <p id="info" class="answer">-</p>
-        <p id="errorMsg"></p>
+      <div id="online-members" style="flex:0 0 20%; background:#111; padding:12px; border-radius:8px;">
+        <b style="color:lime">Online:</b>
+        <ul id="members-list"></ul>
       </div>
     </div>
   </div>
-</div>
 
-<div id="popup2" class="popup-overlay" style="display:none;" onclick="closePopup(event, 'popup2')">
-    <div class="popup-box" onclick="event.stopPropagation();">
-        <button class="close-btn" onclick="closePopup(event, 'popup2')">&times;</button>
-        <h3>Rules</h3>
-        <p>Click a chat room image to join. Use the buttons above for info or assistance.</p>
+  <!-- Popups: login/register/user search/support/settings -->
+  <div id="popup0" class="popup-overlay" style="display:none; position:fixed; inset:0; justify-content:center; align-items:center;">
+    <div class="popup-box" style="background:#111; color:#fff; padding:20px; border-radius:8px;" onclick="event.stopPropagation()">
+      <button class="close-btn" onclick="closePopup(event,'popup0')">&times;</button>
+      <h3>Login</h3>
+      <form id="loginForm" onsubmit="return false;">
+        <input id="loginUsername" placeholder="Username" required style="display:block; width:100%; padding:8px; margin:8px 0;" />
+        <input id="loginPassword" type="password" placeholder="Password" required style="display:block; width:100%; padding:8px; margin:8px 0;" />
+        <button type="submit">Login</button>
+      </form>
+      <button id="showRegisterBtn" onclick="openPopup('popup5')">Register</button>
     </div>
-</div>
+  </div>
 
-<div id="popup3" class="support-overlay" style="display:none;" onclick="closePopup(event, 'popup3')">
-    <div class="popup-box" onclick="event.stopPropagation();">
-        <button class="close-btn" onclick="closePopup(event, 'popup3')">&times;</button>
-           <div class="support">
-      <h2>Support Request</h2>
-      <form id="supportForm" action="/submit-support" method="post" onSubmit="return false;">
-              <label for="submittedBy">Your Username</label>
-        <input type="text" id="submittedBy" name="submittedBy" placeholder="Enter your username" required>
+  <div id="popup5" class="popup-overlay" style="display:none; position:fixed; inset:0; justify-content:center; align-items:center;">
+    <div class="popup-box" style="background:#111; color:#fff; padding:20px; border-radius:8px;" onclick="event.stopPropagation()">
+      <button class="close-btn" onclick="closePopup(event,'popup5')">&times;</button>
+      <h3>Register</h3>
+      <form id="registerForm" enctype="multipart/form-data">
+        <input name="username" placeholder="Username" required style="display:block; width:100%; padding:8px; margin:8px 0;" />
+        <input name="password" type="password" placeholder="Password" required style="display:block; width:100%; padding:8px; margin:8px 0;" />
+        <input name="email" type="email" placeholder="Email" required style="display:block; width:100%; padding:8px; margin:8px 0;" />
+        <input name="age" type="number" placeholder="Age" min="13" max="120" required style="display:block; width:100%; padding:8px; margin:8px 0;" />
+        <input name="stats" placeholder="Height and Weight" style="display:block; width:100%; padding:8px; margin:8px 0;" />
+        <textarea name="info" placeholder="Tell us about yourself" style="display:block; width:100%; padding:8px; margin:8px 0;"></textarea>
+        <select name="nativeLanguage" required style="display:block; width:100%; padding:8px; margin:8px 0;">
+          <option value="">Select language</option>
+          <option value="en">English</option>
+          <option value="es">Spanish</option>
+        </select>
+        <label>Name Color: <input type="color" name="colorPreference" value="#ff0000" /></label>
+        <label>Profile Image: <input type="file" id="image" name="image" accept="image/*" /></label>
+        <div id="registerImagePreviewContainer"><img id="registerImagePreview" style="max-width:50%; display:none;" /></div>
+        <button type="submit">Register</button>
+      </form>
+    </div>
+  </div>
 
-        <label for="incidentDate">Date of Incident</label>
-        <input type="date" id="incidentDate" name="incidentDate" required>
+  <div id="popup1" class="popup-overlay" style="display:none; position:fixed; inset:0; justify-content:center; align-items:center;">
+    <div class="popup-box" style="background:#111; color:#fff; padding:20px; border-radius:8px;" onclick="event.stopPropagation()">
+      <button class="close-btn" onclick="closePopup(event,'popup1')">&times;</button>
+      <input id="searchBar" placeholder="Search user by username..." style="display:block; width:100%; padding:8px; margin-bottom:12px;" />
+      <div class="holo-card" style="background:#0b1220; padding:12px; border-radius:8px;">
+        <p id="username">Search for a user</p>
+        <img id="profile-img" src="https://via.placeholder.com/200?text=No+Image" style="width:120px; height:120px; border-radius:50%;" />
+        <p>Age: <span id="age">-</span></p>
+        <p>Stats: <span id="stats">-</span></p>
+        <p>Language: <span id="lang">-</span></p>
+        <p>Info: <span id="info">-</span></p>
+        <p id="errorMsg" style="color:salmon"></p>
+      </div>
+    </div>
+  </div>
 
-        <label for="topic">Main Topic</label>
-        <select id="topic" name="topic" required>
+  <div id="popup2" class="popup-overlay" style="display:none; position:fixed; inset:0; justify-content:center; align-items:center;">
+    <div class="popup-box" style="background:#111; color:#fff; padding:20px; border-radius:8px;" onclick="event.stopPropagation()">
+      <button class="close-btn" onclick="closePopup(event,'popup2')">&times;</button>
+      <h3>Rules</h3>
+      <p>Click a chat room image to join. Use the buttons above for info or assistance.</p>
+    </div>
+  </div>
+
+  <div id="popup3" class="support-overlay" style="display:none; position:fixed; inset:0; justify-content:center; align-items:center;">
+    <div class="popup-box" style="background:#111; color:#fff; padding:20px; border-radius:8px;" onclick="event.stopPropagation()">
+      <button class="close-btn" onclick="closePopup(event,'popup3')">&times;</button>
+      <h3>Support Request</h3>
+      <form id="supportForm" onsubmit="return false;">
+        <input id="submittedBy" placeholder="Your username" required style="display:block; width:100%; padding:8px; margin:8px 0;" />
+        <input id="incidentDate" type="date" required style="display:block; width:100%; padding:8px; margin:8px 0;" />
+        <select id="topic" required style="display:block; width:100%; padding:8px; margin:8px 0;">
           <option value="">-- Select a topic --</option>
           <option value="error">Error Report</option>
           <option value="violation">Report Violation</option>
-          <option value="account">Account Issue</option>
-          <option value="contest">Contest Decision</option>
-          <option value="other">Other</option>
         </select>
-
-        <label for="reportedPerson">Who's Being Reported</label>
-        <input type="text" id="reportedPerson" name="reportedPerson" placeholder="Enter username or leave blank if N/A" required>
-
-        <label for="description">Describe the Issue</label>
-        <textarea id="description" name="description" rows="4" required></textarea>
-
-        <button type="submit" class="support-submit">Submit</button>
-        <button type="button" class="btn-close" onclick="closePopup(event, 'popup3')">Close</button>
+        <input id="reportedPerson" placeholder="Who's being reported" style="display:block; width:100%; padding:8px; margin:8px 0;" />
+        <textarea id="description" rows="4" placeholder="Describe the issue" style="display:block; width:100%; padding:8px; margin:8px 0;"></textarea>
+        <button type="submit">Submit</button>
       </form>
     </div>
+  </div>
+
+  <div id="popup4" class="popup-overlay" style="display:none; position:fixed; inset:0; justify-content:center; align-items:center;">
+    <div class="popup-box" style="background:#111; color:#fff; padding:20px; border-radius:8px;" onclick="event.stopPropagation()">
+      <button class="close-btn" onclick="closePopup(event,'popup4')">&times;</button>
+      <h3>Settings</h3>
+      <form id="settingsForm" onsubmit="return false;">
+        <input id="settingsUsername" placeholder="Username" style="display:block; width:100%; padding:8px; margin:8px 0;" />
+        <label>Profile Image: <input id="imageUpload" type="file" accept="image/*" /></label>
+        <div id="imagePreviewContainer"><img id="imagePreview" style="max-width:50%; display:none;" /></div>
+        <button type="submit">Save</button>
+      </form>
     </div>
-</div>
+  </div>
 
-<div id="popup4" class="popup-overlay" style="display:none;" onclick="closePopup(event, 'popup4')">
-    <div class="popup-box" onclick="event.stopPropagation();">
-        <button class="close-btn" onclick="closePopup(event, 'popup4')">&times;</button>
-        <h3>Settings</h3>
-        <form id="settingsForm" onSubmit="return false;">
-            <input type="text" id="username" placeholder="Username" />
-            <label for="imageUpload">Profile Image:</label>
-            <input type="file" id="imageUpload" accept="image/*" />
-            <div id="imagePreviewContainer">
-                <img id="imagePreview" style="max-width:50%;max-height:150px;display:none;" />
-            </div>
-            <button type="submit" style="background:green;color:white;width:100%;border-radius:8px;font-size:18px;">Save</button>
-        </form>
-    </div>
-</div>
+  <script src="/socket.io/socket.io.js"></script>
+  <script>
+    // Client script: connects to server and wires UI to socket endpoints
+    const socket = io();
 
-<!-- Profile Overlay (Demo only) -->
-<div id="myNavi2" class="pop-up" style="display:none;">
-    <div class="profile2">
-        <div class="top" onclick="toggleOpen()">
-            <p style="text-align:center; font-size:20px; margin-top:1%;">Click here to close</p>
-            <div class="light"></div>
-        </div>
-        <div class="middle closed">
-            <svg height="400" width="300">
-                <circle cx="0" cy="0" r="100" fill="rgba(90,140,240,1)"></circle>
-                <circle cx="90" cy="110" r="20" fill="rgba(90,140,240,1)"></circle>
-                <circle cx="0" cy="310" r="100" fill="rgba(90,140,240,0.75)"></circle>
-            </svg>
-            <div class="middlecont">
-                <br>
-                <p style="margin-left:69px; margin-bottom: 0;" id="profile-name"></p>
-                <p style="margin-left: 55px;" id="profile-age"></p><br>
-                <p style="margin-left: 55px;" id="profile-stats"></p><br>
-                <br><br>
-                <p id="profile-info"></p>
-                <img src="" class="profile-img" id="profile-img">
-                <button onclick="startPrivateChat(document.getElementById('profile-name').textContent)">Msg</button>
-            </div>
-        </div>
-        <div onclick="toggleOpen()" class="bottom"></div>
-    </div>
-</div>    
+    // state
+    let currentUsername = sessionStorage.getItem('username') || null;
+    let currentRoom = null;
+    let currentDmRoom = null;
+    let dmTarget = null;
 
-<script>
-const socket = io();
-let currentUsername = '';
-let currentRoom = null;
-let currentDmRoom = null;
-let dmTarget = null;
-let dmAttachedFile = null;
-let unseenPrivateMessages = 0;
-let privateChats = {};
-let currentUser = null;
-let isAgeVerified = false;
-sessionStorage.setItem('isLoggedIn', 'false');
+    // DOM refs
+    const landingPage = document.getElementById('landingPage');
+    const hiddenPage = document.getElementById('hiddenPage');
+    const enterBtn = document.getElementById('enterBtn');
+    const images = document.querySelectorAll('.image-item img');
+    const overlay = document.getElementById('chatOverlay');
+    const messages = document.getElementById('messages');
+    const dmMessages = document.getElementById('dmMessages');
+    const dmInput = document.getElementById('dmInput');
+    const dmSend = document.getElementById('dmSend');
+    const dmAttachBtn = document.getElementById('dmAttachBtn');
+    const dmFileInput = document.getElementById('dmFileInput');
+    const roomListEl = document.getElementById('roomList');
+    const membersList = document.getElementById('members-list');
+    const roomTitle = document.getElementById('roomTitle');
+    const registerForm = document.getElementById('registerForm');
+    const loginForm = document.getElementById('loginForm');
+    const searchBar = document.getElementById('searchBar');
+    const profileImg = document.getElementById('profile-img');
+    const usernameElem = document.getElementById('username');
+    const ageElem = document.getElementById('age');
+    const statsElem = document.getElementById('stats');
+    const langElem = document.getElementById('lang');
+    const infoElem = document.getElementById('info');
+    const errorMsg = document.getElementById('errorMsg');
 
-// DOM elements (cache references)
-var images, overlay, closeBtn, messages, form, input, roomTitle, membersList, dmOverlay, dmTitle, dmMessages, dmForm, dmInput, dmFileInput, dmAttachBtn, dmImagePreview, dmCloseBtn, privateChatsList, openPrivateChatsBtn, privateChatBadge, sideTab;
-
-function cacheDOM() {
-    images = document.querySelectorAll('.image-grid img');
-    overlay = document.getElementById('chatOverlay');
-    closeBtn = document.getElementById('closeBtn');
-    messages = document.getElementById('messages');
-    form = document.getElementById('form');
-    input = document.getElementById('m');
-    roomTitle = document.getElementById('roomTitle');
-    membersList = document.getElementById('members-list');
-    dmOverlay = document.getElementById('dmSidebar');
-    dmTitle = document.getElementById('dmUserTitle');
-    dmMessages = document.getElementById('dmMessages');
-    dmForm = document.getElementById('dmForm');
-    dmInput = document.getElementById('dmInput');
-    dmFileInput = document.getElementById('dmFileInput');
-    dmAttachBtn = document.getElementById('dmAttachBtn');
-    dmImagePreview = document.getElementById('dmImagePreview');
-    privateChatsList = document.getElementById('private-chats');
-    openPrivateChatsBtn = document.getElementById('openPrivateChats');
-    privateChatBadge = document.getElementById('privateChatBadge');
-    sideTab = document.getElementById('mySideTab');
-    dmSend = document.getElementById('dmSend');
-}
-
-// --- Age Verification and App Launch ---
-window.addEventListener('DOMContentLoaded', function() {
-    cacheDOM();
-
-    document.getElementById("enterBtn")?.addEventListener('click', function() {
-        if (!isAgeVerified) {
-            const userConfirmed = confirm("Are you 18 years or older?");
-            if (userConfirmed) {
-                isAgeVerified = true;
-                const landingPage = document.getElementById("landingPage");
-                landingPage.classList.add("fade-out");
-                setTimeout(() => {
-                    landingPage.style.display = "none";
-                    document.getElementById("hiddenPage").style.display = "block";
-                    // Show private chats button and tab after verification
-                    const privateChatsBtn = document.getElementById("privateChatsBtn");
-                    const mySideTab = document.getElementById("mySideTab");
-                    if (privateChatsBtn) privateChatsBtn.style.display = "flex";
-                    if (mySideTab) mySideTab.style.display = "block";
-                }, 2000);
-            } else {
-                alert("You must be at least 18 years old to proceed.");
-            }
-        }
-    });
-});
-
-// --- Carousel Logic ---
-let currentGrid = 0;
-const track = document.querySelector('.grid-track');
-const totalGrids = document.querySelectorAll('.image-grid.grid').length;
-function updateSlide() {
-    if (track) track.style.transform = `translateX(-${currentGrid * 100}%)`;
-}
-function showNextGrid() {
-    currentGrid = (currentGrid + 1) % totalGrids;
-    updateSlide();
-}
-function showPrevGrid() {
-    currentGrid = (currentGrid - 1 + totalGrids) % totalGrids;
-    updateSlide();
-}
-window.showNextGrid = showNextGrid;
-window.showPrevGrid = showPrevGrid;
-
-// --- Popup Logic ---
-function openPopup(id) {
-    var popup = document.getElementById(id);
-    if (popup) popup.style.display = 'flex';
-}
-function closePopup(event, id) {
-    if (event) event.stopPropagation();
-    var popup = document.getElementById(id);
-    if (popup) popup.style.display = 'none';
-}
-window.openPopup = openPopup;
-window.closePopup = closePopup;
-
-// --- Profile Modal Logic ---
-function openProfile(username) {
-    fetch('/user/' + username)
-        .then(function(response) { return response.json(); })
-        .then(function(data) {
-            sessionStorage.setItem('receiver', data.username);
-            var img = data.imagePath;
-            var infoElem = document.getElementById('profile-info');
-            var statsElem = document.getElementById('profile-stats');
-            var ageElem = document.getElementById('profile-age');
-            var nameElem = document.getElementById('profile-name');
-            var imgElem = document.getElementById('profile-img');
-            if (infoElem) infoElem.innerHTML = 'Info: ' + data.info;
-            if (statsElem) statsElem.innerHTML = 'Stats: ' + data.stats;
-            if (ageElem) ageElem.innerHTML = 'Age: ' + data.age;
-            if (nameElem) nameElem.innerHTML = data.username;
-            if (imgElem) imgElem.src = img;
-        })
-        .catch(function(error) {
-            console.error('Error:', error);
-        });
-    var naviElem = document.getElementById('myNavi2');
-    if (naviElem) naviElem.style.display = 'flex';
-    var middleDiv = document.querySelector('#myNavi2 .middle');
-    if (middleDiv) {
-        middleDiv.classList.remove('closed');
-        middleDiv.classList.add('open');
-    }
-}
-window.openProfile = openProfile;
-
-function toggleOpen() {
-    var el = document.getElementsByClassName('middle')[0];
-    var naviElem = document.getElementById('myNavi2');
-    if (!el) return;
-    if (el.className.indexOf('open') !== -1) {
-        el.className = 'middle closed';
-    } else if (el.className.indexOf('closed') !== -1) {
-        if (naviElem) naviElem.style.display = 'none';
-        el.className = 'middle open';
-    } else {
-        el.className = 'middle open';
-        if (naviElem) naviElem.style.display = 'flex';
-    }
-}
-window.toggleOpen = toggleOpen;
-
-// --- sessionStorage Logic ---
-function loadProfileFromStorage() {
-    var savedUsername = sessionStorage.getItem('username');
-    var savedImage = sessionStorage.getItem('profileImage');
-    if (savedUsername) {
-        currentUsername = savedUsername;
-        sessionStorage.setItem('isLoggedIn', 'true');
-        var profileHtml = '<p>Welcome back, ' + currentUsername + '</p>';
-        if (savedImage) {
-            var imgUrl = savedImage.indexOf('http') === 0 ? savedImage : window.location.origin + '/' + savedImage;
-            profileHtml += '<img src="' + imgUrl + '" alt="Profile Picture" style="max-width:100px; border-radius:50%;">';
-        }
-        var profileElem = document.getElementById('profile');
-        if (profileElem) {
-            profileElem.innerHTML = profileHtml;
-        }
-    }
-}
-
-// --- Notification Badge ---
-function updatePrivateChatBadge() {
-    if (privateChatBadge) {
-        if (unseenPrivateMessages > 0) {
-            privateChatBadge.textContent = unseenPrivateMessages;
-            privateChatBadge.style.display = 'inline-block';
-        } else {
-            privateChatBadge.style.display = 'none';
-        }
-    }
-}
-function incrementPrivateMessageBadge() {
-    unseenPrivateMessages++;
-    updatePrivateChatBadge();
-}
-function clearPrivateChatBadge() {
-    unseenPrivateMessages = 0;
-    updatePrivateChatBadge();
-}
-if (openPrivateChatsBtn) {
-    openPrivateChatsBtn.addEventListener('click', clearPrivateChatBadge);
-}
-    
-document.addEventListener('DOMContentLoaded', function() {
-    cacheDOM();
-    loadProfileFromStorage();
-
-    // --- Login Handler ---
-    var loginForm = document.getElementById('loginForm');
-    if (loginForm) {
-        loginForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-            var username = document.getElementById('loginUsername').value;
-            var password = document.getElementById('loginPassword').value;
-            fetch('/login', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ username: username, password: password })
-            })
-            .then(function(res) { return res.json(); })
-            .then(function(data) {
-                if (data.success && data.user) {
-                    sessionStorage.setItem('username', data.user.username || '');
-                    sessionStorage.setItem('profileImage', data.user.imagePath || '');
-                    sessionStorage.setItem('color', data.user.color || 'white');
-                    sessionStorage.setItem('stats', data.user.stats || '');
-                    sessionStorage.setItem('info', data.user.info || '');
-                    currentUsername = data.user.username;
-                    sessionStorage.setItem('isLoggedIn', 'true');
-                    alert('Login successful! Welcome, ' + currentUsername);
-                    var profileElem = document.getElementById('profile');
-                    if (data.user.imagePath && profileElem) {
-                        var profilePicUrl = data.user.imagePath.indexOf('http') === 0
-                            ? data.user.imagePath
-                            : window.location.origin + data.user.imagePath;
-                        profileElem.innerHTML =
-                            '<p>Welcome, ' + currentUsername + '</p>' +
-                            '<p>' + sessionStorage.getItem('info') + '</p>' + 
-                            '<img src="' + profilePicUrl + '" alt="Profile Picture" style="max-width:100px; border-radius:50%;">';
-                        sessionStorage.setItem('profileImageURL', profilePicUrl || '');
-                    }
-                    closePopup(null, 'popup0');
-                } else {
-                    alert('Login failed: ' + (data.error || 'Check your credentials and try again.'));
-                }
-            })
-            .catch(function(err) {
-                alert('Login error: ' + err.message);
-            });
-        });
-    }
-
-      var supportForm =  document.getElementById('supportForm');
-    if(supportForm) {
-        supportForm.addEventListener('submit', function(e) {
-    e.preventDefault();
-    var submittedBy = document.getElementById('submittedBy').value;
-    var reportedPerson = document.getElementById('reportedPerson').value;
-    var topic = document.getElementById('topic').value;
-    var incidentDate = document.getElementById('incidentDate').value;
-    var description = document.getElementById('description').value;
-
-    fetch('/submit-support', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-            submittedBy, reportedPerson, topic, incidentDate, description
-        })
-    })
-    .then(response => {
-        if (!response.ok) throw new Error('Network response was not ok');
-        alert('Report Submitted');
-        if (typeof closePopup === 'function') closePopup(event, 'popup3');
-    })
-    .catch(error => {
-        alert('There was an error submitting report, please try again');
-        if (typeof closePopup === 'function') closePopup(event, 'popup3');
-    });
-});
-    }
-    
-
-    // --- Register popup button ---
-    var showRegisterBtn = document.getElementById('showRegisterBtn');
-    if (showRegisterBtn) {
-        showRegisterBtn.onclick = function(e) {
-            e.stopPropagation();
-            closePopup(null, 'popup0');
-            setTimeout(function() { openPopup('popup5'); }, 200);
-        };
-    }
-
-    // --- Image upload preview during registration ---
-    var image = document.getElementById('image');
-    if (image) {
-        image.onchange = function(evt) {
-            var file = evt.target.files[0];
-            if (file) {
-                var preview = document.getElementById('registerImagePreview');
-                if (preview) {
-                    preview.src = URL.createObjectURL(file);
-                    preview.style.display = 'block';
-                }
-            }
-        };
-    }
-
-    // --- Registration form ---
-    var registerForm = document.getElementById('registerForm');
-    if (registerForm) {
-        registerForm.onsubmit = function(e) {
-            e.preventDefault();
-            var btn = this.querySelector('button[type="submit"]');
-            btn.disabled = true;
-            btn.textContent = 'Registering...';
-            var formData = new FormData(e.target);
-
-            fetch('/register', {
-                method: 'POST',
-                body: formData
-            })
-            .then(function(response) {
-                if (response.ok) {
-                    alert('Registration successful! Please log in.');
-                    closePopup(null, 'popup5');
-                    openPopup('popup0');
-                } else {
-                    response.json()
-                        .then(function(error) {
-                            alert('Registration failed: ' + (error.message || response.statusText));
-                            document.getElementById('registerForm').innerText = JSON.stringify(error);
-                        })
-                        .catch(function() {
-                            alert('Registration failed: ' + response.statusText);
-                        });
-                }
-            })
-            .catch(function(err) {
-                alert('Error: ' + err.message);
-            })
-            .finally(function() {
-                btn.disabled = false;
-                btn.textContent = 'Register';
-            });
-        };
-    }
-const isLoggedIn = sessionStorage.getItem('isLoggedIn');
-    // --- Chat room images click ---
-    if (images) {
-        for (var i = 0; i < images.length; i++) {
-            images[i].addEventListener('click', function() {
-                if (!isLoggedIn) {
-                    alert('Please log in before entering any chat room!');
-                    openPopup('popup0');
-                    return;
-                }
-                var roomName = this.dataset.room;
-                openChat(roomName);
-            });
-        }
-    }
-
-    // --- Chat overlay close ---
-    if (closeBtn) closeBtn.addEventListener('click', closeChat);
-    window.addEventListener('click', function(event) {
-        if (event.target === overlay) closeChat();
+    // landing -> app
+    enterBtn.addEventListener('click', () => {
+      const ok = confirm('Are you 18 years or older?');
+      if (!ok) return alert('You must be at least 18 to proceed.');
+      landingPage.style.display = 'none';
+      hiddenPage.style.display = 'block';
+      refreshRooms();
     });
 
-    // --- Settings image preview ---
-    var imageUpload = document.getElementById('imageUpload');
-    if (imageUpload) {
-        imageUpload.addEventListener('change', function(event) {
-            var file = event.target.files[0];
-            var preview = document.getElementById('imagePreview');
-            if (file && preview) {
-                var reader = new FileReader();
-                reader.onload = function(e) {
-                    preview.src = e.target.result;
-                    preview.style.display = 'block';
-                };
-                reader.readAsDataURL(file);
-            } else if (preview) {
-                preview.src = '';
-                preview.style.display = 'none';
-            }
-        });
-    }
+    // popup helpers
+    function openPopup(id) { document.getElementById(id).style.display = 'flex'; }
+    function closePopup(e, id) { if (e) e.stopPropagation(); document.getElementById(id).style.display = 'none'; }
 
-    // --- Settings form submit ---
-    var settingsForm = document.getElementById('settingsForm');
-    if (settingsForm) {
-        settingsForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-            var unameElem = document.getElementById('username');
-            currentUsername = (unameElem && unameElem.value) ? unameElem.value : 'User';
-            var profilePicElem = document.getElementById('imagePreview');
-            var profilePic = profilePicElem ? profilePicElem.src : '';
-            var profilePic1Elem = document.getElementById('profilepic1');
-            if (profilePic && profilePic1Elem) {
-                profilePic1Elem.src = profilePic;
-            }
-            closePopup(event, 'popup4');
-            alert('Settings updated! Username is now: ' + currentUsername);
-        });
-    }
+    // register preview
+    const imageInput = document.getElementById('image');
+    if (imageInput) imageInput.onchange = e => {
+      const f = e.target.files[0];
+      if (!f) return;
+      const p = document.getElementById('registerImagePreview');
+      p.src = URL.createObjectURL(f);
+      p.style.display = 'block';
+    };
 
-    // --- DM Overlay ---
+    // register submit
+    if (registerForm) registerForm.onsubmit = async (e) => {
+      e.preventDefault();
+      const fd = new FormData(registerForm);
+      const res = await fetch('/register', { method: 'POST', body: fd });
+      const data = await res.json();
+      if (res.ok) {
+        alert('Registered. Please log in.');
+        closePopup(null, 'popup5');
+        openPopup('popup0');
+      } else {
+        alert('Register failed: ' + (data.error || 'unknown'));
+      }
+    };
 
-function getDmRoomName(userA, userB) {
-  return 'dm_' + [userA, userB].sort().join('_');
-}
+    // login
+    if (loginForm) loginForm.onsubmit = async (e) => {
+      e.preventDefault();
+      const username = document.getElementById('loginUsername').value.trim();
+      const password = document.getElementById('loginPassword').value;
+      const res = await fetch('/login', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({ username, password }) });
+      const data = await res.json();
+      if (res.ok && data.success) {
+        currentUsername = username;
+        sessionStorage.setItem('username', username);
+        socket.emit('register', username);
+        closePopup(null, 'popup0');
+        document.getElementById('profile').innerHTML = `<p>Welcome, ${username}</p>`;
+        alert('Login successful');
+      } else {
+        alert('Login failed: ' + (data.error || 'invalid credentials'));
+      }
+    };
 
-function openDmOverlay(username) {
-  if (username === currentUsername) {
-        alert("You can't DM yourself.");
-        return;
-    }
-  dmTarget = username;
-  const dmRoom = getDmRoomName(currentUsername, username);
-  window.currentDmRoom = dmRoom;  // ← ADD THIS LINE to track current DM room
-  socket.emit('joinDmRoom', { dmRoom, username: currentUsername });
-  
-    const chatObj = privateChats[username];
-    if (!chatObj) return;
-    dmTitle.textContent = 'Chat with ' + username;
-    dmMessages.innerHTML = '<li>Loading...</li>';
-    fetch('/dm-messages/' + encodeURIComponent(chatObj.dmRoom))
-      .then(res => res.json())
-      .then(messagesArr => {
-        dmMessages.innerHTML = '';
-        messagesArr.forEach(msg => {
-            var li = document.createElement('li');
-            li.textContent = msg.from_user + ': ' + msg.message;
-            if (msg.from_user === currentUsername) li.className += ' me';
-            dmMessages.appendChild(li);
-        });
-        dmMessages.scrollTop = dmMessages.scrollHeight;
-      });
-    clearPrivateChatBadge();
-}
-
-window.openDmOverlay = openDmOverlay;
-
-function closeDmOverlay() {
-  dmOverlay.style.display = 'none';
-  const dmRoom = getDmRoomName(currentUsername, dmTarget);
-  socket.emit('leaveDmRoom', { dmRoom, username: currentUsername });
-  window.currentDmRoom = null;  // ← ADD THIS LINE
-  dmTarget = null;
-  dmInput.value = '';
-  dmMessages.innerHTML = '';
-  dmImagePreview.innerHTML = '';
-  dmFileInput.value = '';
-  dmAttachedFile = null;
-}
-window.closeDmOverlay = closeDmOverlay;
-    
-    // DM Attach Image
-    if (dmAttachBtn) {
-        dmAttachBtn.onclick = function() {
-            if (dmFileInput) dmFileInput.click();
-        };
-    }
-    if (dmFileInput) {
-        dmFileInput.onchange = function() {
-            var file = dmFileInput.files[0];
-            dmImagePreview.innerHTML = '';
-            dmAttachedFile = null;
-            if (file && file.type.indexOf('image/') === 0) {
-                var img = document.createElement('img');
-                img.src = URL.createObjectURL(file);
-                dmImagePreview.appendChild(img);
-                dmAttachedFile = file;
-            }
-        };
-    }
-    // Add DM message to overlay
-function addDmMessage(from, message) {
-    var li = document.createElement('li');
-    li.textContent = from + ': ' + message;
-    if (from === currentUsername) li.className += ' me';
-    dmMessages.appendChild(li);
-    dmMessages.scrollTop = dmMessages.scrollHeight;
-}
-
-// Send DM message (text or with image)
-   document.getElementById('dmSend').addEventListener('click', () => {
-  const message = document.getElementById('dmInput').value;
-  const userProfileImage = sessionStorage.getItem('profileImage');
-  const userColor = sessionStorage.getItem('color');
-  socket.emit("dm message", {
-    room: currentDmRoom,
-    to: dmTarget,
-    from: currentUsername,
-    message: message,
-    timestamp: new Date(),
-    color: userColor,
-    profileImage: userProfileImage
-  });
-  document.getElementById('dmInput').value = '';
-});
-    function startPrivateChat(username) {
-    if (username === currentUsername) { alert("You can't DM yourself."); return; }
-    // Always request or create room from backend
-    fetch('/dm-room', {
-        method: 'POST',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({ userA: currentUsername, userB: username })
-    })
-    .then(res => res.json())
-    .then(data => {
-        if (data.success && data.room) {
-            const dmRoomName = data.room;
-            if (!privateChats[username]) {
-                privateChats[username] = { username, dmRoom: dmRoomName, messages: [] };
-                addPrivateChat(username);
-                socket.emit('request-create-dm', { from: currentUsername, to: username, room: dmRoomName });
-            }
-            openDmOverlay(username);
-        }
-    });
-}
-window.startPrivateChat = startPrivateChat;
-
-    function addPrivateChat(username) {
-        var listItem = document.createElement('li');
-        listItem.textContent = username;
-        listItem.addEventListener('click', function() { openDmOverlay(username); });
-        if (privateChatsList) privateChatsList.appendChild(listItem);
-    }
-});
-
-// --- Room Handling ---
-function openChat(roomName) {
-    overlay.style.display = 'flex';
-    roomTitle.textContent = roomName;
-    if (currentRoom) {
-        socket.emit('leaveRoom', { room: currentRoom, username: currentUsername });
-    }
-    currentRoom = roomName;
-    socket.emit('joinRoom', { room: roomName, username: currentUsername });
-}
-window.openChat = openChat;
-
-function closeChat() {
-    overlay.style.display = 'none';
-    if (socket && currentRoom) {
-        socket.emit('leaveRoom', { room: currentRoom, username: currentUsername });
-        currentRoom = null;
-    }
-}
-window.closeChat = closeChat;
-
-    
-const sendBtn = document.getElementById('sendBtn');
-if (sendBtn) {
-  sendBtn.addEventListener('click', function () {
-    const now = new Date();
-    const hours = now.getHours().toString().padStart(2,'0');
-    const minutes = now.getMinutes().toString().padStart(2,'0');
-    const timestamp = `${hours}:${minutes}`;
-    const profileImage = sessionStorage.getItem('profileImage');
-    const color = sessionStorage.getItem('color');
-    
-    if (currentRoom && input.value.trim() ) {
-      socket.emit('chat message', {
-        room: currentRoom,
-        username: currentUsername,
-        message: input.value,
-        timestamp: timestamp,
-        color: color,
-        profileImage: profileImage
-      });
-      input.value = '';
-    }
-  });
-}
-
-    
-function scrollToBottom() {
-    messages.scrollTop = messages.scrollHeight;
-}
-// --- Sidebar Room List and Button Handling ---
-const rooms = [
-  "Main_Chat", "Lobby", "Public_Ring", "Weight_Room", "Locker_Room",
-  "Public_Pool", "Mat_Room", "Field", "Urban_Brawl"
-];
-    
-
-  // Profile Search Logic (stays fixed, no resize on search)
-const searchBar = document.getElementById('searchBar');
-const usernameElem = document.getElementById('username');
-const profileImg = document.getElementById('profile-img');
-const ageElem = document.getElementById('age');
-const statsElem = document.getElementById('stats');
-const langElem = document.getElementById('lang');
-const infoElem = document.getElementById('info');
-const errorMsg = document.getElementById('errorMsg');
-
-searchBar.addEventListener('keydown', function(event) {
-  if (event.key === 'Enter') {
-    const username = searchBar.value.trim();
-    if (!username) {
-      return;
-    }
-    errorMsg.textContent = '';
-    usernameElem.textContent = 'Loading...';
-    profileImg.src = 'https://via.placeholder.com/200?text=Loading...';
-    ageElem.textContent = '-';
-    statsElem.textContent = '-';
-    langElem.textContent = '-';
-    infoElem.textContent = '-';
-
-    fetch('/user/' + encodeURIComponent(username))
-      .then(response => {
-        if (!response.ok) {
-          throw new Error('User not found');
-        }
-        return response.json();
-      })
-      .then(user => {
-        usernameElem.textContent = user.username || 'Unknown';
-        profileImg.src = user.imagePath || 'https://via.placeholder.com/200?text=No+Image';
-        ageElem.textContent = user.age || 'N/A';
-        statsElem.textContent = user.stats || 'N/A';
-        langElem.textContent = user.language || 'N/A';
-        infoElem.textContent = user.info || 'N/A';
+    // search user
+    if (searchBar) searchBar.addEventListener('keydown', async (ev) => {
+      if (ev.key !== 'Enter') return;
+      const name = searchBar.value.trim();
+      if (!name) return;
+      usernameElem.textContent = 'Loading...';
+      try {
+        const res = await fetch('/user/' + encodeURIComponent(name));
+        if (!res.ok) throw new Error('User not found');
+        const u = await res.json();
+        usernameElem.textContent = u.username;
+        profileImg.src = u.imagePath || 'https://via.placeholder.com/200?text=No+Image';
+        ageElem.textContent = u.age || '-';
+        statsElem.textContent = u.stats || '-';
+        langElem.textContent = u.language || '-';
+        infoElem.textContent = u.info || '-';
         errorMsg.textContent = '';
-      })
-      .catch(error => {
+      } catch (err) {
         usernameElem.textContent = 'Search for a user';
         profileImg.src = 'https://via.placeholder.com/200?text=No+Image';
         ageElem.textContent = '-';
         statsElem.textContent = '-';
         langElem.textContent = '-';
         infoElem.textContent = '-';
-        errorMsg.textContent = error.message;
+        errorMsg.textContent = err.message;
+      }
+    });
+
+    // room carousel click -> open chat
+    images.forEach(img => img.addEventListener('click', function() {
+      if (!currentUsername) { alert('Please log in'); openPopup('popup0'); return; }
+      const room = this.dataset.room;
+      openChat(room);
+    }));
+
+    // open chat overlay and join room
+    function openChat(roomName) {
+      overlay.style.display = 'flex';
+      roomTitle.textContent = roomName;
+      if (currentRoom) socket.emit('leaveRoom', { room: currentRoom, username: currentUsername });
+      currentRoom = roomName;
+      socket.emit('joinRoom', { room: roomName, username: currentUsername });
+    }
+    function closeChat() {
+      overlay.style.display = 'none';
+      if (currentRoom) socket.emit('leaveRoom', { room: currentRoom, username: currentUsername });
+      currentRoom = null;
+      messages.innerHTML = '';
+    }
+
+    // send public message
+    document.getElementById('sendBtn').onclick = () => {
+      const text = document.getElementById('m').value.trim();
+      if (!text) return;
+      socket.emit('chat message', { room: currentRoom, username: currentUsername, message: text, timestamp: new Date().toISOString(), color: '#fff', profileImage: sessionStorage.getItem('profileImageURL') || null });
+      document.getElementById('m').value = '';
+    };
+
+    // DM attach
+    dmAttachBtn.addEventListener('click', () => dmFileInput.click());
+    dmFileInput.addEventListener('change', () => {
+      alert('Image attached (demo only). Sending images via DM requires server upload implementation.');
+    });
+
+    // DM send
+    dmSend.addEventListener('click', () => {
+      const msg = dmInput.value.trim();
+      if (!msg || !dmTarget) return alert('Open a DM first');
+      if (!currentUsername) return alert('Please log in');
+      const room = getDmRoomName(currentUsername, dmTarget);
+      currentDmRoom = room;
+      socket.emit('dm message', { room, to: dmTarget, from: currentUsername, message: msg, timestamp: new Date().toISOString(), color: '#fff', profileImage: sessionStorage.getItem('profileImageURL') || null });
+      dmInput.value = '';
+    });
+
+    // helper to create dm room name
+    function getDmRoomName(a,b) { return 'dm_' + [a,b].sort().join('_'); }
+
+    // open DM overlay (called from member list)
+    function startPrivateChat(username) {
+      if (!currentUsername) return alert('Please log in');
+      if (username === currentUsername) return alert("You can't DM yourself");
+      dmTarget = username;
+      currentDmRoom = getDmRoomName(currentUsername, username);
+      socket.emit('joinDmRoom', { dmRoom: currentDmRoom, username: currentUsername });
+      fetch('/dm-messages/' + encodeURIComponent(currentDmRoom)).then(r => r.json()).then(msgs => {
+        dmMessages.innerHTML = '';
+        msgs.forEach(m => {
+          const li = document.createElement('li');
+          li.textContent = `${m.from_user}: ${m.message}`;
+          dmMessages.appendChild(li);
+        });
       });
-  }
-});
-const roomList = document.getElementById('roomList');
-const btnDMs = document.getElementById('btnDMs');
-const btnRooms = document.getElementById('btnRooms');
-const btnCreateRoom = document.getElementById('btnCreateRoom');
+    }
+    window.startPrivateChat = startPrivateChat;
 
-function populateRooms() {
-  if (!roomList) return;
-  roomList.innerHTML = '';
-  rooms.forEach(roomName => {
-    const li = document.createElement('li');
-    li.textContent = roomName;
-    li.onclick = () => {
-        openChat(roomName);
-    };
-    roomList.appendChild(li);
-  });
-}
+    // populate rooms sidebar
+    async function refreshRooms() {
+      fetch('/api/rooms').then(r => r.json()).then(list => {
+        roomListEl.innerHTML = '';
+        const select = document.getElementById('roomSelect');
+        select.innerHTML = '';
+        list.forEach(r => {
+          const li = document.createElement('li');
+          li.textContent = `${r.name} (${r.memberCount}) ${r.public ? '[public]' : '[private]'}`;
+          li.onclick = () => openChat(r.name);
+          roomListEl.appendChild(li);
 
-if (btnDMs) {
-    btnDMs.onclick = () => {
-      alert("DMs view toggle - implement your UI logic here.");
-    };
-}
-if (btnRooms) {
-    btnRooms.onclick = () => {
-      alert("Rooms view toggle - implement your UI logic here.");
-    };
-}
-if (btnCreateRoom) {
-    btnCreateRoom.onclick = () => {
-      const newRoom = prompt("Enter the new room name:");
-      if (newRoom && newRoom.trim()) {
-        rooms.push(newRoom.trim());
-        populateRooms();
-        if (typeof openChatroomName === 'function') {
-          openChatroomName(newRoom.trim());
-        }
-      }
-    };
-}
+          const opt = document.createElement('option');
+          opt.value = r.name;
+          opt.textContent = r.name;
+          select.appendChild(opt);
+        });
+      }).catch(err => console.error('Failed to load rooms', err));
+    }
 
-populateRooms();
+    // socket listeners
+    socket.on('registered', data => {
+      refreshRooms();
+    });
 
-// Function to show DMs in sidebar
-function showDMListSidebar() {
-    roomList.innerHTML = '';
-    roomList.style.display = 'block'; // Ensure visibility
-    Object.keys(privateChats).forEach(username => {
+    socket.on('rooms_changed', refreshRooms);
+    socket.on('room_created', r => {
+      refreshRooms();
+      alert('Room created: ' + r.name);
+    });
+
+    socket.on('loadMessages', msgs => {
+      messages.innerHTML = '';
+      msgs.forEach(m => {
         const li = document.createElement('li');
-        li.textContent = username;
-        li.onclick = function() {
-            openDmOverlay(username);
+        const time = m.timestamp ? (new Date(m.timestamp)).toLocaleTimeString() : '';
+        li.innerHTML = `<strong style="color:${m.color||'#fff'}">${m.username}</strong> <span style="color:#999">[${time}]</span><div>${m.message}</div>`;
+        messages.appendChild(li);
+      });
+      messages.scrollTop = messages.scrollHeight;
+    });
+
+    socket.on('chat message', data => {
+      const li = document.createElement('li');
+      const time = data.timestamp ? (new Date(data.timestamp)).toLocaleTimeString() : '';
+      li.innerHTML = `<strong style="color:${data.color||'#fff'}">${data.username}</strong> <span style="color:#999">[${time}]</span><div>${data.message}</div>`;
+      messages.appendChild(li);
+      messages.scrollTop = messages.scrollHeight;
+    });
+
+    socket.on('loadDmMessages', msgs => {
+      dmMessages.innerHTML = '';
+      msgs.forEach(m => {
+        const li = document.createElement('li');
+        const time = m.timestamp ? (new Date(m.timestamp)).toLocaleTimeString() : '';
+        li.textContent = `${m.from || m.from_user}: ${m.message} ${time ? '['+time+']' : ''}`;
+        dmMessages.appendChild(li);
+      });
+      dmMessages.scrollTop = dmMessages.scrollHeight;
+    });
+
+    socket.on('private message', data => {
+      const li = document.createElement('li');
+      const time = data.timestamp ? (new Date(data.timestamp)).toLocaleTimeString() : '';
+      li.textContent = `${data.from}: ${data.message} ${time ? '['+time+']' : ''}`;
+      dmMessages.appendChild(li);
+      dmMessages.scrollTop = dmMessages.scrollHeight;
+    });
+
+    socket.on('updateMembers', members => {
+      membersList.innerHTML = '';
+      const roomMembersList = document.getElementById('roomMembersList');
+      if (roomMembersList) roomMembersList.innerHTML = '';
+      members.forEach(m => {
+        const name = typeof m === 'string' ? m : (m.username || m);
+        const li = document.createElement('li');
+        li.textContent = name;
+        const msgBtn = document.createElement('button'); msgBtn.textContent = 'Msg'; msgBtn.style.marginLeft='8px';
+        msgBtn.onclick = (e) => { e.stopPropagation(); startPrivateChat(name); };
+        const removeBtn = document.createElement('button'); removeBtn.textContent = 'Remove'; removeBtn.style.marginLeft='6px';
+        removeBtn.onclick = (e) => {
+          e.stopPropagation();
+          if (!confirm('Remove ' + name + ' from this room?')) return;
+          socket.emit('remove_user', { roomName: currentRoom, targetUsername: name });
         };
-        roomList.appendChild(li);
+        li.appendChild(msgBtn);
+        li.appendChild(removeBtn);
+        membersList.appendChild(li);
+        if (roomMembersList) roomMembersList.appendChild(li.cloneNode(true));
+      });
     });
-}
 
-// Restore room list
-function showRoomListSidebar() {
-    roomList.innerHTML = '';
-    rooms.forEach(roomName => {
-        const li = document.createElement('li');
-        li.textContent = roomName;
-        li.onclick = () => openChat(roomName);
-        roomList.appendChild(li);
+    socket.on('invited', ({ room, from }) => {
+      alert(`You were invited to ${room} by ${from}`);
+      refreshRooms();
     });
-}
 
-// Attach button handlers
-if (btnDMs) {
-    btnDMs.onclick = showDMListSidebar;
-}
-if (btnRooms) {
-    btnRooms.onclick = showRoomListSidebar;
-}
+    socket.on('removed', ({ room, by }) => {
+      alert(`You were removed from ${room} by ${by}`);
+      if (currentRoom === room) closeChat();
+      refreshRooms();
+    });
 
-// --- Socket Listeners ---
-socket.on('loadMessages', function(msgs) {
-    messages.innerHTML = '';
-    for (var i = 0; i < msgs.length; i++) {
-        var item = document.createElement('li');
-        item.textContent = msgs[i];
-        messages.appendChild(item);
-    }
-    scrollToBottom();
-});
-socket.on('chat message', function(data) {
-    var item = document.createElement('li');
-    item.style.textAlign = 'left';
+    socket.on('error', err => console.error('Socket error', err));
 
-    var timestamp = document.createElement('span');
-    timestamp.textContent = `[${data.timestamp}] `;
-    timestamp.style.fontSize = '0.8em';
-    timestamp.style.color = '#999';
+    // create room button (in overlay)
+    document.getElementById('createRoomBtn')?.addEventListener('click', async () => {
+      const name = prompt('Enter new room name');
+      if (!name) return;
+      socket.emit('create_room', { name, public: true });
+    });
 
-    var username = document.createElement('strong');
-    username.textContent = data.username;
-    var userColor = data.color;
-    username.style.color = userColor;
-    username.style.marginLeft = '5px';
-    var img = document.createElement('img');
-    img.src = data.profileImage;
-    img.alt = data.username;
-    img.style.width = '30px';
-    img.style.height = '30px';
-    img.style.borderRadius = '50%';
-    img.style.marginRight = '10px';
-    var br = document.createElement('br');
-    var msg = document.createElement('span');
-    msg.textContent = data.message;
-
-    item.appendChild(img);
-    item.appendChild(username);
-    item.appendChild(timestamp);
-    item.appendChild(br);
-    item.appendChild(msg);
-
-    messages.appendChild(item);
-    scrollToBottom();
-    fetch('/api/sendChatMessage', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-            username: data.username,
-            message: data.message,
-            avatarUrl: data.profileImage
-        })
-    }).catch(err => console.error('Failed to send chat message to backend:', err));
-});
-
-socket.on('discord message', function(data) {
-    var item = document.createElement('li');
-    item.style.textAlign = 'left';
-
-    var timestamp = document.createElement('span');
-    timestamp.textContent = `[${data.timestamp}] `;
-    timestamp.style.fontSize = '0.8em';
-    timestamp.style.color = '#999';
-
-    var username = document.createElement('strong');
-    username.textContent = data.username;
-    var userColor = data.color;
-    username.style.color = userColor;
-    username.style.marginLeft = '5px';
-
-    var br = document.createElement('br');
-    var msg = document.createElement('span');
-    msg.textContent = data.message;
-
-    item.appendChild(username);
-    item.appendChild(timestamp);
-    item.appendChild(br);
-    item.appendChild(msg);
-
-    messages.appendChild(item);
-    scrollToBottom();
-});
-
- socket.on('updateMembers', async function(members) {
-  const membersList = document.getElementById('members-list');
-  membersList.innerHTML = '';
-
-  // Fetch user info for each member in parallel
-  const membersInfo = await Promise.all(members.map(async (member) => {
-    try {
-      const response = await fetch(`/user/${member.username}`);
-      if (!response.ok) throw new Error('Fetch error');
-      const userInfo = await response.json();
-      return {
-        username: member.username,
-        profilePic: userInfo.imagePath || 'default-profile.png' // fallback image
+    // support form submit
+    const supportForm = document.getElementById('supportForm');
+    if (supportForm) supportForm.onsubmit = async (e) => {
+      e.preventDefault();
+      const payload = {
+        submittedBy: document.getElementById('submittedBy').value,
+        incidentDate: document.getElementById('incidentDate').value,
+        topic: document.getElementById('topic').value,
+        reportedPerson: document.getElementById('reportedPerson').value,
+        description: document.getElementById('description').value
       };
-    } catch (e) {
-      // Return member with fallback image on error
-      return {
-        username: member.username,
-        profilePic: 'default-profile.png'
-      };
-    }
-  }));
-
-  // Render updated members list with fetched info
-  membersInfo.forEach(member => {
-    const memberItem = document.createElement('li');
-    memberItem.className = 'member-item';
-
-    const img = document.createElement('img');
-    img.src = member.profilePic;
-    img.alt = member.username;
-    img.style.width = '30px';
-    img.style.height = '30px';
-    img.style.borderRadius = '50%';
-    img.style.marginRight = '10px';
-
-    const nameSpan = document.createElement('span');
-    nameSpan.textContent = member.username;
-
-    memberItem.appendChild(img);
-    memberItem.appendChild(nameSpan);
-let dmBtn = document.createElement('button');
-            dmBtn.textContent = 'Msg';
-            dmBtn.onclick = function(e) {
-                e.stopPropagation();
-                startPrivateChat(member.username);
-            };
-            let blkBtn = document.createElement('button');
-            blkBtn.textContent = 'Block';
-            blkBtn.onclick = function(e) {
-                e.stopPropagation();
-                blockMember(member.username);
-            };
-            var br = document.createElement('br');
-            memberItem.appendChild(br);
-            memberItem.appendChild(dmBtn);
-            memberItem.appendChild(blkBtn);
-    membersList.appendChild(memberItem);
-  });
-});
-            
-socket.on('dm message', function(data) {
-  addDmMessage(data.from_user, data.message, data.timestamp);
-});
-socket.on('updateDmMembers', function(members) {
-  // Update DM UI with member list if desired
-});
-socket.on('loadDmMessages', function(msgs) {
-  dmMessages.innerHTML = '';
-  for (var i = 0; i < msgs.length; i++) {
-    var item = document.createElement('li');
-    item.textContent = msgs[i];
-    dmMessages.appendChild(item);
-  }
-});
-
-socket.on('private message', function(data) {
-    // Create <li> for the message
-    var item = document.createElement('li');
-    item.style.textAlign = 'left';
-
-    // Avatar image
-    var img = document.createElement('img');
-    img.src = data.profileImage || 'https://via.placeholder.com/30';
-    img.alt = data.from;
-    img.style.width = '30px';
-    img.style.height = '30px';
-    img.style.borderRadius = '50%';
-    img.style.verticalAlign = 'middle';
-    img.style.marginRight = '8px';
-
-    // Username in their color
-    var username = document.createElement('strong');
-    username.textContent = data.from;
-    username.style.color = data.color || 'white';
-    username.style.marginRight = '6px';
-
-    // Timestamp
-    var timestamp = document.createElement('span');
-    var timeString = typeof data.timestamp === 'string' && !isNaN(Date.parse(data.timestamp))
-        ? `[${new Date(data.timestamp).toLocaleTimeString()}]`
-        : `[${data.timestamp}]`;
-    timestamp.textContent = timeString + " ";
-    timestamp.style.fontSize = '0.8em';
-    timestamp.style.color = '#999';
-
-    // Actual message content
-    var msg = document.createElement('span');
-    msg.textContent = data.message;
-
-    // Compose the message item: [Avatar] [Username] [Timestamp]
-    //                             [Message text...]
-    item.appendChild(img);
-    item.appendChild(username);
-    item.appendChild(timestamp);
-    item.appendChild(document.createElement('br'));
-    item.appendChild(msg);
-
-    // Add to DM message list
-    var dmMsgList = document.getElementById('dmMessages');
-    if (dmMsgList) {
-        dmMsgList.appendChild(item);
-
-        // Auto-scroll to bottom
-        var dmMessagesContainer = document.getElementById('dmmessages');
-        if (dmMessagesContainer) {
-            dmMessagesContainer.scrollTop = dmMessagesContainer.scrollHeight;
-        }
-    }
-
-    // Notification badge logic: Only show unread badge if NOT currently viewing this user's DM
-    let chattingWith = window.currentlyOpenedDmUser; // Set this when user opens a DM
-    if (!chattingWith || chattingWith !== data.from) {
-        if (typeof incrementPrivateMessageBadge === 'function') {
-            incrementPrivateMessageBadge(data.from);
-        }
-    }
-});
-function renderPrivateChatsList() {
-  const privateChatsList = document.getElementById('private-chats');
-  privateChatsList.innerHTML = '';
-  Object.keys(privateChats).forEach(username => {
-    const chatObj = privateChats[username];
-    const listItem = document.createElement('li');
-    listItem.className = 'private-chat-item';
-    listItem.textContent = username;
-
-    // DM button
-    const msgBtn = document.createElement('button');
-    msgBtn.textContent = 'Msg';
-    msgBtn.style.marginLeft = '12px';
-    msgBtn.onclick = function(e) {
-      e.stopPropagation();
-      openDmOverlay(username); // Or your function to open DM
+      await fetch('/submit-support', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify(payload) });
+      alert('Report submitted');
+      closePopup(null, 'popup3');
     };
 
-    listItem.appendChild(msgBtn);
-
-    // Clicking username (optional: open DM overlay too)
-    listItem.onclick = function() {
-      openDmOverlay(username);
-    };
-
-    privateChatsList.appendChild(listItem);
-  });
-}
-
-socket.on('create-dm', function({ from, room }) {
-  // Ensure chat exists in privateChats
-  if (!privateChats[from]) {
-    privateChats[from] = { username: from, dmRoom: room, messages: [] };
-    renderPrivateChatsList();
-  }
-  openDmOverlay(from); // Optionally auto-open DM overlay
-});
-const dmBox = document.getElementById('dmBox');
-const chatSidebar = document.getElementById('chatSidebar');
-const btnToggleDmBox = document.getElementById('toggleDmBox');
-const btnToggleChatSidebar = document.getElementById('toggleChatSidebar');
-
-function togglePanel(panelEl, buttonEl) {
-  const isOpen = panelEl.classList.toggle('open');
-  if (buttonEl) {
-    buttonEl.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
-  }
-}
-
-// Open/close DM box
-if (btnToggleDmBox && dmBox) {
-  btnToggleDmBox.addEventListener('click', () => {
-    // Close sidebar if open
-    if (chatSidebar && chatSidebar.classList.contains('open')) {
-      chatSidebar.classList.remove('open');
-      if (btnToggleChatSidebar) {
-        btnToggleChatSidebar.setAttribute('aria-expanded', 'false');
-      }
-    }
-    togglePanel(dmBox, btnToggleDmBox);
-  });
-}
-
-// Open/close Rooms sidebar
-if (btnToggleChatSidebar && chatSidebar) {
-  btnToggleChatSidebar.addEventListener('click', () => {
-    // Close dmBox if open
-    if (dmBox && dmBox.classList.contains('open')) {
-      dmBox.classList.remove('open');
-      if (btnToggleDmBox) {
-        btnToggleDmBox.setAttribute('aria-expanded', 'false');
-      }
-    }
-    togglePanel(chatSidebar, btnToggleChatSidebar);
-  });
-}
-
-// Optional: tap overlay background to close panels on mobile
-document.getElementById('chatOverlay').addEventListener('click', (e) => {
-  // Only if clicking the dark background, not inside panels
-  if (e.target.id === 'chatOverlay') {
-    if (dmBox) {
-      dmBox.classList.remove('open');
-    }
-    if (chatSidebar) {
-      chatSidebar.classList.remove('open');
-    }
-    if (btnToggleDmBox) {
-      btnToggleDmBox.setAttribute('aria-expanded', 'false');
-    }
-    if (btnToggleChatSidebar) {
-      btnToggleChatSidebar.setAttribute('aria-expanded', 'false');
-    }
-  }
-});
-
-
-</script>
+    // initial refresh
+    refreshRooms();
+  </script>
 </body>
-</html>
 </html>
